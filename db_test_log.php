@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>The Latest piStatus information --- Details</title>
+<title>PiStatus Log Page</title>
 </head>
 <body>
 <center>
