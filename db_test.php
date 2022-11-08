@@ -67,14 +67,14 @@ if ($result->num_rows > 0) {
 	echo"<td>".$row[total_memory_used_percent]." </td>";
 	echo"<td>".$row[cpu_load_1_5_15min]." </td>";
 	// echo"<td>".$row[current_update_min]." </td>";
-  if($row[current_update_min]<1000)
+  if($row[current_update_min]<30)
                               {
-           echo "<td style='background-color: #FF0000;'>".$row[current_update_min]."</td>";
+           echo "<td style='background-color: #00FF00;'>".$row[current_update_min]."</td>";
 
                          }
                          else
                          {
-           echo "<td style='background-color: #00FF00;'>".$row[current_update_min]."</td>";
+           echo "<td style='background-color: #FF0000;'>".$row[current_update_min]."</td>";
                          }
   echo"<td>".$row[acc_button_wire_connected]." </td>";
   echo"<td>".$row[libpanda_git_hash]." </td>";
