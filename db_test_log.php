@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta http-equiv="refresh" content="10" >
 <title>The Latest piStatus information --- Details</title>
 </head>
 <body>
