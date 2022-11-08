@@ -44,7 +44,7 @@ FROM piStatus ORDER BY update_time DESC LIMIT 500
 
 $result = $conn->query($sql);
 echo $conn->error;
-print_r("The Latest piStatus Information");
+print_r("The Latest 500 Messages Posted to PiStatus");
 
 echo "<br>";
 echo "<table border=1>";
