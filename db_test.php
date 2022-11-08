@@ -36,6 +36,7 @@ wlan0_mac
 ,TIMESTAMPDIFF(MINUTE, SUBSTRING(CAST(FROM_UNIXTIME(update_time) AS NCHAR),1,19),current_timestamp()) current_update_min
 ,acc_button_wire_connected
 ,libpanda_git_hash
+,log_message
 ,veh_id
 FROM(SELECT * ,ROW_NUMBER() over ( PARTITION BY wlan0_mac ORDER BY update_time DESC) as rn From piStatus) as tmp join dim_vehicle on tmp.vin=dim_vehicle.vin WHERE tmp.rn =1 AND tmp.wlan0_mac IS NOT NULL
 ";
