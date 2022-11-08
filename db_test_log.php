@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta http-equiv="refresh" content="10" >
 <title>PiStatus Log Page</title>
 </head>
 <body>

@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>The Latest piStatus information --- Details</title>
+<meta http-equiv="refresh" content="10" >
 </head>
 <body>
 <center>
@@ -38,7 +39,7 @@ wlan0_mac
 ,libpanda_git_hash
 ,log_message
 ,veh_id
-FROM(SELECT * ,ROW_NUMBER() over ( PARTITION BY wlan0_mac ORDER BY update_time DESC) as rn From piStatus) as tmp join dim_vehicle on tmp.vin=dim_vehicle.vin WHERE tmp.rn =1 AND tmp.wlan0_mac IS NOT NULL
+FROM(SELECT * ,ROW_NUMBER() over ( PARTITION BY wlan0_mac ORDER BY update_time DESC) as rn From piStatus) as tmp join dim_vehicle on tmp.vin=dim_vehicle.vin WHERE tmp.rn =1 AND tmp.wlan0_mac IS NOT NULL ORDER BY update_time DESC
 ";
 
 $result = $conn->query($sql);
