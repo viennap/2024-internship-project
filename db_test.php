@@ -52,8 +52,14 @@ echo "<tr><td>Car #</td><td>Pi_MAC</td><td>SSID</td><td>wlan0_ip</td><td>eth0_ip
 echo"<tr>";
 
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-	echo"<tr>";
+  while($row = $result->fetch_assoc()) {
+  if ($row[current_update_min < 60]){
+    echo "<tr style='background-color: #00FF00;>";
+    }
+    else{
+    echo "<tr style='background-color: #FF0000;>";
+    }
+	// echo"<tr>";
   echo"<td>".$row[veh_id]."</td>";
 	echo"<td>".$row[wlan0_mac]."</td>";
 	echo"<td>".$row[SSID]." </td>";
