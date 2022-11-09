@@ -92,7 +92,7 @@ if ($result->num_rows > 0) {
     echo "<td style='background-color: ".$RED.";'>".$row[acc_button_wire_connected]."</td>";
   }
 else{
-  echo "<td style='background-color: ".$GREEN.";'>".$row[acc_button_wire_connected]."</td>";
+  echo "<td>".$row[acc_button_wire_connected]."</td>";
 
   }
   echo"<td>".$row[libpanda_git_hash]." </td>";
