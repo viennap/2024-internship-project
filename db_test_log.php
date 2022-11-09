@@ -28,7 +28,7 @@ wlan0_mac
 ,wlan0_ip
 ,eth0_ip
 ,concat(wlan0_upload_rate_kb,' || ',wlan0_download_rate_kb) AS wlan0_up_download_kb
--- ,dim_vehicle.vin
+,vin
 ,battery_voltage
 ,external_power
 -- ,(100 - ROUND((CAST(REPLACE(tmp.available_ram,'G','') as DOUBLE)/CAST(REPLACE(tmp.total_ram,'G','') as DOUBLE))*100,0)) AS total_ram_used_percent
