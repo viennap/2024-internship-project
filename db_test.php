@@ -53,8 +53,8 @@ echo"<tr>";
 
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
-  if ($row[current_update_min]<60){
-    echo "<tr style='background-color: #00FF00;'>";
+  if ($row[current_update_min]<30){
+    echo "<tr style='background-color: #74c451;'>";
     }
     else{
     echo "<tr style='background-color: #999999;'>";
@@ -73,9 +73,9 @@ if ($result->num_rows > 0) {
 	echo"<td>".$row[total_memory_used_percent]." </td>";
 	echo"<td>".$row[cpu_load_1_5_15min]." </td>";
 	// echo"<td>".$row[current_update_min]." </td>";
-  if($row[current_update_min]<60)
+  if($row[current_update_min]<30)
                               {
-           echo "<td style='background-color: #00FF00;'>".$row[current_update_min]."</td>";
+           echo "<td style='background-color: #74c451;'>".$row[current_update_min]."</td>";
 
                          }
                          else
