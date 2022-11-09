@@ -13,9 +13,9 @@ $username = "circles";
 $password = "wjytxeu5";
 $db = "circledb";
 
-$GREEN='#74c451'
-$GRAY='#999999'
-$RED='#CD1337'
+$GREEN='#74c451';
+$GRAY='#999999';
+$RED='#CD1337';
 
 $conn = new mysqli($servername, $username, $password, $db);
 
