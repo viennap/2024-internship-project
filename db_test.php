@@ -13,6 +13,10 @@ $username = "circles";
 $password = "wjytxeu5";
 $db = "circledb";
 
+$GREEN='#74c451'
+$GRAY='#999999'
+$RED='#CD1337'
+
 $conn = new mysqli($servername, $username, $password, $db);
 
 if ($conn->connect_error)
@@ -82,7 +86,15 @@ if ($result->num_rows > 0) {
                          {
            echo "<td style='background-color: #999999;'>".$row[current_update_min]."</td>";
                          }
-  echo"<td>".$row[acc_button_wire_connected]." </td>";
+  // echo"<td>".$row[acc_button_wire_connected]." </td>";
+  if($row[acc_button_wire_connected]==0)
+  {
+    echo "<td style='background-color: "$RED";'>".$row[acc_button_wire_connected]."</td>";
+  }
+else{
+  echo "<td style='background-color: "$GREEN";'>".$row[acc_button_wire_connected]."</td>";
+
+  }
   echo"<td>".$row[libpanda_git_hash]." </td>";
   echo"<td>".$row[log_message]." </td>";
 	echo"</tr>";
