@@ -16,7 +16,7 @@ VestKey(*): <input type='text' name='VestKey'>
 
 <?php
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./vest_tracking_home.php> go home </a>";
 echo "<br>";
 if(array_key_exists('checkVestStatusView', $_POST)) {
         	checkVestStatusView();
@@ -30,7 +30,8 @@ if(array_key_exists('checkVestStatusView', $_POST)) {
 
 function checkVestStatusView() {
 	echo "This is check current VestStatusView that is selected";
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
 	echo "<h3>Show VestStatusView</h3>";
         $sql_check_vest_view_res = "select * from VestStatusView order by TeamName,VestStatusKey";
         $check_vest_view_res = $conn->query($sql_check_vest_view_res);
@@ -62,7 +63,8 @@ function checkVestStatusView() {
 function driverReady() {
 	echo "This is get driver ready that is selected";
 	$VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
 	$sql_ready = "INSERT INTO VestStatus (VestKey, VestStatusKey)
                 VALUES ($VestKey, ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Be Ready') )";
 	$conn->query($sql_ready);
@@ -102,7 +104,8 @@ function driverReady() {
 function driverDownstairs() {
         echo "This is get driver downstairs that is selected";
         $VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
         $sql_downstairs = "INSERT INTO VestStatus (VestKey, VestStatusKey)
                 VALUES ($VestKey, ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Go Downstairs') )";
         $conn->query($sql_downstairs);

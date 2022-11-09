@@ -14,7 +14,7 @@ DriverKey(*): <input type='text' name='DriverKey'>
 
 <?php
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./vest_tracking_home.php> go home </a>";
 echo "<br>";
 if(array_key_exists('DriverCheckIn', $_POST)) {
         	DriverCheckIn();
@@ -26,7 +26,8 @@ if(array_key_exists('DriverCheckIn', $_POST)) {
 function DriverCheckIn() {
         echo "This is driver check-in that is selected";
         $DriverKey = empty($_POST['DriverKey'])?die("Please input the DriverKey"):$_POST['DriverKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
         $check_in_sql =  "UPDATE Drivers SET IsActive = 1 where DriverKey = $DriverKey";
         $conn->query($check_in_sql);
         echo "<br>";
@@ -63,7 +64,8 @@ function DriverCheckIn() {
 function DriverCheckOut() {
         echo "This is driver check-out that is selected";
         $DriverKey = empty($_POST['DriverKey'])?die("Please input the DriverKey"):$_POST['DriverKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
         $check_out_sql =  "UPDATE Drivers SET IsActive = 0 where DriverKey = $DriverKey";
         $conn->query($check_out_sql);
         echo "<br>";

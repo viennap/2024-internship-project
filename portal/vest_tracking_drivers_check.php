@@ -10,8 +10,12 @@ header("refresh: 60;");
 $timestamp=time();
 echo date("Y-m-d H:i:s", $timestamp);
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
-$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+echo "<a href=./vest_tracking_home.php> go home </a>";
+	// get shared config information outside of this file
+	$ini= parse_ini_file("mysql_link.ini");
+	// set connection based on outside information
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
+
 	$check_d_sql ="select * from Drivers";
 	$check_d_res = $conn->query($check_d_sql);
 	echo "<br>";

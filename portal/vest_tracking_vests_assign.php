@@ -16,7 +16,7 @@ VestKey(*): <input type='text' name='VestKey'>
 
 <?php
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./vest_tracking_home.php> go home </a>";
 echo "<br>";
 if(array_key_exists('checkVests', $_POST)) {
                 checkVests();
@@ -30,7 +30,8 @@ if(array_key_exists('checkVests', $_POST)) {
 
 function checkVests() {
         echo "This is Check current availabe Vests that is selected";
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
         $check_v_sql ="select * from Vests where DriverKey is NULL";
         $check_v_res = $conn->query($check_v_sql);
         echo "<br>";
@@ -58,7 +59,8 @@ function assignVestDriver() {
 	echo "This is assign a vest to a driver that is selected";
 	$DriverKeyV = empty($_POST['DriverKeyV'])?die("Please input the DriverKey"):$_POST['DriverKeyV'];
         $VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
         $a_vd_sql_1 = "UPDATE Drivers SET VestKey = $VestKey WHERE DriverKey = $DriverKeyV";
 	$conn->query($a_vd_sql_1);
 	$a_vd_sql_2 = "UPDATE Vests SET DriverKey = $DriverKeyV,RouteKey = (SELECT RouteKey from Training WHERE DriverKey = $DriverKeyV) WHERE VestKey = $VestKey";
@@ -102,7 +104,8 @@ function unassignVestDriver() {
 	echo "This is unassign vest from driver that is selected";
 	$DriverKeyV = empty($_POST['DriverKeyV'])?die("Please input the DriverKey"):$_POST['DriverKeyV'];
         $VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
         $una_vd_sql_1 = "UPDATE Drivers SET VestKey = NULL WHERE DriverKey = $DriverKeyV";
 	$conn->query($una_vd_sql_1);
 	$una_vd_sql_2 = "UPDATE Vests SET DriverKey = NULL,RouteKey = 1 WHERE VestKey = $VestKey";

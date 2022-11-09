@@ -17,7 +17,7 @@ CarKey(*): <input type='text' name='CarKey'>
 
 <?php
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./vest_tracking_home.php> go home </a>";
 echo "<br>";
 if(array_key_exists('checkCarStatusView', $_POST)) {
                 checkCarStatusView();
@@ -31,7 +31,8 @@ if(array_key_exists('checkCarStatusView', $_POST)) {
 
 function checkCarStatusView() {
         echo "This is check current CarStatusView that is selected";
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
 	echo "<h3>Show CarStatusView</h3>";
         $sql_check_car_view_res = "select * from CarStatusView";
         $check_car_view_res = $conn->query($sql_check_car_view_res);
@@ -65,7 +66,8 @@ function assignVestCar() {
 	echo "This is assign a vest to a car that is selected";
 	$VestKeyC = empty($_POST['VestKeyC'])?die("Please input the VestKey"):$_POST['VestKeyC'];
         $CarKey = empty($_POST['CarKey'])?die("Please input the CarKey"):$_POST['CarKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
 	$a_sql_1 = "UPDATE Cars as c
 		SET c.VestKey = $VestKeyC
 		WHERE c.CarKey = $CarKey";
@@ -138,7 +140,8 @@ function unassignVestCar() {
 	echo "This is unassign a vest from a car that is selected";
 	$VestKeyC = empty($_POST['VestKeyC'])?die("Please input the VestKey"):$_POST['VestKeyC'];
 	$CarKey = empty($_POST['CarKey'])?die("Please input the CarKey"):$_POST['CarKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
 	$una_sql_1 = "UPDATE Cars as c
 		SET c.VestKey = NULL
 		WHERE c.CarKey = $CarKey

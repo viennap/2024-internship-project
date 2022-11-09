@@ -10,8 +10,10 @@ header("refresh: 60;");
 $timestamp=time();
 echo date("Y-m-d H:i:s", $timestamp);
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
-$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+echo "<a href=./vest_tracking_home.php> go home </a>";
+$ini= parse_ini_file("mysql_link.ini");
+$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
+
         $check_v_sql ="select * from Vests where DriverKey is NULL";
         $check_v_res = $conn->query($check_v_sql);
         echo "<br>";

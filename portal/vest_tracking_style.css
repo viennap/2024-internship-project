@@ -1,0 +1,9 @@
+
+a {
+    display: inline-block;
+    width: 90px;
+    height: 44px;
+    background: url(https://csdnimg.cn/cdn/content-toolbar/csdn-logo_.png?v=20190924.1) no-repeat left top/94px 44px;
+    text-indent: -9999px;
+    overflow: hidden;
+}

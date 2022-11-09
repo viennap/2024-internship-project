@@ -10,11 +10,11 @@ header("refresh: 60;");
 $timestamp=time();
 echo date("Y-m-d H:i:s", $timestamp);
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./vest_tracking_home.php> go home </a>";
 echo "<h1>Vest and Vehicle quick assignment status (readonly)</h1>";
 
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
-
+	$ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
 	
 	$sql_drivers_get_ready_orange = "select * from VestStatusView where VestStatusKey=3 and RouteKey=1 order by Modified";
 	$drivers_get_ready_res_orange = $conn->query($sql_drivers_get_ready_orange);

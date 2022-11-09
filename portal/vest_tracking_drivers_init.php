@@ -20,7 +20,7 @@ DriverKey(*): <input type='text' name='DriverKey'>
 
 <?php
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./vest_tracking_home.php> go home </a>";
 echo "<br>";
 if(array_key_exists('initialDriver', $_POST)) {
         	initialDriver();
@@ -38,7 +38,8 @@ function initialDriver() {
         $PhoneNumber = empty($_POST['PhoneNumber'])?NULL:$_POST['PhoneNumber'];
         $Email = empty($_POST['Email'])?die("Please input the Email"):$_POST['Email'];
         $DriverKey = empty($_POST['DriverKey'])?die("Please input the DriverKey"):$_POST['DriverKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
         $ini_d_sql =  "INSERT IGNORE INTO Drivers (Firstname, Middlename, Lastname, Suffix, PhoneNumber, Email, DriverKey )
 			VALUES ('$Firstname', '$Middlename', '$Lastname', '$Suffix', '$PhoneNumber', '$Email', $DriverKey)";
 	$conn->query($ini_d_sql);
@@ -76,7 +77,8 @@ function initialDriver() {
 function deleteDriver() {
 	echo "This is Delete a driver that is selected";
 	$DriverKey = empty($_POST['DriverKey'])?die("Please input the DriverKey"):$_POST['DriverKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $ini= parse_ini_file("mysql_link.ini");
+	$conn =new mysqli($ini["servername"],$ini["username"],$ini["password"],$ini["dbname"]) or die("DB connection failed.<br/>");
         $delete_sql =  "DELETE from Drivers where DriverKey = $DriverKey";
         $conn->query($delete_sql);
         echo "<br>";
