@@ -11,8 +11,9 @@
 
 <style>
 * { box-sizing: border-box; }
-.column { float: left; width: 30%; padding: 10px; }
+.column { float: left; width: 33.33%; padding: 10px; }
 .row:after { content: ""; display: table; clear: both; }
+@media screen and (max-width: 600px) { .column { width: 100%; } }
 </style>
 
 </head>
@@ -22,12 +23,12 @@
 <center>
 
 <div class="row">
-<h1> Driver assignment status </h1>
+<h1> Driver assignment status <span style="color: #d48713;"> (Orange) </span> </h1>
 </div>
 
 <div class="row">
 
-<div class="column">
+<div class="column" style="width: 50%;">
 <?php
 header("refresh: 60;");
 $timestamp=time();
@@ -36,7 +37,7 @@ echo date("Y-m-d H:i:s", $timestamp);
 ?>
 </div>
 
-<div class="column">
+<div class="column" style="width: 50%;">
 <a href="http://ransom.isis.vanderbilt.edu/home.html#status" class=button> Go home </a>
 </div>
 
