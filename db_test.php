@@ -57,7 +57,7 @@ echo"<tr>";
 
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
-  if ($row[current_update_min]<30){
+  if ($row[current_update_min]<5){
     echo "<tr style='background-color: #74c451;'>";
     }
     else{
