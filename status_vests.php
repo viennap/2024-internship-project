@@ -49,7 +49,6 @@
             $sql_drivers_assigned_yellow = "select * from VestStatusView";
             $drivers_assigned_res_yellow = $conn->query($sql_drivers_assigned_yellow);
 
-                echo "<h2>Current VestStatusView</h2>";
                 echo "<table border=1>";
                 echo "<tr><td>VestKey</td><td>RouteColor</td><td>TeamName</td><td>DriverFirstName</td><td>DriverLastName</td><td>VestStatusString</td><td>RouteKey</td><td>DriverKey</td><td>VestStatusKey</td><td>Modified</td></tr>";
                 echo"<tr>";
