@@ -10,7 +10,9 @@
         <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 
         <style>
-        * { box-sizing: border-box; }
+            * { box-sizing: border-box; }
+            .column { float: left; width: 33.33%; padding: 10px; }
+            .row:after { content: ""; display: table; clear: both; }
         </style>
 
     </head>
