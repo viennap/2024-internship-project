@@ -1,4 +1,4 @@
-<html>
+\<html>
 
 <head>
 
@@ -53,7 +53,7 @@ echo date("Y-m-d H:i:s", $timestamp);
             $sqlinfo = require_once('/var/www/config.php');
             $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         
-            $sql_drivers_assigned_orange = "select * from VestStatusView where VestStatusKey=1 and RouteKey=1 order by Modified";
+            $sql_drivers_assigned_orange = "select VestKey, DriverFirstName, DriverLastName from VestStatusView where VestStatusKey in (1,10) and RouteKey=1 order by Modified";
             $drivers_assigned_res_orange = $conn->query($sql_drivers_assigned_orange);
 
             echo "<table border=1 style='color: #000000;'>";
@@ -75,10 +75,10 @@ echo date("Y-m-d H:i:s", $timestamp);
     <div class="column" style="background-color:#b8a818;">
         <h2>Get Ready To Drive</h2>
         
-        <?php
-            $sql_drivers_get_ready_orange = "select * from VestStatusView where VestStatusKey=3 and RouteKey=1 order by Modified";
+<?php
+            $sql_drivers_get_ready_orange = "select VestKey, DriverFirstName, DriverLastName from VestStatusView where VestStatusKey=3 and RouteKey=1 order by Modified";
             $drivers_get_ready_res_orange = $conn->query($sql_drivers_get_ready_orange);
-
+	    
             echo "<table border=1>";
             echo "<tr><td>VestKey</td><td>DriverFirstName</td><td>DriverLastName</td></tr>";
             echo "<tr>";
@@ -98,8 +98,8 @@ echo date("Y-m-d H:i:s", $timestamp);
     <div class="column" style="background-color:#1b7d35; color:#000000;">
         <h2 style="color: #000000">Go To Lobby</h2>
         
-        <?php
-            $sql_drivers_go_downstairs_orange = "select * from VestStatusView where VestStatusKey=4 and RouteKey=1 order by Modified";
+<?php
+            $sql_drivers_go_downstairs_orange = "select VestKey, DriverFirstName, DriverLastName from VestStatusView where VestStatusKey=4 and RouteKey=1 order by Modified";
             $drivers_go_downstairs_res_orange = $conn->query($sql_drivers_go_downstairs_orange);
 
             echo "<table border=1 style='color: #000000;'>";

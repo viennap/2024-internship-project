@@ -16,7 +16,7 @@ VestKey(*): <input type='text' name='VestKey'>
 
 <?php
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./home.html> go home </a>";
 echo "<br>";
 if(array_key_exists('checkVestStatusView', $_POST)) {
         	checkVestStatusView();
@@ -104,7 +104,8 @@ function driverReady() {
 function driverDownstairs() {
         echo "This is get driver downstairs that is selected";
         $VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $sqlinfo = require_once('/var/www/config.php');
+        $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $sql_downstairs = "INSERT INTO VestStatus (VestKey, VestStatusKey)
                 VALUES ($VestKey, ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Go Downstairs') )";
         $conn->query($sql_downstairs);

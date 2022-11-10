@@ -17,7 +17,7 @@ CarKey(*): <input type='text' name='CarKey'>
 
 <?php
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./home.html> go home </a>";
 echo "<br>";
 if(array_key_exists('checkCarStatusView', $_POST)) {
                 checkCarStatusView();
@@ -31,7 +31,8 @@ if(array_key_exists('checkCarStatusView', $_POST)) {
 
 function checkCarStatusView() {
         echo "This is check current CarStatusView that is selected";
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $sqlinfo = require_once('/var/www/config.php');
+        $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	echo "<h3>Show CarStatusView</h3>";
         $sql_check_car_view_res = "select * from CarStatusView";
         $check_car_view_res = $conn->query($sql_check_car_view_res);

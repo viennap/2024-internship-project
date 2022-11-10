@@ -13,7 +13,7 @@ VestKey(*): <input type='text' name='VestKey'>
 </form>
 <?php
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./home.html> go home </a>";
 echo "<br>";
 if(array_key_exists('initialVest', $_POST)) {
                 initialVest();
@@ -61,7 +61,8 @@ function initialVest() {
 function deleteVest() {
         echo "This is Delete a vest that is selected";
         $VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $sqlinfo = require_once('/var/www/config.php');
+        $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $delete_v_sql =  "DELETE from Vests where VestKey = $VestKey";
         $conn->query($delete_v_sql);
         echo "<br>";

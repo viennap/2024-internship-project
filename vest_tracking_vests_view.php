@@ -10,8 +10,9 @@ header("refresh: 60;");
 $timestamp=time();
 echo date("Y-m-d H:i:s", $timestamp);
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
-$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+echo "<a href=./home.html> go home </a>";
+$sqlinfo = require_once('/var/www/config.php');
+$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 $sql_drivers_assigned_yellow = "select * from VestStatusView";
 $drivers_assigned_res_yellow = $conn->query($sql_drivers_assigned_yellow);
 

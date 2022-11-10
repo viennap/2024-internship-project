@@ -17,7 +17,7 @@ RouteKey(*): <input type='text' name='RouteKey'>
 
 <?php
 echo "<br>";
-echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
+echo "<a href=./home.html> go home </a>";
 echo "<br>";
 if(array_key_exists('checkTraining', $_POST)) {
                 checkTraining();
@@ -59,7 +59,8 @@ function assignRouteDriver() {
         echo "This is assign driver to a trained route that is selected";
         $DriverKeyR = empty($_POST['DriverKeyR'])?die("Please input the DriverKey"):$_POST['DriverKeyR'];
         $RouteKey = empty($_POST['RouteKey'])?die("Please input the RouteKey"):$_POST['RouteKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $sqlinfo = require_once('/var/www/config.php');
+        $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $a_rd_sql = "INSERT IGNORE INTO Training (DriverKey, RouteKey) VALUES ($DriverKeyR,$RouteKey)";
 	$conn->query($a_rd_sql);
 	echo "<br>";
@@ -92,7 +93,8 @@ function unassignRouteDriver() {
         echo "This is unassign driver from route that is selected";
         $DriverKeyR = empty($_POST['DriverKeyR'])?die("Please input the DriverKey"):$_POST['DriverKeyR'];
         $RouteKey = empty($_POST['RouteKey'])?die("Please input the RouteKey"):$_POST['RouteKey'];
-        $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+        $sqlinfo = require_once('/var/www/config.php');
+        $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $una_rd_sql = "DELETE from Training where DriverKey = $DriverKeyR and RouteKey = $RouteKey ";
         $conn->query($una_rd_sql);
 	echo "<br>";
