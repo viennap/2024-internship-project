@@ -44,7 +44,7 @@ echo date("Y-m-d H:i:s", $timestamp);
 
 <?php
 	// $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
-	$sqlinfo = require_once('/var/www/config.php');
+	$sqlinfo = require_once('../../config.php');
 	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 
 	$check_d_sql ="select * from Drivers";
