@@ -13,7 +13,8 @@ echo "<br>";
 echo "<a href=http://ransom.isis.vanderbilt.edu/vest_tracking_home.php> go home </a>";
 echo "<h1>Vest and Vehicle quick assignment status (readonly)</h1>";
 
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 
 	
 	$sql_drivers_get_ready_yellow = "select * from VestStatusView where VestStatusKey=3 and RouteKey=2 order by Modified";

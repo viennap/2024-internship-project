@@ -38,7 +38,8 @@ function initialDriver() {
         $PhoneNumber = empty($_POST['PhoneNumber'])?NULL:$_POST['PhoneNumber'];
         $Email = empty($_POST['Email'])?die("Please input the Email"):$_POST['Email'];
         $DriverKey = empty($_POST['DriverKey'])?die("Please input the DriverKey"):$_POST['DriverKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $ini_d_sql =  "INSERT IGNORE INTO Drivers (Firstname, Middlename, Lastname, Suffix, PhoneNumber, Email, DriverKey )
 			VALUES ('$Firstname', '$Middlename', '$Lastname', '$Suffix', '$PhoneNumber', '$Email', $DriverKey)";
 	$conn->query($ini_d_sql);

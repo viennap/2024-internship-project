@@ -31,7 +31,8 @@ if(array_key_exists('checkTraining', $_POST)) {
 
 function checkTraining() {
 	echo "This is check current drivers route training that is selected";
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	echo "<h3>Show Current Drivers Route Training</h3>";
         $sql_check_training_res = "select * from Training order by RouteKey,Modified,DriverKey";
         $check_training_res = $conn->query($sql_check_training_res);

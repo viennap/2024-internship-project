@@ -8,7 +8,8 @@
 <?php
 	echo "<h1>Vest and Vehicle quick assignment status (readonly)</h1>";
 
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 
 	//echo "<br>";
 	

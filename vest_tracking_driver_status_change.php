@@ -30,7 +30,8 @@ if(array_key_exists('checkVestStatusView', $_POST)) {
 
 function checkVestStatusView() {
 	echo "This is check current VestStatusView that is selected";
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	echo "<h3>Show VestStatusView</h3>";
         $sql_check_vest_view_res = "select * from VestStatusView order by TeamName,VestStatusKey";
         $check_vest_view_res = $conn->query($sql_check_vest_view_res);
@@ -62,7 +63,8 @@ function checkVestStatusView() {
 function driverReady() {
 	echo "This is get driver ready that is selected";
 	$VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	$sql_ready = "INSERT INTO VestStatus (VestKey, VestStatusKey)
                 VALUES ($VestKey, ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Be Ready') )";
 	$conn->query($sql_ready);

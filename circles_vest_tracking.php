@@ -118,7 +118,8 @@ if(array_key_exists('checkDrivers', $_POST)) {
 
 function checkDrivers() {
         echo "This is Check current drivers that is selected";
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	$check_d_sql ="select * from Drivers";
 	$check_d_res = $conn->query($check_d_sql);
 	echo "<br>";
@@ -156,7 +157,8 @@ function initialDriver() {
         $PhoneNumber = empty($_POST['PhoneNumber'])?NULL:$_POST['PhoneNumber'];
         $Email = empty($_POST['Email'])?die("Please input the Email"):$_POST['Email'];
         $DriverKey = empty($_POST['DriverKey'])?die("Please input the DriverKey"):$_POST['DriverKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $ini_d_sql =  "INSERT IGNORE INTO Drivers (Firstname, Middlename, Lastname, Suffix, PhoneNumber, Email, DriverKey )
 			VALUES ('$Firstname', '$Middlename', '$Lastname', '$Suffix', '$PhoneNumber', '$Email', $DriverKey)";
 	$conn->query($ini_d_sql);
@@ -306,7 +308,8 @@ function initialVest() {
         echo "This is Initialize a vest that is selected";
         $VestKey = empty($_POST['VestKey'])?die("Please input the Firstname"):$_POST['VestKey'];
         $TeamName = empty($_POST['TeamName'])?die("Please input the TeamName"):$_POST['TeamName'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $ini_v_sql =  "INSERT IGNORE INTO Vests (VestKey,  RouteKey, TeamName )
                         VALUES ($VeatKey, 1, '$TeamName')";
         $conn->query($ini_v_sql);
@@ -436,7 +439,8 @@ function unassignVestDriver() {
 
 function checkTraining() {
 	echo "This is check current drivers route training that is selected";
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	echo "<h3>Show Current Drivers Route Training</h3>";
         $sql_check_training_res = "select * from Training";
         $check_training_res = $conn->query($sql_check_training_res);
@@ -505,7 +509,8 @@ function unassignRouteDriver() {
 
 function checkVestStatusView() {
 	echo "This is check current VestStatusView that is selected";
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	echo "<h3>Show VestStatusView</h3>";
         $sql_check_vest_view_res = "select * from VestStatusView order by TeamName,VestStatusKey";
         $check_vest_view_res = $conn->query($sql_check_vest_view_res);
@@ -537,7 +542,8 @@ function checkVestStatusView() {
 function driverReady() {
 	echo "This is get driver ready that is selected";
 	$DriverKeyS = empty($_POST['DriverKeyS'])?die("Please input the DriverKey"):$_POST['DriverKeyS'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	$sql_ready = "INSERT INTO VestStatus (VestKey, VestStatusKey)
                 VALUES ((select VestKey from Vests where DriverKey = $DriverKeyS), ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Be Ready') )";
 	$conn->query($sql_ready);
@@ -650,7 +656,8 @@ function assignVestCar() {
 	echo "This is assign a vest to a car that is selected";
 	$VestKeyC = empty($_POST['VestKeyC'])?die("Please input the VestKey"):$_POST['VestKeyC'];
         $CarKey = empty($_POST['CarKey'])?die("Please input the CarKey"):$_POST['CarKey'];	
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	$a_sql_1 = "UPDATE Cars as c
 		SET c.VestKey = $VestKeyC
 		WHERE c.CarKey = $CarKey";
@@ -723,7 +730,8 @@ function unassignVestCar() {
 	echo "This is unassign a vest from a car that is selected";
 	$VestKeyC = empty($_POST['VestKeyC'])?die("Please input the VestKey"):$_POST['VestKeyC'];
 	$CarKey = empty($_POST['CarKey'])?die("Please input the CarKey"):$_POST['CarKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	$una_sql_1 = "UPDATE Cars as c
 		SET c.VestKey = NULL
 		WHERE c.CarKey = $CarKey

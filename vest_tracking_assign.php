@@ -32,7 +32,8 @@ function assign() {
 	echo "This is assign that is selected";
 	$VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
         $CarKey = empty($_POST['CarKey'])?die("Please input the CarKey"):$_POST['CarKey'];	
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	$a_sql_1 = "UPDATE Cars as c
 		SET c.VestKey = $VestKey
 		WHERE c.CarKey = $CarKey";
@@ -105,7 +106,8 @@ function unassign() {
 	echo "This is unassign that is selected";
 	$VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
 	$CarKey = empty($_POST['CarKey'])?die("Please input the CarKey"):$_POST['CarKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	$una_sql_1 = "UPDATE Cars as c
 		SET c.VestKey = NULL
 		WHERE c.CarKey = $CarKey

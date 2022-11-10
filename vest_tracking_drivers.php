@@ -78,7 +78,8 @@ if(array_key_exists('checkDrivers', $_POST)) {
 
 function checkDrivers() {
         echo "This is Check current drivers that is selected";
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	$check_d_sql ="select * from Drivers";
 	$check_d_res = $conn->query($check_d_sql);
 	echo "<br>";
@@ -116,7 +117,8 @@ function initialDriver() {
         $PhoneNumber = empty($_POST['PhoneNumber'])?NULL:$_POST['PhoneNumber'];
         $Email = empty($_POST['Email'])?die("Please input the Email"):$_POST['Email'];
         $DriverKey = empty($_POST['DriverKey'])?die("Please input the DriverKey"):$_POST['DriverKey'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $ini_d_sql =  "INSERT IGNORE INTO Drivers (Firstname, Middlename, Lastname, Suffix, PhoneNumber, Email, DriverKey )
 			VALUES ('$Firstname', '$Middlename', '$Lastname', '$Suffix', '$PhoneNumber', '$Email', $DriverKey)";
 	$conn->query($ini_d_sql);
@@ -191,7 +193,8 @@ function initialVest() {
         echo "This is Initialize a vest that is selected";
         $VestKey = empty($_POST['VestKey'])?die("Please input the Firstname"):$_POST['VestKey'];
         $TeamName = empty($_POST['TeamName'])?die("Please input the Lastname"):$_POST['TeamName'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $ini_v_sql =  "INSERT IGNORE INTO Vests (VestKey, DriverKey, RouteKey, TeamName )
                         VALUES ($VeatKey, NULL, 1, '$TeamName')";
         $conn->query($ini_v_sql);
@@ -321,7 +324,8 @@ function unassignVestDriver() {
 
 function checkTraining() {
 	echo "This is check current drivers route training that is selected";
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 	echo "<h3>Show Current Drivers Route Training</h3>";
         $sql_check_training_res = "select * from Training";
         $check_training_res = $conn->query($sql_check_training_res);

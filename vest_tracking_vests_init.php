@@ -27,7 +27,8 @@ function initialVest() {
         echo "This is Initialize a vest that is selected";
         $VestKey = empty($_POST['VestKey'])?die("Please input the Firstname"):$_POST['VestKey'];
         //$TeamName = empty($_POST['TeamName'])?die("Please input the TeamName"):$_POST['TeamName'];
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
         $ini_v_sql =  "INSERT IGNORE INTO Vests (VestKey,  RouteKey, TeamName )
                         VALUES ($VeatKey, 1, 'CIRCLES Crew')";
         $conn->query($ini_v_sql);
