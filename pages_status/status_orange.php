@@ -49,6 +49,9 @@ echo date("Y-m-d H:i:s", $timestamp);
         <h2 style="color: #000000">On Break</h2>
         
         <?php
+            $sqlinfo = require_once('/var/www/config.php');
+            $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
+        
             $sql_drivers_assigned_orange = "select * from VestStatusView where VestStatusKey=1 and RouteKey=1 order by Modified";
             $drivers_assigned_res_orange = $conn->query($sql_drivers_assigned_orange);
 
@@ -72,9 +75,6 @@ echo date("Y-m-d H:i:s", $timestamp);
         <h2>Get Ready To Drive</h2>
         
         <?php
-            $sqlinfo = require_once('/var/www/config.php');
-            $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
-
             $sql_drivers_get_ready_orange = "select * from VestStatusView where VestStatusKey=3 and RouteKey=1 order by Modified";
             $drivers_get_ready_res_orange = $conn->query($sql_drivers_get_ready_orange);
 
