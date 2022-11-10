@@ -43,15 +43,23 @@
         </div>
         
         <form action='' method='post'>
-            Firstname(*): <input type='text' name='Firstname'>
-            Middlename: <input type='text' name='Middlename'>
-            Lastname(*): <input type='text' name='Lastname'>
-            Suffix: <input type='text' name='Suffix'>
-            PhoneNumber: <input type='text' name='PhoneNumber'>
-            Email(*): <input type='text' name='Email'>
-            DriverKey(*): <input type='text' name='DriverKey'>
-            <input type='submit' value='Initialize a driver' name='initialDriver' class="button">
-            <input type='submit' value='Delete a driver(only need to input DriverKey)' name='deleteDriver' class="button">
+            <div class="row">
+                <div class="column">
+                    Firstname(*): <input type='text' name='Firstname'>
+                    Middlename: <input type='text' name='Middlename'>
+                    Lastname(*): <input type='text' name='Lastname'>
+                    Suffix: <input type='text' name='Suffix'>
+                </div>
+                <div class="column">
+                    Phone Number: <input type='text' name='PhoneNumber'>
+                    Email(*): <input type='text' name='Email'>
+                    DriverKey(*): <input type='text' name='DriverKey'>
+                </div>
+            </div>
+            <div class="row">
+                <input type='submit' value='Initialize a driver' name='initialDriver' class="button">
+                <input type='submit' value='Delete a driver(only need to input DriverKey)' name='deleteDriver' class="button">
+            </div>
         </form>
 
         <?php
