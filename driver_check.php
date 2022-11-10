@@ -56,16 +56,16 @@ echo date("Y-m-d H:i:s", $timestamp);
         if ($check_d_res->num_rows > 0) {
                 while($row = $check_d_res->fetch_assoc()) {
                         echo"<tr>";
-                        echo"<td>".$row[DriverKey]."</td>";
-                        echo"<td>".$row[Firstname]." </td>";
-                        echo"<td>".$row[Middlename]." </td>";
-                        echo"<td>".$row[Lastname]." </td>";
-                        echo"<td>".$row[Suffix]." </td>";
-                        echo"<td>".$row[PhoneNumer]."</td>";
-                        echo"<td>".$row[Email]." </td>";
-                        echo"<td>".$row[VestKey]." </td>";
-                        echo"<td>".$row[IsActive]." </td>";
-                        echo"<td>".$row[Modified]." </td>";
+                        echo"<td>".$row['DriverKey']."</td>";
+                        echo"<td>".$row['Firstname']." </td>";
+                        echo"<td>".$row['Middlename']." </td>";
+                        echo"<td>".$row['Lastname']." </td>";
+                        echo"<td>".$row['Suffix']." </td>";
+                        echo"<td>".$row['PhoneNumber']."</td>";
+                        echo"<td>".$row['Email']." </td>";
+                        echo"<td>".$row['VestKey']." </td>";
+                        echo"<td>".$row['IsActive']." </td>";
+                        echo"<td>".$row['Modified']." </td>";
                         echo"</tr>";
 
 
