@@ -50,7 +50,7 @@ echo date("Y-m-d H:i:s", $timestamp);
 	$check_d_res = $conn->query($check_d_sql);
 
         echo "<table border=1>";
-        echo "<tr><td>DriverKey</td><td>Firstname</td><td>Middlename</td><td>Lastname</td><td>Suffix</td><td>PhoneNumer</td><td>Email</td><td>VestKey</td><td>IsActive</td><td>Modified</td></tr>";
+        echo "<tr><td>DriverKey</td><td>Firstname</td><td>Middlename</td><td>Lastname</td><td>Suffix</td><td>PhoneNumber</td><td>Email</td><td>VestKey</td><td>IsActive</td><td>Modified</td></tr>";
         echo "<tr>";
         if ($check_d_res->num_rows > 0) {
                 while($row = $check_d_res->fetch_assoc()) {
