@@ -112,7 +112,7 @@ echo date("Y-m-d H:i:s", $timestamp);
                     echo"<td>".$row['DriverFirstName']." </td>";
                     echo"<td>".$row['DriverLastName']." </td>";
                     echo"</tr>";
-            } >
+            } }
             echo "</table>";
         ?>
     </div>
