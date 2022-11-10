@@ -42,6 +42,43 @@
 
         </div>
         
+        <div>
+        <nav>
+            <ul>
+                <li><a href="#drivers">Drivers</a></li>
+                <li><a href="#vests">Vests</a></li>
+                <li><a href="#vehicles">Vehicles</a></li>
+                <li><a href="#status">Status</a></li>
+            </ul>
+        </nav>
+        </div>
+        
+        <div id="main">
+
+            <!-- Initialize -->
+                <article id="drivers">
+                    <div class="aligned"><span><h2 class="major">Drivers</h2></span><img src="images/drive.jpg" style="float: right;" width=300 alt="" /></div>
+                    <br>
+                    <a href="http://ransom.isis.vanderbilt.edu/vest_tracking_drivers_init.php" class="button">Initialize driver</a>
+                    <br>
+                    <a href="http://ransom.isis.vanderbilt.edu/vest_tracking_drivers_checkin.php" class="button">Check-in/Check-out</a>
+                    <br>
+                    <a href="http://ransom.isis.vanderbilt.edu/vest_tracking_driver_status_change.php" class="button">Status change</a>
+                    <br>
+                    <a href="http://ransom.isis.vanderbilt.edu/driver_check.php" class="button">Check current</a>
+                </article>
+
+            <!-- Delete -->
+                <article id="vests">
+                    <div class="aligned"><span><h2 class="major">Vests</h2></span><img src="images/vest.jpg" style="float: right;" width=300 alt="" /></div>
+                    <a href="http://ransom.isis.vanderbilt.edu/vest_tracking_vests_init.php" class="button">Initialize vest</a>
+                    <br>
+                    <a href="http://ransom.isis.vanderbilt.edu/vest_tracking_vests_assign.php" class="button">Assign/unassign</a>
+                    <br>
+                    <a href="http://ransom.isis.vanderbilt.edu/vest_tracking_vests_check.php" class="button">Check current</a>
+                </article>
+        </div>
+        
         <form action='' method='post'>
             <div class="row">
                 <div class="column">
