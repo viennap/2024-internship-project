@@ -43,7 +43,6 @@ echo date("Y-m-d H:i:s", $timestamp);
 </div>
 
 <?php
-	// $conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
 	$sqlinfo = require_once('../config.php');
 	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 

@@ -48,7 +48,9 @@ echo date("Y-m-d H:i:s", $timestamp);
 <div class="column" style="background-color:#1b7d35;">
 
 <?php
-	$conn = new mysqli('localhost', 'webuser', 'abcDFF2393@', 'vest_tracking_test');
+	$sqlinfo = require_once('/var/www/config.php');
+	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
+	
 
 	$sql_drivers_get_ready_orange = "select * from VestStatusView where VestStatusKey=3 and RouteKey=1 order by Modified";
 	$drivers_get_ready_res_orange = $conn->query($sql_drivers_get_ready_orange);
@@ -61,9 +63,9 @@ echo date("Y-m-d H:i:s", $timestamp);
         if ($drivers_get_ready_res_orange->num_rows > 0) {
                 while($row = $drivers_get_ready_res_orange->fetch_assoc()) {
                         echo"<tr>";
-                        echo"<td>".$row[VestKey]."</td>";
-                        echo"<td>".$row[DriverFirstName]." </td>";
-                        echo"<td>".$row[DriverLastName]." </td>";
+                        echo"<td>".$row['VestKey']."</td>";
+                        echo"<td>".$row['DriverFirstName']." </td>";
+                        echo"<td>".$row['DriverLastName']." </td>";
                         echo"</tr>";
                 }
         }
@@ -87,9 +89,9 @@ echo date("Y-m-d H:i:s", $timestamp);
 	if ($drivers_go_downstairs_res_orange->num_rows > 0) {
     		while($row = $drivers_go_downstairs_res_orange->fetch_assoc()) {
 			echo"<tr>";
-			echo"<td>".$row[VestKey]." </td>";
-			echo"<td>".$row[DriverFirstName]." </td>";
-			echo"<td>".$row[DriverLastName]." </td>";
+			echo"<td>".$row['VestKey']." </td>";
+			echo"<td>".$row['DriverFirstName']." </td>";
+			echo"<td>".$row['DriverLastName']." </td>";
 			echo"</tr>";
 		}
 	}
@@ -115,9 +117,9 @@ echo date("Y-m-d H:i:s", $timestamp);
         if ($drivers_go_upstairs_res_orange->num_rows > 0) {
                 while($row = $drivers_go_upstairs_res_orange->fetch_assoc()) {
                         echo"<tr>";
-                        echo"<td>".$row[VestKey]." </td>";
-                        echo"<td>".$row[DriverFirstName]." </td>";
-                        echo"<td>".$row[DriverLastName]." </td>";
+                        echo"<td>".$row['VestKey']." </td>";
+                        echo"<td>".$row['DriverFirstName']." </td>";
+                        echo"<td>".$row['DriverLastName']." </td>";
                         echo"</tr>";
 
 
@@ -140,9 +142,9 @@ echo date("Y-m-d H:i:s", $timestamp);
         if ($drivers_assigned_res_orange->num_rows > 0) {
                 while($row = $drivers_assigned_res_orange->fetch_assoc()) {
                         echo"<tr>";
-                        echo"<td>".$row[VestKey]."</td>";
-                        echo"<td>".$row[DriverFirstName]." </td>";
-                        echo"<td>".$row[DriverLastName]." </td>";
+                        echo"<td>".$row['VestKey']."</td>";
+                        echo"<td>".$row['DriverFirstName']." </td>";
+                        echo"<td>".$row['DriverLastName']." </td>";
                         echo"</tr>";
                 }
         }
