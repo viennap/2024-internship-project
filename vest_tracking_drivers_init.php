@@ -29,8 +29,7 @@
                 <a href="http://ransom.isis.vanderbilt.edu/home.html#drivers" class=button> Go home </a>
         </div>
         
-        <div id="main">
-            <form action='' method='post'>
+        <form action='' method='post'>
                 <div class="row">
                     <div class="column">
                         Firstname(*): <input type='text' name='Firstname'>
@@ -48,9 +47,7 @@
                     <input type='submit' value='Initialize a driver' name='initialDriver' class="button primary">
                     <input type='submit' value='Delete a driver(only need to input DriverKey)' name='deleteDriver' class="button">
                 </div>
-            </form>
-        </div>
-        
+        </form>
         
 
         <?php
@@ -121,13 +118,6 @@
         ?>
 
     </center>
-        
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/browser.min.js"></script>
-    <script src="assets/js/breakpoints.min.js"></script>
-    <script src="assets/js/util.js"></script>
-    <script src="assets/js/main.js"></script>
-        
     </body>
     
 </html>
