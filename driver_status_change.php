@@ -1,16 +1,55 @@
 <html>
-<head>
-<title>Vest Tracking Test</title>
-</head>
-<body>
-<center>
+    <head>
+
+        <title>Change driver status</title>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+        <style>
+            * { box-sizing: border-box; }
+            .column { float: left; width: 25%; padding: 10px; }
+            .row:after { content: ""; display: table; clear: both; }
+            @media screen and (max-width: 600px) { .column { width: 100%; } }
+        </style>
+
+    </head>
+
+    <body>
+    <center>
+        
+        <div class="row">
+            <h1> Change driver status </h1>
+        </div>
+
+        <div class="row">
+                <a href="http://ransom.isis.vanderbilt.edu/home.html#drivers" class=button> Go home </a>
+        </div>
+
+        <form action='' method='post'>
+            <div class="row">
+                VestKey(*): <input type='text' name='VestKey'>
+            </div>
+            <div class="row">
+                <div class="column" style="width: 12.5%"><br></div>
+                <div class="column">
+                    <input type='submit' value='Check current VestStatusView' name='checkVestStatusView' class="button">
+                </div>
+                <div class="column">
+                    <input type='submit' value='Get driver ready' name='driverReady' class="button">
+                </div>
+                <div class="column">
+                    <input type='submit' value='Get driver downstairs' name='driverDownstairs' class="button">
+                </div>
+                <div class="column" style="width: 12.5%"><br></div>
+            </div>
+        </form>
 
 <form action='' method='post'>
 <h2>Change driver status</h2>
-VestKey(*): <input type='text' name='VestKey'>
-<input type='submit' value='Check current VestStatusView' name='checkVestStatusView' class="button">
-<input type='submit' value='Get driver ready' name='driverReady' class="button">
-<input type='submit' value='Get driver downstairs' name='driverDownstairs' class="button">
+
 </form>
 
 
