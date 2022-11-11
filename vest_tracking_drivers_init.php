@@ -11,7 +11,7 @@
 
         <style>
             * { box-sizing: border-box; }
-            .column { float: left; width: 33.33%; padding: 10px; }
+            .column { float: left; width: 40%; padding: 10px; }
             .row:after { content: ""; display: table; clear: both; }
             @media screen and (max-width: 600px) { .column { width: 100%; } }
         </style>
@@ -31,6 +31,7 @@
         
         <form action='' method='post'>
                 <div class="row">
+                    <div class="column" style="width: 10%"><br></div>
                     <div class="column">
                         Firstname(*): <input type='text' name='Firstname'>
                         Middlename: <input type='text' name='Middlename'>
@@ -42,6 +43,7 @@
                         Email(*): <input type='text' name='Email'>
                         DriverKey(*): <input type='text' name='DriverKey'>
                     </div>
+                    <div class="column" style="width: 10%"><br></div>
                 </div>
                 <div class="row">
                     <input type='submit' value='Initialize a driver' name='initialDriver' class="button primary">
