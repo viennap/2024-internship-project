@@ -26,20 +26,7 @@
         </div>
 
         <div class="row">
-
-            <div class="column" style="width: 50%;">
-                <?php
-                header("refresh: 60;");
-                $timestamp=time();
-                echo "Last refresh:  ";
-                echo date("Y-m-d H:i:s", $timestamp);
-                ?>
-            </div>
-
-            <div class="column" style="width: 50%;">
                 <a href="http://ransom.isis.vanderbilt.edu/home.html#drivers" class=button> Go home </a>
-            </div>
-
         </div>
         
         <div>
