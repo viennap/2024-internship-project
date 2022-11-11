@@ -42,10 +42,10 @@
             <div class="row">
                 <div class="column" style="width: 12.5%"><br></div>
                 <div class="column">
-                    <input type='submit' value='Check current drivers route training' name='checkTraining' class="button">
+                    <input type='submit' value='Check current route' name='checkTraining' class="button">
                 </div>
                 <div class="column">
-                    <input type='submit' value='Assign driver to a trained route' name='assignRouteDriver' class="button">
+                    <input type='submit' value='Assign driver to route' name='assignRouteDriver' class="button">
                 </div>
                 <div class="column">
                     <input type='submit' value='Unassign driver from route' name='unassignRouteDriver' class="button">
