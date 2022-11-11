@@ -30,25 +30,25 @@
         </div>
         
         <form action='' method='post'>
-                <div class="row">
-                    <div class="column" style="width: 10%"><br></div>
-                    <div class="column">
-                        Firstname(*): <input type='text' name='Firstname'>
-                        Middlename: <input type='text' name='Middlename'>
-                        Lastname(*): <input type='text' name='Lastname'>
-                        Suffix: <input type='text' name='Suffix'>
-                    </div>
-                    <div class="column">
-                        Phone Number: <input type='text' name='PhoneNumber'>
-                        Email(*): <input type='text' name='Email'>
-                        DriverKey(*): <input type='text' name='DriverKey'>
-                    </div>
-                    <div class="column" style="width: 10%"><br></div>
+            <div class="row">
+                <div class="column" style="width: 10%"><br></div>
+                <div class="column">
+                    Firstname(*): <input type='text' name='Firstname'>
+                    Middlename: <input type='text' name='Middlename'>
+                    Lastname(*): <input type='text' name='Lastname'>
+                    Suffix: <input type='text' name='Suffix'>
                 </div>
-                <div class="row">
-                    <input type='submit' value='Initialize a driver' name='initialDriver' class="button primary">
-                    <input type='submit' value='Delete a driver(only need to input DriverKey)' name='deleteDriver' class="button">
+                <div class="column">
+                    Phone Number: <input type='text' name='PhoneNumber'>
+                    Email(*): <input type='text' name='Email'>
+                    DriverKey(*): <input type='text' name='DriverKey'>
                 </div>
+                <div class="column" style="width: 10%"><br></div>
+            </div>
+            <div class="row">
+                <input type='submit' value='Initialize driver' name='initialDriver' class="button primary">
+                <input type='submit' value='Delete driver (only input DriverKey)' name='deleteDriver' class="button">
+            </div>
         </form>
         
 
