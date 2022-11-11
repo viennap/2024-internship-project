@@ -30,7 +30,11 @@
 
         <form action='' method='post'>
             <div class="row">
-                VestKey(*): <input type='text' name='VestKey'>
+                <div class="column" style="width: 30%"><br></div>
+                <div class="column" style="width: 40%">
+                    VestKey(*): <input type='text' name='VestKey'>
+                </div>
+                <div class="column" style="width: 30%"><br></div>
             </div>
             <div class="row">
                 <div class="column" style="width: 12.5%"><br></div>
@@ -47,143 +51,125 @@
             </div>
         </form>
 
-<form action='' method='post'>
-<h2>Change driver status</h2>
 
-</form>
-
-
-<?php
-echo "<br>";
-echo "<a href=./home.html> go home </a>";
-echo "<br>";
-if(array_key_exists('checkVestStatusView', $_POST)) {
-        	checkVestStatusView();
-}
-	else if(array_key_exists('driverReady', $_POST)) {
-                driverReady();
-        }
-        else if(array_key_exists('driverDownstairs', $_POST)) {
-		driverDownstairs();
-	}
-
-function checkVestStatusView() {
-	echo "This is check current VestStatusView that is selected";
-	$sqlinfo = require_once('/var/www/config.php');
-	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
-	echo "<h3>Show VestStatusView</h3>";
-        $sql_check_vest_view_res = "select * from VestStatusView order by TeamName,VestStatusKey";
-        $check_vest_view_res = $conn->query($sql_check_vest_view_res);
-        echo "<table border=1>";
-        echo "<tr><td>VestKey</td><td>RouteColor</td><td>TeamName</td><td>DriverFirstName</td><td>DriverLastName</td><td>VestStatusString</td><td>RouteKey</td><td>DriverKey</td><td>VestStatusKey</td><td>Modified</td></tr>";
-        echo"<tr>";
-
-        if ($check_vest_view_res->num_rows > 0) {
-                while($row = $check_vest_view_res->fetch_assoc()) {
-                        echo"<tr>";
-                        echo"<td>".$row[VestKey]."</td>";
-                        echo"<td>".$row[RouteColor]." </td>";
-                        echo"<td>".$row[TeamName]." </td>";
-                        echo"<td>".$row[DriverFirstName]." </td>";
-                        echo"<td>".$row[DriverLastName]." </td>";
-                        echo"<td>".$row[VestStatusString]."</td>";
-                        echo"<td>".$row[RouteKey]." </td>";
-                        echo"<td>".$row[DriverKey]." </td>";
-                        echo"<td>".$row[VestStatusKey]." </td>";
-                        echo"<td>".$row[Modified]." </td>";
-                        echo"</tr>";
-
-
+        <?php
+            echo "<br>";
+            echo "<a href=./home.html> go home </a>";
+            echo "<br>";
+            if(array_key_exists('checkVestStatusView', $_POST)) {
+                        checkVestStatusView();
+            }
+                else if(array_key_exists('driverReady', $_POST)) {
+                            driverReady();
+                    }
+                    else if(array_key_exists('driverDownstairs', $_POST)) {
+                    driverDownstairs();
                 }
-        }
-        echo "</table>";
-}
 
-function driverReady() {
-	echo "This is get driver ready that is selected";
-	$VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
-	$sqlinfo = require_once('/var/www/config.php');
-	$conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
-	$sql_ready = "INSERT INTO VestStatus (VestKey, VestStatusKey)
-                VALUES ($VestKey, ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Be Ready') )";
-	$conn->query($sql_ready);
-	echo "<br>";
-        echo "Driver gets ready!";
-        echo "<br>";
-        echo "<br>";
-        echo "<h3>Show VestStatusView</h3>";
-        $sql_ready_res = "select * from VestStatusView where VestKey = $VestKey";
-        $ready_res = $conn->query($sql_ready_res);
-        echo "<table border=1>";
-        echo "<tr><td>VestKey</td><td>RouteColor</td><td>TeamName</td><td>DriverFirstName</td><td>DriverLastName</td><td>VestStatusString</td><td>RouteKey</td><td>DriverKey</td><td>VestStatusKey</td><td>Modified</td></tr>";
-        echo"<tr>";
+            function checkVestStatusView() {
+                echo "This is check current VestStatusView that is selected";
+                $sqlinfo = require_once('/var/www/config.php');
+                $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
+                echo "<h3>Show VestStatusView</h3>";
+                $sql_check_vest_view_res = "select * from VestStatusView order by TeamName,VestStatusKey";
+                $check_vest_view_res = $conn->query($sql_check_vest_view_res);
+                echo "<table border=1>";
+                echo "<tr><td>VestKey</td><td>RouteColor</td><td>TeamName</td><td>DriverFirstName</td><td>DriverLastName</td><td>VestStatusString</td><td>RouteKey</td><td>DriverKey</td><td>VestStatusKey</td><td>Modified</td></tr>";
+                echo"<tr>";
 
-        if ($ready_res->num_rows > 0) {
-                while($row = $ready_res->fetch_assoc()) {
-                        echo"<tr>";
-                        echo"<td>".$row[VestKey]."</td>";
-                        echo"<td>".$row[RouteColor]." </td>";
-                        echo"<td>".$row[TeamName]." </td>";
-                        echo"<td>".$row[DriverFirstName]." </td>";
-                        echo"<td>".$row[DriverLastName]." </td>";
-                        echo"<td>".$row[VestStatusString]."</td>";
-                        echo"<td>".$row[RouteKey]." </td>";
-                        echo"<td>".$row[DriverKey]." </td>";
-                        echo"<td>".$row[VestStatusKey]." </td>";
-                        echo"<td>".$row[Modified]." </td>";
-                        echo"</tr>";
+                if ($check_vest_view_res->num_rows > 0) {
+                        while($row = $check_vest_view_res->fetch_assoc()) {
+                                echo"<tr>";
+                                echo"<td>".$row[VestKey]."</td>";
+                                echo"<td>".$row[RouteColor]." </td>";
+                                echo"<td>".$row[TeamName]." </td>";
+                                echo"<td>".$row[DriverFirstName]." </td>";
+                                echo"<td>".$row[DriverLastName]." </td>";
+                                echo"<td>".$row[VestStatusString]."</td>";
+                                echo"<td>".$row[RouteKey]." </td>";
+                                echo"<td>".$row[DriverKey]." </td>";
+                                echo"<td>".$row[VestStatusKey]." </td>";
+                                echo"<td>".$row[Modified]." </td>";
+                                echo"</tr>";
+                } }
+                echo "</table>";
+            }
 
+            function driverReady() {
+                echo "This is get driver ready that is selected";
+                $VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
+                $sqlinfo = require_once('/var/www/config.php');
+                $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
+                $sql_ready = "INSERT INTO VestStatus (VestKey, VestStatusKey)
+                            VALUES ($VestKey, ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Be Ready') )";
+                $conn->query($sql_ready);
+                echo "<br>";
+                echo "Driver gets ready!";
+                echo "<br>";
+                echo "<br>";
+                echo "<h3>Show VestStatusView</h3>";
+                $sql_ready_res = "select * from VestStatusView where VestKey = $VestKey";
+                $ready_res = $conn->query($sql_ready_res);
+                echo "<table border=1>";
+                echo "<tr><td>VestKey</td><td>RouteColor</td><td>TeamName</td><td>DriverFirstName</td><td>DriverLastName</td><td>VestStatusString</td><td>RouteKey</td><td>DriverKey</td><td>VestStatusKey</td><td>Modified</td></tr>";
+                echo"<tr>";
 
-                }
-        }
-        echo "</table>";
+                if ($ready_res->num_rows > 0) {
+                        while($row = $ready_res->fetch_assoc()) {
+                                echo"<tr>";
+                                echo"<td>".$row[VestKey]."</td>";
+                                echo"<td>".$row[RouteColor]." </td>";
+                                echo"<td>".$row[TeamName]." </td>";
+                                echo"<td>".$row[DriverFirstName]." </td>";
+                                echo"<td>".$row[DriverLastName]." </td>";
+                                echo"<td>".$row[VestStatusString]."</td>";
+                                echo"<td>".$row[RouteKey]." </td>";
+                                echo"<td>".$row[DriverKey]." </td>";
+                                echo"<td>".$row[VestStatusKey]." </td>";
+                                echo"<td>".$row[Modified]." </td>";
+                                echo"</tr>";
+                } }
+                echo "</table>";
+            }
 
-}
+            function driverDownstairs() {
+                echo "This is get driver downstairs that is selected";
+                $VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
+                $sqlinfo = require_once('/var/www/config.php');
+                $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
+                $sql_downstairs = "INSERT INTO VestStatus (VestKey, VestStatusKey)
+                        VALUES ($VestKey, ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Go Downstairs') )";
+                $conn->query($sql_downstairs);
+                echo "<br>";
+                echo "Driver goes downstairs!";
+                echo "<br>";
+                echo "<br>";
+                echo "<h3>Show VestStatusView</h3>";
+                $sql_downstairs_res = "select * from VestStatusView where VestKey = $VestKey";
+                $downstairs_res = $conn->query($sql_downstairs_res);
+                echo "<table border=1>";
+                echo "<tr><td>VestKey</td><td>RouteColor</td><td>TeamName</td><td>DriverFirstName</td><td>DriverLastName</td><td>VestStatusString</td><td>RouteKey</td><td>DriverKey</td><td>VestStatusKey</td><td>Modified</td></tr>";
+                echo"<tr>";
 
-function driverDownstairs() {
-        echo "This is get driver downstairs that is selected";
-        $VestKey = empty($_POST['VestKey'])?die("Please input the VestKey"):$_POST['VestKey'];
-        $sqlinfo = require_once('/var/www/config.php');
-        $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
-        $sql_downstairs = "INSERT INTO VestStatus (VestKey, VestStatusKey)
-                VALUES ($VestKey, ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Go Downstairs') )";
-        $conn->query($sql_downstairs);
-        echo "<br>";
-        echo "Driver goes downstairs!";
-        echo "<br>";
-        echo "<br>";
-        echo "<h3>Show VestStatusView</h3>";
-        $sql_downstairs_res = "select * from VestStatusView where VestKey = $VestKey";
-        $downstairs_res = $conn->query($sql_downstairs_res);
-        echo "<table border=1>";
-        echo "<tr><td>VestKey</td><td>RouteColor</td><td>TeamName</td><td>DriverFirstName</td><td>DriverLastName</td><td>VestStatusString</td><td>RouteKey</td><td>DriverKey</td><td>VestStatusKey</td><td>Modified</td></tr>";
-        echo"<tr>";
+                if ($downstairs_res->num_rows > 0) {
+                        while($row = $downstairs_res->fetch_assoc()) {
+                                echo"<tr>";
+                                echo"<td>".$row[VestKey]."</td>";
+                                echo"<td>".$row[RouteColor]." </td>";
+                                echo"<td>".$row[TeamName]." </td>";
+                                echo"<td>".$row[DriverFirstName]." </td>";
+                                echo"<td>".$row[DriverLastName]." </td>";
+                                echo"<td>".$row[VestStatusString]."</td>";
+                                echo"<td>".$row[RouteKey]." </td>";
+                                echo"<td>".$row[DriverKey]." </td>";
+                                echo"<td>".$row[VestStatusKey]." </td>";
+                                echo"<td>".$row[Modified]." </td>";
+                                echo"</tr>";
+                } }
+                echo "</table>";
+            }
+        ?>
 
-        if ($downstairs_res->num_rows > 0) {
-                while($row = $downstairs_res->fetch_assoc()) {
-                        echo"<tr>";
-                        echo"<td>".$row[VestKey]."</td>";
-                        echo"<td>".$row[RouteColor]." </td>";
-                        echo"<td>".$row[TeamName]." </td>";
-                        echo"<td>".$row[DriverFirstName]." </td>";
-                        echo"<td>".$row[DriverLastName]." </td>";
-                        echo"<td>".$row[VestStatusString]."</td>";
-                        echo"<td>".$row[RouteKey]." </td>";
-                        echo"<td>".$row[DriverKey]." </td>";
-                        echo"<td>".$row[VestStatusKey]." </td>";
-                        echo"<td>".$row[Modified]." </td>";
-                        echo"</tr>";
-
-
-                }
-        }
-        echo "</table>";
-
-}
-
-
-?>
-
-</center>
-</body>
+    </center>
+    </body>
 </html>

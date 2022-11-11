@@ -31,7 +31,11 @@
 
         <form action='' method='post'>
             <div class="row">
-                DriverKey(*): <input type='text' name='DriverKey'>
+                <div class="column" style="width: 30%"><br></div>
+                <div class="column" style="width: 40%">
+                    DriverKey(*): <input type='text' name='DriverKey'>
+                </div>
+                <div class="column" style="width: 30%"><br></div>
             </div>
             <div class="row">
                 <div class="column" style="width: 20%"><br></div>
