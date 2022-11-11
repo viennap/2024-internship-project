@@ -29,58 +29,26 @@
                 <a href="http://ransom.isis.vanderbilt.edu/home.html#drivers" class=button> Go home </a>
         </div>
         
-        <div>
-                <a href="#form1" class=button>Drivers</a>
-                <a href="#form2" class=button>Vests</a>
-        </div>
-        
         <div id="main">
-
-            <!-- Initialize -->
-                <article id="form1">
-                    <form action='' method='post'>
-                        <div class="row">
-                            <div class="column">
-                                Firstname(*): <input type='text' name='Firstname'>
-                                Middlename: <input type='text' name='Middlename'>
-                                Lastname(*): <input type='text' name='Lastname'>
-                                Suffix: <input type='text' name='Suffix'>
-                            </div>
-                            <div class="column">
-                                Phone Number: <input type='text' name='PhoneNumber'>
-                                Email(*): <input type='text' name='Email'>
-                                DriverKey(*): <input type='text' name='DriverKey'>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <input type='submit' value='Initialize a driver' name='initialDriver' class="button">
-                            <input type='submit' value='Delete a driver(only need to input DriverKey)' name='deleteDriver' class="button">
-                        </div>
-                    </form>
-                </article>
-
-            <!-- Delete -->
-                <article id="form2">
-                    <form action='' method='post'>
-                        <div class="row">
-                            <div class="column">
-                                ZFirstname(*): <input type='text' name='Firstname'>
-                                ZMiddlename: <input type='text' name='Middlename'>
-                                ZLastname(*): <input type='text' name='Lastname'>
-                                ZSuffix: <input type='text' name='Suffix'>
-                            </div>
-                            <div class="column">
-                                ZPhone Number: <input type='text' name='PhoneNumber'>
-                                ZEmail(*): <input type='text' name='Email'>
-                                ZDriverKey(*): <input type='text' name='DriverKey'>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <input type='submit' value='Initialize a driver' name='initialDriver' class="button">
-                            <input type='submit' value='Delete a driver(only need to input DriverKey)' name='deleteDriver' class="button">
-                        </div>
-                    </form>
-                </article>
+            <form action='' method='post'>
+                <div class="row">
+                    <div class="column">
+                        Firstname(*): <input type='text' name='Firstname'>
+                        Middlename: <input type='text' name='Middlename'>
+                        Lastname(*): <input type='text' name='Lastname'>
+                        Suffix: <input type='text' name='Suffix'>
+                    </div>
+                    <div class="column">
+                        Phone Number: <input type='text' name='PhoneNumber'>
+                        Email(*): <input type='text' name='Email'>
+                        DriverKey(*): <input type='text' name='DriverKey'>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type='submit' value='Initialize a driver' name='initialDriver' class="button primary">
+                    <input type='submit' value='Delete a driver(only need to input DriverKey)' name='deleteDriver' class="button">
+                </div>
+            </form>
         </div>
         
         
