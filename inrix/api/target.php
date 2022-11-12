@@ -20,7 +20,7 @@ if ($conn->connect_error)
 
 function get_all_data() {
   global $conn;
-  $sql = "WITH last_time AS (SELECT max(published_at) as last_time FROM fact_speed_planner) SELECT sp.published_at, sp.position, sp.lane_num, sp.target_speed, sp.max_headway FROM fact_speed_planner sp JOIN last_time lt on sp.published_at = lt.last_time";
+  $sql = "WITH last_time AS (SELECT max(published_at) as last_time FROM fact_speed_planner) SELECT sp.published_at/1000.0 AS published_at, sp.position, sp.lane_num, sp.target_speed, sp.max_headway FROM fact_speed_planner sp JOIN last_time lt on sp.published_at = lt.last_time";
   $result = $conn->query($sql);
   $target = array();
   if ($result->num_rows > 0) {
