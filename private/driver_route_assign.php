@@ -57,7 +57,7 @@
 
         <?php
             echo "<br>";
-            echo "<a href=./home.html> go home </a>";
+            echo "<a href=/home.html> go home </a>";
             echo "<br>";
             if(array_key_exists('checkTraining', $_POST)) {
                 checkTraining();
