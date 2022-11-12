@@ -20,24 +20,11 @@ if ($conn->connect_error)
 function get_all_data() {
   global $conn;
   $result_array = array();
-  if (array_key_exists('timestamp', $_GET)) {
-    $statement = $conn->prepare('SELECT MAX(observed_at) FROM fact_vehicle_observation WHERE observed_at <= ?');
-    $limit_timestamp = (double)$_GET['timestamp'];
-    $statement->bind_param('d', $limit_timestamp);
-    $statement->execute();
-    $result = $statement->get_result();
-    if ($result->num_rows == 1) {
-      $row = $result->fetch_assoc();
-      $result_array['timestamp'] = (double)$row['MAX(observed_at)'];
-    }
-  }
-  else {
-    $statement = "SELECT MAX(observed_at) FROM fact_vehicle_observation";
-    $result = $conn->query($statement);
-    if ($result->num_rows == 1) {
-        $row = $result->fetch_assoc();
-        $result_array['timestamp'] = (double)$row['MAX(observed_at)'];
-      }
+  $statement = $conn->prepare('SELECT vin, MAX(observed_at) FROM fact_vehicle_observation GROUP BY vin');
+  $statement->execute();
+  $result = $statement->get_result();
+  while ($row = $result->fetch_assoc()) {
+    $result_array[] = $row;
   }
   return $result_array;
 }
