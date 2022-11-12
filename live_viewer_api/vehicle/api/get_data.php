@@ -37,7 +37,9 @@ function get_all_data() {
   }
   $statement = $conn->prepare($query);
   echo $lane_num;
+  echo '\n';
   echo $second;
+  echo '\n';
   echo $second_sub_history_time;
   $statement->bind_param('idd', $lane_num, $second, $second_sub_history_time);
   $statement->execute();
