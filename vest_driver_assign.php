@@ -99,7 +99,7 @@
                 $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
                 $a_vd_sql_1 = "UPDATE Drivers SET VestKey = $VestKey WHERE DriverKey = $DriverKeyV";
                 $conn->query($a_vd_sql_1);
-                $a_vd_sql_2 = "UPDATE Vests SET DriverKey = $DriverKeyV,RouteKey = (SELECT RouteKey from Training WHERE DriverKey = $DriverKeyV) WHERE VestKey = $VestKey";
+                $a_vd_sql_2 = "UPDATE Vests SET DriverKey = $DriverKeyV WHERE VestKey = $VestKey";
                 $conn->query($a_vd_sql_2);
                 $a_vd_sql_3 = "INSERT INTO VestStatus (VestKey, VestStatusKey)VALUES ($VestKey, ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'VestAssigned') )";
                 $conn->query($a_vd_sql_3);
@@ -140,7 +140,7 @@
                 $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
                 $una_vd_sql_1 = "UPDATE Drivers SET VestKey = NULL WHERE DriverKey = $DriverKeyV";
                 $conn->query($una_vd_sql_1);
-                $una_vd_sql_2 = "UPDATE Vests SET DriverKey = NULL,RouteKey = 1 WHERE VestKey = $VestKey";
+                $una_vd_sql_2 = "UPDATE Vests SET DriverKey = NULL WHERE VestKey = $VestKey";
                 $conn->query($una_vd_sql_2);
                 echo "<br>";
                 echo "Unassign vest from driver success!";
