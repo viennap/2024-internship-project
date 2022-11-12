@@ -27,7 +27,7 @@ function get_all_data() {
     $result = $statement->get_result();
     if ($result->num_rows == 1) {
       $row = $result->fetch_assoc();
-      $result_array['timestamp'] = $row['MAX(queried_at)'];
+      $result_array['timestamp'] = (double)$row['MAX(queried_at)'];
     }
   }
   else {
@@ -35,7 +35,7 @@ function get_all_data() {
     $result = $conn->query($statement);
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
-        $result_array['timestamp'] = $row['MAX(queried_at)'];
+        $result_array['timestamp'] = (double)$row['MAX(queried_at)'];
       }
   }
   return $result_array;
