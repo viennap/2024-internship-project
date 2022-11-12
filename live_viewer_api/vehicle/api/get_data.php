@@ -36,6 +36,9 @@ function get_all_data() {
     WHERE lane_num = ? AND ? >= observed_at AND observed_at >= ? ORDER BY vin, observed_at";
   }
   $statement = $conn->prepare($query);
+  echo $lane_num;
+  echo $second;
+  echo $second_sub_history_time;
   $statement->bind_param('idd', $lane_num, $second, $second_sub_history_time);
   $statement->execute();
   $result = $statement->get_result();
