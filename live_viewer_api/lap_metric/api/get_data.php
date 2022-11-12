@@ -23,7 +23,8 @@ function get_all_data() {
   $second = (double)$_GET['second'];
   $tolerance = (double)$_GET['tolerance'];
   $second_sub_tolerance_time = $second - $tolerance;
-  $statement = $conn->prepare("SELECT vin, lap_uuid, start_time, start_position, end_time, end_position, avg_speed, fuel_economy, pct_time_infeasible 
+  
+  $statement = $conn->prepare("SELECT a.vin, a.lap_uuid, a.start_time, a.start_position, a.end_time, a.end_position, a.avg_speed, a.fuel_economy, a.pct_time_infeasible 
   FROM fact_lap_metrics a INNER JOIN ( SELECT vin, MAX(end_time) AS end_time FROM fact_lap_metrics WHERE ? >= end_time AND end_time >= ? GROUP BY vin ) b 
   ON a.vin = b.vin AND a.end_time = b.end_time ORDER BY a.vin, a.end_time");
   $statement->bind_param('dd', $second, $second_sub_tolerance_time);
