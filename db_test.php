@@ -57,7 +57,7 @@ echo"<tr>";
 
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
-  if ($row[current_update_min]<5){
+  if ($row[current_update_min]<2){
     echo "<tr style='background-color: #74c451;'>";
     }
     else{
@@ -76,16 +76,16 @@ if ($result->num_rows > 0) {
 	echo"<td>".$row[total_ram_used_percent]." </td>";
 	echo"<td>".$row[total_memory_used_percent]." </td>";
 	echo"<td>".$row[cpu_load_1_5_15min]." </td>";
-	// echo"<td>".$row[current_update_min]." </td>";
-  if($row[current_update_min]<30)
-                              {
-           echo "<td style='background-color: #74c451;'>".$row[current_update_min]."</td>";
-
-                         }
-                         else
-                         {
-           echo "<td style='background-color: #999999;'>".$row[current_update_min]."</td>";
-                         }
+	echo"<td>".$row[current_update_min]." </td>";
+  // if($row[current_update_min]<30)
+  //                             {
+  //          echo "<td style='background-color: #74c451;'>".$row[current_update_min]."</td>";
+  //
+  //                        }
+  //                        else
+  //                        {
+  //          echo "<td style='background-color: #999999;'>".$row[current_update_min]."</td>";
+  //                        }
   // echo"<td>".$row[acc_button_wire_connected]." </td>";
   if($row[acc_button_wire_connected]==0)
   {
