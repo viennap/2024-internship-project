@@ -23,7 +23,7 @@ function get_all_data() {
   $second = (double)$_GET['second'];
   $history_time = (double)$_GET['history_time'];
   $second_sub_history_time = $second - $history_time;
-  $statement = $conn->prepare('SELECT * FROM fact_inrix_estimate WHERE ? >= queried_at AND queried_at >= ?');
+  $statement = $conn->prepare('SELECT queried_at AS timestamp, segment_id, speed FROM fact_inrix_estimate WHERE ? >= queried_at AND queried_at >= ?');
   $statement->bind_param('dd', $second, $second_sub_history_time);
   $statement->execute();
   $result = $statement->get_result();
