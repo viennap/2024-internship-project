@@ -26,7 +26,7 @@ function get_all_data() {
   $only_recent = (bool)((int)$_GET['only_recent']);
   $second_sub_history_time = $second - $history_time;
   $query = "";
-  if (only_recent){
+  if ($only_recent){
     $query = "WITH max_obs AS ( SELECT vin, max(observed_at) AS max_obs_at FROM fact_vehicle_observation WHERE 1=1 AND lane_num = ? AND ? >= observed_at AND observed_at >= ? GROUP BY 1) 
     SELECT mo.max_obs_at AS observed_at, vo.position, vo.speed, vo.lane_num, vo.vin, vo.source, vp.acc_status, vp.is_wb, vp.latitude, vp.longitude FROM max_obs mo 
     JOIN fact_vehicle_observation vo ON 1=1 AND mo.vin = vo.vin AND mo.max_obs_at = vo.observed_at JOIN fact_vehicle_ping vp ON 1=1 AND vp.gpstime = mo.max_obs_at AND vp.vin = mo.vin";
