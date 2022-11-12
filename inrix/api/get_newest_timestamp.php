@@ -22,7 +22,8 @@ function get_all_data() {
   $result_array = array();
   if (array_key_exists('timestamp', $_GET)) {
     $statement = $conn->prepare('SELECT MAX(queried_at) FROM fact_inrix_estimate WHERE queried_at <= ?');
-    $statement->bind_param('d', (double)$_GET['timestamp']);
+    $limit_timestamp = (double)$_GET['timestamp'];
+    $statement->bind_param('d', $limit_timestamp);
     $statement->execute();
     $result = $statement->get_result();
     if ($result->num_rows == 1) {
