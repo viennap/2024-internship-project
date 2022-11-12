@@ -25,7 +25,7 @@
         </div>
 
         <div class="row">
-                <a href="http://ransom.isis.vanderbilt.edu/home.html#vests" class=button> Go home </a>
+                <a href="https://ransom.isis.vanderbilt.edu/home.html#vests" class=button> Go home </a>
         </div>
 
         <form action='' method='post'>

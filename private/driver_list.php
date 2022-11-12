@@ -29,7 +29,7 @@
 
             <div class="column">
                 <?php
-                header("refresh: 60;");
+                header("refresh: 5;");
                 $timestamp=time();
                 echo "Last refresh:  ";
                 echo date("Y-m-d H:i:s", $timestamp);
@@ -37,7 +37,7 @@
             </div>
 
             <div class="column">
-                <a href="http://ransom.isis.vanderbilt.edu/home.html#drivers" class=button> Go Home </a>
+                <a href="https://ransom.isis.vanderbilt.edu/home.html#drivers" class=button> Go Home </a>
             </div>
 
         </div>
