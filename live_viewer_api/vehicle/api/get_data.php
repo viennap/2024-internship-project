@@ -32,15 +32,10 @@ function get_all_data() {
     JOIN fact_vehicle_observation vo ON 1=1 AND mo.vin = vo.vin AND mo.max_obs_at = vo.observed_at JOIN fact_vehicle_ping vp ON 1=1 AND vp.gpstime = mo.max_obs_at AND vp.vin = mo.vin";
   }
   else {
-    $query = "SELECT observed_at, position, speed, lane_num, vin, source, acc_status, is_wb, latitude, longitude  FROM fact_vehicle_observation 
+    $query = "SELECT observed_at, position, speed, lane_num, vin, source  FROM fact_vehicle_observation 
     WHERE lane_num = ? AND ? >= observed_at AND observed_at >= ? ORDER BY vin, observed_at";
   }
   $statement = $conn->prepare($query);
-  echo $lane_num;
-  echo '\n';
-  echo $second;
-  echo '\n';
-  echo $second_sub_history_time;
   $statement->bind_param('idd', $lane_num, $second, $second_sub_history_time);
   $statement->execute();
   $result = $statement->get_result();
