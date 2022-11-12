@@ -28,7 +28,7 @@
 
             <div class="column">
                 <?php
-                    header("refresh: 60;");
+                    header("refresh: 5;");
                     $timestamp=time();
                     echo "Last refresh:  ";
                     echo date("Y-m-d H:i:s", $timestamp);
@@ -43,7 +43,7 @@
         
         
         <?php
-            header("refresh: 60;");
+            header("refresh: 5;");
             echo "<br>";
             $sqlinfo = require_once('/var/www/config.php');
             $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);

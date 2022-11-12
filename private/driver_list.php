@@ -29,7 +29,7 @@
 
             <div class="column">
                 <?php
-                header("refresh: 60;");
+                header("refresh: 5;");
                 $timestamp=time();
                 echo "Last refresh:  ";
                 echo date("Y-m-d H:i:s", $timestamp);
