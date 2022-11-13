@@ -308,7 +308,7 @@
                         echo"<td>".$row[Modified]." </td>";
                         echo"</tr>";
                 } }
-                echo "</table>";
+                echo "</table>";}
 
         ?>
 
