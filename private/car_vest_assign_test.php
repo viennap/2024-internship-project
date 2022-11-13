@@ -62,6 +62,13 @@
                 </div>
                 <div class="column" style="width: 15%"><br></div>
             </div>
+	    <div class="row">
+	    	<div class="column" style="width: 30%"><br></div>
+                <div class="column" style="width: 40%">
+                    <input type='submit' value='Check Cars Assignment History' name='carsAssignHis' class="button">
+                </div>
+		<div class="column" style="width: 30%"><br></div>
+	    </div>
         </form>
 
         
@@ -81,6 +88,9 @@
             }
             else if(array_key_exists('requestYellow', $_POST)) {
                 requestYellow();
+            }
+	    else if(array_key_exists('carsAssignHis', $_POST)) {
+                carsAssignHis();
             }
 
             function checkCarStatusView() {
@@ -277,6 +287,29 @@
                 echo "A yellow driver gets ready!";
 
         }
+	
+	function carsAssignHis() {
+                echo "This is check cars assignment history that is selected";
+                $sqlinfo = require_once('/var/www/config.php');
+                $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
+		echo "<h3>Show Cars Assignment History</h3>";                
+		$sql_cars_assign_his = "select * from CarStatus order by Modified DESC";
+		$cars_assign_his_res = $conn->query($sql_cars_assign_his);
+                echo "<table border=1>";
+                echo "<tr><td>CarKey</td><td>VestKey</td><td>CarStatusKey</td><td>IsActive</td><td>Modified</td></tr>";
+                echo"<tr>";
+                if ($cars_assign_his_res->num_rows > 0) {
+                    while($row = $cars_assign_his_res->fetch_assoc()) {
+                        echo"<tr>";
+                        echo"<td>".$row[CarKey]."</td>";
+                        echo"<td>".$row[VestKey]." </td>";
+                        echo"<td>".$row[CarStatusKey]."</td>";
+                        echo"<td>".$row[IsActive]." </td>";
+                        echo"<td>".$row[Modified]." </td>";
+                        echo"</tr>";
+                } }
+                echo "</table>";
+
         ?>
 
     </center>
