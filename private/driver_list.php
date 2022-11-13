@@ -43,10 +43,10 @@
         </div>
 
         <?php
-            $sqlinfo = require_once('../config.php');
+            $sqlinfo = require_once('/var/www/config.php');
             $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 
-            $check_d_sql ="select * from Drivers";
+            $check_d_sql ="select * from Drivers order by Modified DESC";
             $check_d_res = $conn->query($check_d_sql);
 
                 echo "<table border=1>";
