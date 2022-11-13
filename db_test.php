@@ -60,7 +60,7 @@ if ($result->num_rows > 0) {
     if ($row[current_update_min]<1){
       echo "<tr style='background-color: #74c451;'>";
     }
-    elseif ( ($row[current_update_min]>1) && ($row[current_update_min]<2) ){
+    elseif ( ($row[current_update_min]>=1) && ($row[current_update_min]<2) ){
       echo "<tr style='background-color: #ec7331;'>";
     }
     else{
