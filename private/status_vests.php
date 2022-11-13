@@ -46,7 +46,7 @@
             header("refresh: 5;");
             $sqlinfo = require_once('/var/www/config.php');
             $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
-            $sql_drivers_assigned_yellow = "select * from VestStatusView";
+            $sql_drivers_assigned_yellow = "select * from VestStatusView order by RouteKey, VestStatusKey, Modified";
             $drivers_assigned_res_yellow = $conn->query($sql_drivers_assigned_yellow);
 
                 echo "<table border=1>";

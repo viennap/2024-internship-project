@@ -46,7 +46,7 @@
             header("refresh: 5;");
             $sqlinfo = require_once('/var/www/config.php');
             $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
-            $sql_assign_car_res_yellow = "select * from CarStatusView";
+            $sql_assign_car_res_yellow = "select * from CarStatusView order by RouteKey, CarStatusKey, Modified";
             $assign_car_res_yellow = $conn->query($sql_assign_car_res_yellow);
 
                 echo "<table border=1>";
