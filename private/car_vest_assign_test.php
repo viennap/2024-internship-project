@@ -55,7 +55,7 @@
 	    <div class="row">
                 <div class="column" style="width: 15%"><br></div>
                 <div class="column" style="width: 35%">
-                    <input type='submit' value='Request a orange driver' name='requestOrange' class="button">
+                    <input type='submit' value='Request an orange driver' name='requestOrange' class="button">
                 </div>
                 <div class="column" style="width: 35%">
                     <input type='submit' value='Request a yellow driver' name='requestYellow' class="button">
@@ -256,14 +256,14 @@
 	    }
 
 	function requestOrange() {
-                echo "This is request a orange driver that is selected";
+                echo "This is request an orange driver that is selected";
                 $sqlinfo = require_once('/var/www/config.php');
                 $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
 		$sql_orange_ready = "INSERT INTO VestStatus (VestKey, VestStatusKey)
                             VALUES ((select VestKey from VestStatusView where RouteKey = 1 and VestStatusKey in (1,10) order by Modified limit 1), ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Be Ready') )";
 		$conn->query($sql_orange_ready);
                 echo "<br>";
-                echo "A orange driver gets ready!";
+                echo "An orange driver gets ready!";
 	}
 
 	function requestYellow() {

@@ -56,6 +56,16 @@
                 </div>
                 <div class="column" style="width: 12.5%"><br></div>
             </div>
+	     <div class="row">
+                <div class="column" style="width: 20%"><br></div>
+                <div class="column">
+                    <input type='submit' value='An orange driver can drive now' name='orangeDrive' class="button">
+                </div>
+                <div class="column">
+                    <input type='submit' value='A yellow driver can drive now' name='yellowDrive' class="button">
+                </div>
+                <div class="column" style="width: 12.5%"><br></div>
+            </div>
         </form>
 
 
@@ -75,6 +85,12 @@
 		else if(array_key_exists('driverFree', $_POST)) {
                     driverFree();
 		}
+		else if(array_key_exists('orangeDrive', $_POST)) {
+                    orangeDrive();
+                }
+                else if(array_key_exists('yellowDrive', $_POST)) {
+                    yellowDrive();
+                }
 
             function checkVestStatusView() {
                 echo "This is check current VestStatusView that is selected";
@@ -215,6 +231,29 @@
                 } }
                 echo "</table>";
             }
+	function orangeDrive() {
+                echo "This is An orange driver can drive now that is selected";
+                $sqlinfo = require_once('/var/www/config.php');
+                $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
+                $sql_orange_drive = "INSERT INTO VestStatus (VestKey, VestStatusKey)
+                            VALUES ((select VestKey from VestStatusView where RouteKey = 1 and VestStatusKey=3 order by Modified limit 1), ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Go Downstairs') )";
+                $conn->query($sql_orange_drive);
+                echo "<br>";
+                echo "An orange driver can Go Downstairs and drive now!";
+        }
+
+        function yellowDrive() {
+                echo "This is a yellow driver can drive now that is selected";
+                $sqlinfo = require_once('/var/www/config.php');
+                $conn = new mysqli($sqlinfo['hostname'],$sqlinfo['username'],$sqlinfo['password'],$sqlinfo['database']);
+                $sql_yellow_drive = "INSERT INTO VestStatus (VestKey, VestStatusKey)
+                            VALUES ((select VestKey from VestStatusView where RouteKey = 2 and VestStatusKey=3 order by Modified limit 1), ( select VestStatusTypes.VestStatusKey from VestStatusTypes where VestStatusTypes.VestStatusShort like 'Go Downstairs') )";
+                $conn->query($sql_yellow_drive);
+                echo "<br>";
+                echo "A yellow driver can Go Downstairs and drive now!";
+
+        }
+
         ?>
 
     </center>
