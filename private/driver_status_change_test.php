@@ -57,14 +57,14 @@
                 <div class="column" style="width: 12.5%"><br></div>
             </div>
 	     <div class="row">
-                <div class="column" style="width: 30%"><br></div>
-                <div class="column">
+                <div class="column" style="width: 20%"><br></div>
+                <div class="column" style="width: 30%">
                     <input type='submit' value='An orange driver can drive now' name='orangeDrive' class="button">
                 </div>
-                <div class="column">
+                <div class="column" style="width: 30%">
                     <input type='submit' value='A yellow driver can drive now' name='yellowDrive' class="button">
                 </div>
-                <div class="column" style="width: 30%"><br></div>
+                <div class="column" style="width: 20%"><br></div>
             </div>
         </form>
 
