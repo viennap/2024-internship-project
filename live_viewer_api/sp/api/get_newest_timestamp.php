@@ -21,8 +21,12 @@ function get_all_data() {
   global $conn;
   $result_array = array();
   if (array_key_exists('timestamp', $_GET)) {
-    $statement = $conn->prepare('SELECT MAX(published_at) FROM fact_speed_planner WHERE published_at <= ?');
     $limit_timestamp = (double)$_GET['timestamp'];
+    if ($limit_timestamp < 0) {
+      $statement = $conn->prepare('SELECT MAX(published_at) FROM fact_speed_planner WHERE ? < 0');
+    } else {
+      $statement = $conn->prepare('SELECT MAX(published_at) FROM fact_speed_planner WHERE published_at <= ?');
+    }
     $statement->bind_param('d', $limit_timestamp);
     $statement->execute();
     $result = $statement->get_result();

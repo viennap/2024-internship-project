@@ -24,18 +24,26 @@ function get_all_data() {
   $history_time = (double)$_GET['history_time'];
   $lane_num = (int)$_GET['lane_num'];
   $only_recent = (bool)((int)$_GET['only_recent']);
+  // $all_lanes = (bool)((int)$_GET['all_lanes']);
   $second_sub_history_time = $second - $history_time;
   $query = "";
   if ($only_recent){
-    $query = "WITH max_obs AS ( SELECT vin, max(observed_at) AS max_obs_at FROM fact_vehicle_observation WHERE 1=1 AND lane_num = ? AND ? >= observed_at AND observed_at >= ? GROUP BY 1) 
-    SELECT mo.max_obs_at AS observed_at, vo.position, vo.speed, vo.lane_num, vo.vin, vo.source, vp.acc_status, vp.is_wb, vp.latitude, vp.longitude FROM max_obs mo 
-    JOIN fact_vehicle_observation vo ON 1=1 AND mo.vin = vo.vin AND mo.max_obs_at = vo.observed_at JOIN fact_vehicle_ping vp ON 1=1 AND vp.gpstime = mo.max_obs_at AND vp.vin = mo.vin";
+    if ($lane_num == 0) {
+      $query = "WITH max_obs AS ( SELECT vin, max(observed_at) AS max_obs_at FROM fact_vehicle_observation WHERE 0=? AND lane_num = lane_num AND ? >= observed_at AND observed_at >= ? GROUP BY 1) 
+      SELECT mo.max_obs_at AS observed_at, vo.position, vo.speed, vo.lane_num, vo.vin, vo.source, vp.acc_status, vp.is_wb, vp.latitude, vp.longitude FROM max_obs mo 
+      JOIN fact_vehicle_observation vo ON 1=1 AND mo.vin = vo.vin AND mo.max_obs_at = vo.observed_at JOIN fact_vehicle_ping vp ON 1=1 AND vp.gpstime = mo.max_obs_at AND vp.vin = mo.vin";
+    } else {
+      $query = "WITH max_obs AS ( SELECT vin, max(observed_at) AS max_obs_at FROM fact_vehicle_observation WHERE 1=1 AND lane_num = ? AND ? >= observed_at AND observed_at >= ? GROUP BY 1) 
+      SELECT mo.max_obs_at AS observed_at, vo.position, vo.speed, vo.lane_num, vo.vin, vo.source, vp.acc_status, vp.is_wb, vp.latitude, vp.longitude FROM max_obs mo 
+      JOIN fact_vehicle_observation vo ON 1=1 AND mo.vin = vo.vin AND mo.max_obs_at = vo.observed_at JOIN fact_vehicle_ping vp ON 1=1 AND vp.gpstime = mo.max_obs_at AND vp.vin = mo.vin";
+    }
   }
   else {
-    $query = "SELECT observed_at, position, speed, lane_num, vin, source  FROM fact_vehicle_observation 
-    WHERE lane_num = ? AND ? >= observed_at AND observed_at >= ? ORDER BY vin, observed_at";
+    $query = "SELECT observed_at, position, speed, lane_num, vin, source FROM fact_vehicle_observation 
+    WHERE lane_num = ? AND ? >= observed_at AND observed_at >= ? ORDER BY vin DESC, position DESC, observed_at DESC";
+    // print $query;
   }
-  $statement = $conn->prepare($query);
+  $statement = $conn->prepare(addslashes($query));
   $statement->bind_param('idd', $lane_num, $second, $second_sub_history_time);
   $statement->execute();
   $result = $statement->get_result();
