@@ -55,7 +55,7 @@ print_r("The Latest piStatus Information");
 
 echo "<br>";
 echo "<table border=1>";
-echo "<tr><td>Car #</td><td>Pi_MAC</td><td>SSID</td><td>wlan0_ip</td><td>eth0_ip</td><td>wlan0_up_download_kb</td><td>VIN</td><td>battery_voltage</td><td>external_power</td><td>ram_used%</td><td>storage_used%</td><td>cpu_load_1_5_15min</td><td>current_update_min</td><td>acc_button_wire_connected</td><td>libpanda_git_hash</td><td>log_message</td></tr>";
+echo "<tr><td>Car #</td><td>Pi_MAC</td><td>SSID</td><td>wlan0_ip</td><td>eth0_ip</td><td>wlan0_up_download_kb</td><td>VIN</td><td>battery_voltage</td><td>pwr</td><td>ram%</td><td>storage%</td><td>cpu_load_1_5_15min</td><td>update_min</td><td>wire</td><td>libpanda_git_hash</td><td>log_message</td></tr>";
 echo"<tr>";
 
 if ($result->num_rows > 0) {
