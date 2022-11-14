@@ -35,14 +35,14 @@ if ($result->num_rows > 0)
 {
     while($row = $result->fetch_assoc()) 
     {
-        $center_lat = $center_lat + ($row['Latitude'] / $result->num_rows);
-        $center_long = $center_long + ($row['Longitude'] / $result->num_rows);
+        $center_lat = $center_lat + ($row['latitude'] / $result->num_rows);
+        $center_long = $center_long + ($row['longitude'] / $result->num_rows);
 
-        $gpstime[$count] = floatval($row['GpsTime']);
+        $gpstime[$count] = floatval($row['gpstime']);
 
         $coords[$count] = array();
-        $coords[$count][0] = floatval($row['Longitude']);
-        $coords[$count][1] = floatval($row['Latitude']);
+        $coords[$count][0] = floatval($row['longitude']);
+        $coords[$count][1] = floatval($row['latitude']);
         $coords[$count][2] = int($row['veh_id']);
         $count = $count + 1;
 
