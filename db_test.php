@@ -16,6 +16,7 @@ $db = "circledb";
 $GREEN='#74c451';
 $GRAY='#999999';
 $RED='#CD1337';
+$SUPER_GRAY='#4e5255'
 
 $conn = new mysqli($servername, $username, $password, $db);
 
@@ -79,16 +80,16 @@ if ($result->num_rows > 0) {
 	echo"<td>".$row[total_ram_used_percent]." </td>";
 	echo"<td>".$row[total_memory_used_percent]." </td>";
 	echo"<td>".$row[cpu_load_1_5_15min]." </td>";
-	echo"<td>".$row[current_update_min]." </td>";
-  // if($row[current_update_min]<30)
-  //                             {
-  //          echo "<td style='background-color: #74c451;'>".$row[current_update_min]."</td>";
-  //
-  //                        }
-  //                        else
-  //                        {
-  //          echo "<td style='background-color: #999999;'>".$row[current_update_min]."</td>";
-  //                        }
+	// echo"<td>".$row[current_update_min]." </td>";
+  if($row[current_update_min]>12*60)
+                              {
+           echo "<td style='background-color: ".$SUPER_GRAY.";'>".$row[current_update_min]."</td>";
+
+                         }
+                         else
+                         {
+           echo "<td>".$row[current_update_min]."</td>";
+                         }
   // echo"<td>".$row[acc_button_wire_connected]." </td>";
   if($row[acc_button_wire_connected]==0)
   {
