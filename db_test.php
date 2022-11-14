@@ -16,7 +16,7 @@ $db = "circledb";
 $GREEN='#74c451';
 $GRAY='#999999';
 $RED='#CD1337';
-$SUPER_GRAY='#4e5255'
+$SUPER_GRAY='#4e5255';
 
 $conn = new mysqli($servername, $username, $password, $db);
 
