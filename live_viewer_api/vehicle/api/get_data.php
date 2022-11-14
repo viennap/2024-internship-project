@@ -80,8 +80,8 @@ function get_all_data() {
       SELECT max_obs.max_obs_at AS observed_at, vo.position, vo.speed, vo.lane_num, vo.vin, vo.source,
         vp.acc_status, vp.is_wb, vp.latitude, vp.longitude
       FROM max_obs
-      JOIN fact_vehicle_observation vo ON mo.vin = vo.vin AND mo.max_obs_at = vo.observed_at
-      JOIN fact_vehicle_ping vp ON vp.gpstime = mo.max_obs_at AND vp.vin = mo.vin";
+      JOIN fact_vehicle_observation AS vo ON mo.vin = vo.vin AND mo.max_obs_at = vo.observed_at
+      JOIN fact_vehicle_ping AS vp ON vp.gpstime = mo.max_obs_at AND vp.vin = mo.vin";
     }
   }
   else {
