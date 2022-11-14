@@ -55,7 +55,7 @@ function get_all_data() {
     $only_recent = (bool)((int)$_GET['only_recent']);
   }
   else {
-    $only_recent = False;
+    $only_recent = True;
   }
 
   // build the query
@@ -102,7 +102,8 @@ function get_all_data() {
     }
   }
   $statement = $conn->prepare(addslashes($query));
-
+  print $query;
+  
   // populate parameters (only need $lane_num if calling for specific one)
   if ($all_lanes == False && !is_null($lane_num)) {
     $statement->bind_param('idd', $lane_num, $second_sub_history_time, $second);
