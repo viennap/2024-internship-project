@@ -102,16 +102,6 @@ function get_all_data() {
     }
   }
   $statement = $conn->prepare(addslashes($query));
-  echo $query;
-  echo "<br>";
-  echo $second_sub_history_time;
-  echo "<br>";
-  echo $second;
-  echo "<br>";
-  echo $all_lanes;
-  echo "<br>";
-  echo $lane_num;
-  echo "<br>";
 
   // populate parameters (only need $lane_num if calling for specific one)
   if ($all_lanes == False && !is_null($lane_num)) {
