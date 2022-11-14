@@ -101,6 +101,7 @@ else{
   echo "<td>".$row[acc_button_wire_connected]."</td>";
 
   }
+  echo"<td>".$row[veh_id]."</td>";
   echo"<td>".$row[libpanda_git_hash]." </td>";
   // echo"<td>".$row[log_message]." </td>";
   if(substr_compare($row[log_message],"These rosnodes are down",0,13)==0){
@@ -115,6 +116,7 @@ else{
   else{
     echo"<td>".$row[log_message]." </td>";
   }
+  echo"<td>".$row[veh_id]."</td>";
 	echo"</tr>";
 
     }
