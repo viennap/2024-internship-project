@@ -43,7 +43,7 @@ if ($result->num_rows > 0)
         $coords[$count] = array();
         $coords[$count][0] = floatval($row['longitude']);
         $coords[$count][1] = floatval($row['latitude']);
-        $coords[$count][2] = int($row['veh_id']);
+        $coords[$count][2] = (int)($row['veh_id']);
         $count = $count + 1;
 
     }
