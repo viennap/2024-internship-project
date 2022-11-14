@@ -64,12 +64,12 @@ if ($result->num_rows > 0)
 
 <style>
 body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+#map { position: absolute; top: 10%; bottom: 0; width: 100%; }
 </style>
 </head>
 <body>
-<div id="map"></div>
 <p><?php echo json_encode($coords); ?></p>
+<div id="map"></div>
 
 <script>
 	// TO MAKE THE MAP APPEAR YOU MUST
