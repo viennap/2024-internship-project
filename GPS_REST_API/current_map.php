@@ -18,7 +18,8 @@ if ($conn->connect_error)
 #$sql = "SELECT gpstime as GpsTime, systime as SysTime,latitude as Latitude,longitude as Longitude FROM fact_vehicle_ping 
 #where Status='A' AND VIN='".$VIN."' ORDER BY GpsTime DESC LIMIT 60" ;
 $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY gpstime DESC) AS rn 
-FROM fact_vehicle_ping AS p WHERE p.status = 0 ) SELECT vin_pings.*, dim_vehicle.veh_id FROM vin_pings join dim_vehicle on vin_pings.vin = dim_vehicle.vin WHERE rn=1";
+FROM fact_vehicle_ping AS p WHERE p.status = 0 AND ABS((UNIX_TIMESTAMP() * 1000) - p.systime) < (1000*60*60*24) SELECT vin_pings.*, dim_vehicle.veh_id FROM vin_pings 
+join dim_vehicle on vin_pings.vin = dim_vehicle.vin WHERE rn=1";
 
 $result = $conn->query($sql) ;
 
