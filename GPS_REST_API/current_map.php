@@ -48,7 +48,6 @@ if ($result->num_rows > 0)
 
     }
 }
-echo $coords;
 
 ?>
 
@@ -70,7 +69,7 @@ body { margin: 0; padding: 0; }
 </head>
 <body>
 <div id="map"></div>
-
+<p><?php echo json_encode($coords); ?></p>
 
 <script>
 	// TO MAKE THE MAP APPEAR YOU MUST
