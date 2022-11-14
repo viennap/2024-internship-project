@@ -106,7 +106,7 @@ function get_all_data() {
   print $second_sub_history_time;
   print $second;
   print $all_lanes;
-  print $lane_num
+  print $lane_num;
 
   // populate parameters (only need $lane_num if calling for specific one)
   if ($all_lanes == False && !is_null($lane_num)) {
