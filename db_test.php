@@ -109,6 +109,9 @@ else{
   elseif(substr_compare($row[log_message],"nominal state!",0,13) && $row[current_update_min]<1) {
     echo"<td style='background-color: ".$YELLOW.";'>".$row[log_message]." </td>";
   }
+  elseif(substr_compare($row[log_message],"Rsync finished, shutting system down",0,23) && $row[current_update_min]>10) {
+    echo"<td style='background-color: ".$YELLOW.";'>".$row[log_message]." </td>";
+  }
   else{
     echo"<td>".$row[log_message]." </td>";
   }
