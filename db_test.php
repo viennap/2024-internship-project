@@ -81,7 +81,7 @@ if ($result->num_rows > 0) {
 	echo"<td>".$row[total_memory_used_percent]." </td>";
 	echo"<td>".$row[cpu_load_1_5_15min]." </td>";
 	// echo"<td>".$row[current_update_min]." </td>";
-  if($row[current_update_min]>12*60)
+  if($row[current_update_min]>720)
                               {
            echo "<td style='background-color: ".$SUPER_GRAY.";'>".$row[current_update_min]."</td>";
 
