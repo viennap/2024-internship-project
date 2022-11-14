@@ -15,11 +15,6 @@ if ($conn->connect_error)
     die("Connection failed: " . $conn->connect_error);
 }
 
-WITH ranked_messages AS (
-  SELECT m.*, ROW_NUMBER() OVER (PARTITION BY name ORDER BY id DESC) AS rn
-  FROM messages AS m
-)
-SELECT * FROM ranked_messages WHERE rn = 1;
 #$sql = "SELECT gpstime as GpsTime, systime as SysTime,latitude as Latitude,longitude as Longitude FROM fact_vehicle_ping 
 #where Status='A' AND VIN='".$VIN."' ORDER BY GpsTime DESC LIMIT 60" ;
 $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY gpstime DESC) AS rn 
