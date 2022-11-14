@@ -101,7 +101,14 @@ else{
 
   }
   echo"<td>".$row[libpanda_git_hash]." </td>";
-  echo"<td>".$row[log_message]." </td>";
+  // echo"<td>".$row[log_message]." </td>";
+  if(substr_compare($row[current_update_min],"These rosnodes are down",0,23)){
+    echo"<td style='background-color: ".$RED.";'>".$row[log_message]." </td>";
+  }
+  // elseif {}
+  else{
+    echo"<td>".$row[log_message]." </td>";
+  }
 	echo"</tr>";
 
     }
