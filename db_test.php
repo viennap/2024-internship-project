@@ -17,6 +17,7 @@ $GREEN='#74c451';
 $GRAY='#999999';
 $RED='#CD1337';
 $SUPER_GRAY='#4e5255';
+$ORANGE='#ec7331';
 
 $conn = new mysqli($servername, $username, $password, $db);
 
@@ -61,11 +62,11 @@ if ($result->num_rows > 0) {
     if ($row[current_update_min]<1){
       echo "<tr style='background-color: #74c451;'>";
     }
-    elseif ( ($row[current_update_min]>=1) && ($row[current_update_min]<2) ){
-      echo "<tr style='background-color: #ec7331;'>";
+    elseif ( ($row[current_update_min]>=1) && ($row[current_update_min]<10) ){
+      echo "<tr style='background-color:".$ORANGE.";'>";
     }
     else{
-      echo "<tr style='background-color: #999999;'>";
+      echo "<tr style='background-color: ".$GRAY.";'>";
     }
 	// echo"<tr>";
   echo"<td>".$row[veh_id]."</td>";
