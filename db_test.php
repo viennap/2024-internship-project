@@ -18,6 +18,7 @@ $GRAY='#999999';
 $RED='#CD1337';
 $SUPER_GRAY='#4e5255';
 $ORANGE='#ec7331';
+$YELLOW='#efe11a';
 
 $conn = new mysqli($servername, $username, $password, $db);
 
@@ -105,7 +106,9 @@ else{
   if(substr_compare($row[log_message],"These rosnodes are down",0,13)==0){
     echo"<td style='background-color: ".$RED.";'>".$row[log_message]." </td>";
   }
-  // elseif {}
+  elseif(substr_compare($row[log_message],"nominal state!",0,13)) {
+    echo"<td style='background-color: ".$YELLOW.";'>".$row[log_message]." </td>";
+  }
   else{
     echo"<td>".$row[log_message]." </td>";
   }
