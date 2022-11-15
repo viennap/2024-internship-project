@@ -22,7 +22,10 @@ FROM fact_vehicle_ping AS p WHERE p.status = 0 AND ABS((UNIX_TIMESTAMP() * 1000)
 join dim_vehicle on vin_pings.vin = dim_vehicle.vin WHERE rn=1";
 
 $result = $conn->query($sql) ;
-
+if (!$result) {
+  echo $conn->error;
+  die("Query failed: " . $conn->error);
+}
 $count = 0;
 
 $center_long = 0.0;
