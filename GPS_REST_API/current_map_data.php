@@ -41,6 +41,9 @@ $carnumbers = array();
 
 $systime = array();
 
+$acc_speed_setting = array();
+$acc_status = array();
+
 $velocity = array();
 
 if ($result->num_rows > 0) 
@@ -52,6 +55,8 @@ if ($result->num_rows > 0)
 
         $gpstime[$count] = floatval($row['gpstime']);
         $systime[$count] = floatval($row['systime']);
+        $acc_speed_setting[$count] = floatval($row['acc_speed_setting']);
+        $acc_status[$count] = intval($row['acc_status']);
         $carnumbers[$count] = intval($row['veh_id']);
         $velocity[$count] = floatval($row['velocity']);
 
@@ -69,6 +74,8 @@ $result['coords'] = $coords;
 $result['gpstime'] = $gpstime;
 $result['carnumbers'] = $carnumbers;
 $result['systime'] = $systime;
+$result['acc_speed_setting'] = $acc_speed_setting;
+$result['acc_status'] = $acc_status;
 $result['velocity'] = $velocity;
 $result['center_lat'] = $center_lat;
 $result['center_long'] = $center_long;

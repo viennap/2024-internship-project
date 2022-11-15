@@ -50,7 +50,7 @@ async function getAndProcessLocationData() {
   G["features"][0] = {};
   console.log(data);
   for (let i = 0; i < data.coords.length; i++) {
-    G["features"][i] = { "type": "Feature", "properties": { "gpstime": data.gpstime[i], "systime": data.systime[i], "velocity": data.velocity[i], "title": data.carnumbers[i]}, "geometry": { "type": "Point", "coordinates": data.coords[i] } };
+    G["features"][i] = { "type": "Feature", "properties": { "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i]}, "geometry": { "type": "Point", "coordinates": data.coords[i] } };
   }
   return G;
 }
@@ -107,10 +107,12 @@ map.on('load', async () => {
     // Copy coordinates array.
     const coordinates = e.features[0].geometry.coordinates.slice();
     var description = "<strong>Car "+e.features[0].properties.title.toString()+"</strong>";
+    description += "<p>Ping age: " +((Date.now() - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
     description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
     description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
-    description += "<p>Ping age: " +((Date.now() - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
     description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
+    description += "<p>ACC Speed: "+e.features[0].properties.accspeed.toString()+"</p>";
+    description += "<p>ACC Status: "+e.features[0].properties.accstatus.toString()+"</p>";
     
     // Ensure that if the map is zoomed out such that multiple
     // copies of the feature are visible, the popup appears
