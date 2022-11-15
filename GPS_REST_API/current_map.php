@@ -35,6 +35,8 @@ $gpstime = array();
 
 $coords = array();
 
+$carnumbers = array();
+
 if ($result->num_rows > 0) 
 {
     while($row = $result->fetch_assoc()) 
@@ -43,6 +45,7 @@ if ($result->num_rows > 0)
         $center_long = $center_long + ($row['longitude'] / $result->num_rows);
 
         $gpstime[$count] = floatval($row['gpstime']);
+        $carnumbers[$count] = intval($row['veh_id']);
 
         $coords[$count] = array();
         $coords[$count][0] = floatval($row['longitude']);
@@ -87,12 +90,14 @@ var Coords= JSON.parse(<?php echo json_encode(json_encode($coords)); ?>);
 
 var gpstime = JSON.parse(<?php echo json_encode(json_encode($gpstime)); ?>);
 
+var CarNumbers = JSON.parse(<?php echo json_encode(json_encode($carnumbers)); ?>);
+
 var G = {};
 G["type"] = "FeatureCollection";
 G["features"] = [];
 G["features"][0] = {};
 for (let i = 0; i < Coords.length; i++) {
-  G["features"][i] = { "type": "Feature", "properties": { "gpstime": gpstime[i]}, "geometry": { "type": "Point", "coordinates": Coords[i] } };
+  G["features"][i] = { "type": "Feature", "properties": { "gpstime": gpstime[i], "title": CarNumbers[i]}, "geometry": { "type": "Point", "coordinates": Coords[i] } };
 }
 
 var map = new mapboxgl.Map({
@@ -116,6 +121,23 @@ map.on('load', function() {
     'circle-stroke-color': 'white',
     'circle-stroke-width': 1,
     'circle-opacity': 0.5
+    }
+  });
+  map.addLayer({
+    id: 'datapoints_label',
+    type: 'symbol',
+    source: {
+      type: 'geojson',
+      data: G // replace this with the url of your own geojson
+    },
+    'layout': {
+      'text-field': ['get', 'title'],
+      'text-font': [
+        'Open Sans Semibold',
+        'Arial Unicode MS Bold'
+      ],
+      'text-offset': [0, 1.25],
+      'text-anchor': 'top'
     }
   });
 });
