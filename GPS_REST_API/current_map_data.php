@@ -61,6 +61,8 @@ $result = array();
 $result['coords'] = $coords;
 $result['gpstime'] = $gpstime;
 $result['carnumbers'] = $carnumbers;
+$result['center_lat'] = $center_lat;
+$result['center_long'] = $center_long;
 
 echo json_encode($result);
 
