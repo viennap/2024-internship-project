@@ -40,9 +40,9 @@ zoom: 16
 async function getLocationData() {
   const response = await fetch('http://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data.php', { method: 'GET'});
   return await response.json();
-} 
+}
 
-const updateSource = setInterval(async () => {
+async function getAndProcessLocationData() {
   const data = await getLocationData();
   var G = {};
   G["type"] = "FeatureCollection";
@@ -52,11 +52,16 @@ const updateSource = setInterval(async () => {
   for (let i = 0; i < data.coords.length; i++) {
     G["features"][i] = { "type": "Feature", "properties": { "gpstime": data.gpstime[i], "title": data.carnumbers[i]}, "geometry": { "type": "Point", "coordinates": data.coords[i] } };
   }
+  return G;
+}
+
+const updateSource = setInterval(async () => {
+  var G = await getAndProcessLocationData();
   map.getSource('G').setData(G);
 }, 5000);
 
 map.on('load', async () => {
-  const G = await getLocationData();
+  const G = await getAndProcessLocationData();
   map.addSource('G', {
     type: 'geojson',
     data: G
