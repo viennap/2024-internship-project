@@ -48,8 +48,9 @@ const updateSource = setInterval(async () => {
   G["type"] = "FeatureCollection";
   G["features"] = [];
   G["features"][0] = {};
-  for (let i = 0; i < Coords.length; i++) {
-    G["features"][i] = { "type": "Feature", "properties": { "gpstime": gpstime[i], "title": CarNumbers[i]}, "geometry": { "type": "Point", "coordinates": Coords[i] } };
+  console.log(data);
+  for (let i = 0; i < data.coords.length; i++) {
+    G["features"][i] = { "type": "Feature", "properties": { "gpstime": data.gpstime[i], "title": data.carnumbers[i]}, "geometry": { "type": "Point", "coordinates": data.coords[i] } };
   }
   map.getSource('G').setData(G);
 }, 5000);
