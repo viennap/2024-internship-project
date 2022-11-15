@@ -51,6 +51,9 @@
 	    
 	    $cars_view_record_sql ="insert ignore into CarStatusView_rec select * from CarStatusView";
             $conn->query($cars_view_record_sql);
+
+	    $vests_unassign_record_sql ="insert ignore into Vests_rec select * from Vests";
+            $conn->query($vests_unassign_record_sql);
         ?>
 
     </center>
