@@ -109,7 +109,7 @@ map.on('load', async () => {
     var description = "<strong>Car "+e.features[0].properties.title.toString()+"</strong>";
     description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
     description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
-    description += "<p>Ping age: " +(Date.now() - (e.features[0].properties.gpstime / 1000)).toString() + " seconds ago</p>";
+    description += "<p>Ping age: " +(Date.now() - (e.features[0].properties.gpstime)).toString() + " seconds ago</p>";
     description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
     
     // Ensure that if the map is zoomed out such that multiple
