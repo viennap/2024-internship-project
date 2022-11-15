@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Circles Experiment</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0%; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<p><?php echo json_encode($coords); ?></p>
+<div id="map"></div>
+
+<script>
+	// TO MAKE THE MAP APPEAR YOU MUST
+	// ADD YOUR ACCESS TOKEN FROM
+	// https://account.mapbox.com
+mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
+//var center_lat=0.0;
+//var center_long=0.0;
+
+//var Coords= JSON.parse(<?php echo json_encode(json_encode($coords)); ?>);
+
+//var gpstime = JSON.parse(<?php echo json_encode(json_encode($gpstime)); ?>);
+
+//var CarNumbers = JSON.parse(<?php echo json_encode(json_encode($carnumbers)); ?>);
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/light-v10',
+center: [-86.65905585185185,  36.051528734567896],
+zoom: 16
+});
+
+async function getLocationData() {
+  const response = await fetch('http://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data.php', { method: 'GET'});
+  return await response.json();
+} 
+
+const updateSource = setInterval(async () => {
+  const data = await getLocationData();
+  var G = {};
+  G["type"] = "FeatureCollection";
+  G["features"] = [];
+  G["features"][0] = {};
+  for (let i = 0; i < Coords.length; i++) {
+    G["features"][i] = { "type": "Feature", "properties": { "gpstime": gpstime[i], "title": CarNumbers[i]}, "geometry": { "type": "Point", "coordinates": Coords[i] } };
+  }
+  map.getSource('G').setData(G);
+}, 5000);
+
+map.on('load', async () => {
+  const G = await getLocationData();
+  map.addSource('G', {
+    type: 'geojson',
+    data: G
+  });
+  map.addLayer({
+    id: 'datapoints',
+    type: 'circle',
+    source: 'G',
+    paint: {
+       'circle-radius': 14,
+     "circle-color": "#4361ee",
+    'circle-stroke-color': 'white',
+    'circle-stroke-width': 1,
+    'circle-opacity': 0.5
+    }
+  });
+  map.addLayer({
+    id: 'datapoints_label',
+    type: 'symbol',
+    source: 'G',
+    'layout': {
+      'text-field': ['get', 'title'],
+      'text-font': [
+        'Open Sans Semibold',
+        'Arial Unicode MS Bold'
+      ],
+      'text-offset': [0, 1.25],
+      'text-anchor': 'top'
+    }
+  });
+});
+
+
+</script>
+
+</body>
+</html>
