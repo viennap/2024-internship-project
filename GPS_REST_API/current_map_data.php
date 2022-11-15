@@ -41,6 +41,8 @@ $carnumbers = array();
 
 $systime = array();
 
+$velocity = array();
+
 if ($result->num_rows > 0) 
 {
     while($row = $result->fetch_assoc()) 
@@ -51,6 +53,7 @@ if ($result->num_rows > 0)
         $gpstime[$count] = floatval($row['gpstime']);
         $systime[$count] = floatval($row['systime']);
         $carnumbers[$count] = intval($row['veh_id']);
+        $velocity[$count] = floatval($row['velocity']);
 
         $coords[$count] = array();
         $coords[$count][0] = floatval($row['longitude']);
@@ -66,6 +69,7 @@ $result['coords'] = $coords;
 $result['gpstime'] = $gpstime;
 $result['carnumbers'] = $carnumbers;
 $result['systime'] = $systime;
+$result['velocity'] = $velocity;
 $result['center_lat'] = $center_lat;
 $result['center_long'] = $center_long;
 
