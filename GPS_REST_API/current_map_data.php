@@ -48,6 +48,8 @@ $velocity = array();
 
 $route = array();
 
+$is_wb = array();
+
 if ($result->num_rows > 0) 
 {
     while($row = $result->fetch_assoc()) 
@@ -62,6 +64,7 @@ if ($result->num_rows > 0)
         $carnumbers[$count] = intval($row['veh_id']);
         $velocity[$count] = floatval($row['velocity']);
         $route[$count] = $row['route'];
+        $is_wb[$count] = $row['is_wb'];
 
         $coords[$count] = array();
         $coords[$count][0] = floatval($row['longitude']);
@@ -81,6 +84,7 @@ $result['acc_speed_setting'] = $acc_speed_setting;
 $result['acc_status'] = $acc_status;
 $result['velocity'] = $velocity;
 $result['route'] = $route;
+$result['is_wb'] = $is_wb;
 $result['center_lat'] = $center_lat;
 $result['center_long'] = $center_long;
 
