@@ -84,12 +84,13 @@ margin-right: 5px;
   <strong>Routes</strong>
 </nav>
 <nav id="wb-filter-group" class="filter-group">
-  <strong>Westbound Status</strong>
+  <strong>West/Eastbound Status</strong>
 </nav>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
 const routes = ["orange", "yellow"];
 const wb = ["-1", "0", "1"];
+const wb_lookup = ["Eastbound", "Neither", "Westbound"]
 
 var current_timestamp = 0;
 var stale_threshold = (1000*60*2);
@@ -270,7 +271,7 @@ async function createWbButtons() {
 
     const label = document.createElement('label');
     label.setAttribute('for', wb_val);
-    label.textContent = wb_val;
+    label.textContent = wb_lookup[wb.indexOf(wb_val)];
     wbFilterGroup.appendChild(label);
 
     input.addEventListener('change', wbButtonCallback);
