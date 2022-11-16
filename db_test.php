@@ -84,7 +84,7 @@ if ($result->num_rows > 0) {
       	echo"<td>".$row[wlan0_up_download_kb]." </td>";
       	echo"<td>".$row[vin]."</td>";
       	// echo"<td>".$row[battery_voltage]." </td>";
-        if ($row[battery_voltage] <= 4){
+        if ($row[battery_voltage] <= 4.02){
           echo"<td style='background-color: ".$RED."';>".$row[battery_voltage]." </td>";
         }
         else{
