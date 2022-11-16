@@ -86,6 +86,9 @@ if ($result->num_rows > 0) {
         if ($row[battery_voltage] <= 4){
           echo"<td style='background-color: ".$RED.";>".$row[battery_voltage]." </td>";
         }
+      else{
+        echo"<td>".$row[battery_voltage]." </td>";
+      }
       	echo"<td>".$row[external_power]." </td>";
       	echo"<td>".$row[total_ram_used_percent]." </td>";
       	echo"<td>".$row[total_memory_used_percent]." </td>";
