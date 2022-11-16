@@ -68,7 +68,7 @@ if ($result->num_rows > 0) {
         echo "<tr style='background-color:".$ORANGE.";'>";
       }
       elseif ($row[current_update_min]>14182){
-        echo "<tr style='background-color: ".$SUPER_GRAY.";'>";
+        // echo "<tr style='background-color: ".$SUPER_GRAY.";'>";
       }
       else{
         echo "<tr style='background-color: ".$GRAY.";'>";
