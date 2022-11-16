@@ -28,8 +28,8 @@ if ($Psr16Adapter->has($cacheKey)) {
 else {
     #$sql = "SELECT gpstime as GpsTime, systime as SysTime,latitude as Latitude,longitude as Longitude FROM fact_vehicle_ping 
     #where Status='A' AND VIN='".$VIN."' ORDER BY GpsTime DESC LIMIT 60" ;
-    $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime DESC WHERE p.status = 0 AND (p.gpstime < 2147483647700)) AS rn 
-    FROM fact_vehicle_ping AS p)
+    $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime DESC) AS rn 
+    FROM fact_vehicle_ping AS p WHERE p.status = 0 AND (p.gpstime < 2147483647700))
     SELECT vin_pings.*, dim_vehicle.veh_id, dim_vehicle.route FROM vin_pings 
     join dim_vehicle on vin_pings.vin = dim_vehicle.vin WHERE rn=1";
 
