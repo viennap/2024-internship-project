@@ -11,30 +11,86 @@
 <style>
 body { margin: 0; padding: 0; }
 #map { position: absolute; top: 0%; bottom: 0; width: 100%; }
+
+.filter-group {
+font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+font-weight: 600;
+z-index: 1;
+border-radius: 3px;
+width: 120px;
+color: #fff;
+}
+ 
+.filter-group input[type='checkbox']:first-child + label {
+border-radius: 3px 3px 0 0;
+}
+ 
+.filter-group label:last-child {
+border-radius: 0 0 3px 3px;
+border: none;
+}
+ 
+.filter-group input[type='checkbox'] {
+display: none;
+}
+
+.filter-group input[type='checkbox'] + label {
+background-color: #3386c0;
+display: block;
+cursor: pointer;
+padding: 10px;
+border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+ 
+.filter-group input[type='checkbox'] + label {
+background-color: #3386c0;
+text-transform: capitalize;
+}
+ 
+.filter-group input[type='checkbox'] + label:hover,
+.filter-group input[type='checkbox']:checked + label {
+background-color: #4ea0da;
+}
+ 
+.filter-group input[type='checkbox']:checked + label:before {
+content: '✔';
+margin-right: 5px;
+}
+
+#route-filter-group {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#wb-filter-group {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
 </style>
 </head>
 <body>
 <p><?php echo json_encode($coords); ?></p>
 <div id="map"></div>
-
+<nav id="route-filter-group" class="filter-group"></nav>
+<nav id="wb-filter-group" class="filter-group"></nav>
 <script>
-	// TO MAKE THE MAP APPEAR YOU MUST
-	// ADD YOUR ACCESS TOKEN FROM
-	// https://account.mapbox.com
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
-//var center_lat=0.0;
-//var center_long=0.0;
+const routes = ["orange", "yellow"];
+const wb = ["-1", "0", "1"];
 
-//var Coords= JSON.parse(<?php echo json_encode(json_encode($coords)); ?>);
-
-//var gpstime = JSON.parse(<?php echo json_encode(json_encode($gpstime)); ?>);
-
-//var CarNumbers = JSON.parse(<?php echo json_encode(json_encode($carnumbers)); ?>);
 var map = new mapboxgl.Map({
-container: 'map',
-style: 'mapbox://styles/mapbox/light-v10',
-center: [-86.65905585185185,  36.051528734567896],
-zoom: 16
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v10',
+  center: [-86.65905585185185,  36.051528734567896],
+  zoom: 16
+});
+
+const popup = new mapboxgl.Popup({
+  closeButton: false,
+  closeOnClick: false
 });
 
 async function getLocationData() {
@@ -48,17 +104,161 @@ async function getAndProcessLocationData() {
   G["type"] = "FeatureCollection";
   G["features"] = [];
   G["features"][0] = {};
-  console.log(data);
   for (let i = 0; i < data.coords.length; i++) {
-    G["features"][i] = { "type": "Feature", "properties": { "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i]}, "geometry": { "type": "Point", "coordinates": data.coords[i] } };
+    G["features"][i] = { "type": "Feature", "properties": { "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i], "route": data.route[i], "is_wb": data.is_wb[i]}, "geometry": { "type": "Point", "coordinates": data.coords[i] } };
   }
   return G;
 }
 
-const updateSource = setInterval(async () => {
-  var G = await getAndProcessLocationData();
-  map.getSource('G').setData(G);
-}, 5000);
+async function createPopup(e) {
+  // Change the cursor style as a UI indicator.
+  map.getCanvas().style.cursor = 'pointer';
+    
+  // Copy coordinates array.
+  const coordinates = e.features[0].geometry.coordinates.slice();
+  var description = "<strong>Car "+e.features[0].properties.title.toString()+"</strong>";
+  description += "<p>Ping age: " +((Date.now() - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
+  description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
+  description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
+  description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
+  description += "<p>ACC Speed: "+e.features[0].properties.accspeed.toString()+"</p>";
+  description += "<p>ACC Status: "+e.features[0].properties.accstatus.toString()+"</p>";
+    
+  // Ensure that if the map is zoomed out such that multiple
+  // copies of the feature are visible, the popup appears
+  // over the copy being pointed to.
+  while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  }
+    
+  // Populate the popup and set its coordinates
+  // based on the feature found.
+  popup.setLngLat(coordinates).setHTML(description).addTo(map);
+}
+
+async function removePopup() {
+  map.getCanvas().style.cursor = '';
+  popup.remove();
+}
+
+async function createMapLayers(G) {
+  for (const route of routes) {
+    for (const wb_val of wb) {
+      const layerID = 'route-'+route+'-wb-'+wb_val;
+      const pointLayerID = 'datapoints-'+layerID;
+      const labelLayerID = 'datapoints_label-'+layerID;
+      const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
+      map.addLayer({
+        id: pointLayerID,
+        type: 'circle',
+        source: 'G',
+        paint: {
+          'circle-radius': 14,
+        "circle-color": "#4361ee",
+        'circle-stroke-color': 'white',
+        'circle-stroke-width': 1,
+        'circle-opacity': 0.5
+        },
+        filter: layerFilter
+      });
+      map.addLayer({
+        id: labelLayerID,
+        type: 'symbol',
+        source: 'G',
+        'layout': {
+          'text-field': ['get', 'title'],
+          'text-font': [
+            'Open Sans Semibold',
+            'Arial Unicode MS Bold'
+          ],
+          'text-offset': [0, 1.25],
+          'text-anchor': 'top'
+        },
+        filter: layerFilter
+      });
+      map.on('mouseenter', pointLayerID, createPopup);
+      map.on('mouseleave', pointLayerID, removePopup);
+    }
+  }
+}
+
+async function routeButtonCallback(e) {
+  const element = e.target;
+  const route = element.id;
+  const checked = element.checked ? 'visible' : 'none';
+  for (const wb_val of wb) {
+    const layerID = 'route-'+route+'-wb-'+wb_val;
+    const pointLayerID = 'datapoints-'+layerID;
+    const labelLayerID = 'datapoints_label-'+layerID;
+    map.setLayoutProperty(
+      pointLayerID,
+      'visibility',
+      checked
+    );
+    map.setLayoutProperty(
+      labelLayerID,
+      'visibility',
+      checked
+    );
+  }
+}
+
+async function createRouteButtons() {
+  const routeFilterGroup = document.getElementById('route-filter-group');
+  for (const route of routes) {
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.id = route;
+    input.checked = true;
+    routeFilterGroup.appendChild(input);
+
+    const label = document.createElement('label');
+    label.setAttribute('for', route);
+    label.textContent = route;
+    routeFilterGroup.appendChild(label);
+
+    input.addEventListener('change', routeButtonCallback);
+  }
+}
+
+async function wbButtonCallback(e) {
+  const element = e.target;
+  const wb_val = element.id;
+  const checked = element.checked ? 'visible' : 'none';
+  for (const route of routes) {
+    const layerID = 'route-'+route+'-wb-'+wb_val;
+    const pointLayerID = 'datapoints-'+layerID;
+    const labelLayerID = 'datapoints_label-'+layerID;
+    map.setLayoutProperty(
+      pointLayerID,
+      'visibility',
+      checked
+    );
+    map.setLayoutProperty(
+      labelLayerID,
+      'visibility',
+      checked
+    );
+  }
+}
+
+async function createWbButtons() {
+  const wbFilterGroup = document.getElementById('wb-filter-group');
+  for (const wb_val of wb) {
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.id = wb_val;
+    input.checked = true;
+    wbFilterGroup.appendChild(input);
+
+    const label = document.createElement('label');
+    label.setAttribute('for', wb_val);
+    label.textContent = wb_val;
+    wbFilterGroup.appendChild(label);
+
+    input.addEventListener('change', wbButtonCallback);
+  }
+}
 
 map.on('load', async () => {
   const G = await getAndProcessLocationData();
@@ -66,70 +266,15 @@ map.on('load', async () => {
     type: 'geojson',
     data: G
   });
-  map.addLayer({
-    id: 'datapoints',
-    type: 'circle',
-    source: 'G',
-    paint: {
-       'circle-radius': 14,
-     "circle-color": "#4361ee",
-    'circle-stroke-color': 'white',
-    'circle-stroke-width': 1,
-    'circle-opacity': 0.5
-    }
-  });
-  map.addLayer({
-    id: 'datapoints_label',
-    type: 'symbol',
-    source: 'G',
-    'layout': {
-      'text-field': ['get', 'title'],
-      'text-font': [
-        'Open Sans Semibold',
-        'Arial Unicode MS Bold'
-      ],
-      'text-offset': [0, 1.25],
-      'text-anchor': 'top'
-    }
-  });
+  await createMapLayers(G);
+  await createRouteButtons();
+  await createWbButtons();
 });
-
-  // Create a popup, but don't add it to the map yet.
-  const popup = new mapboxgl.Popup({
-    closeButton: false,
-    closeOnClick: false
-  });
   
-  map.on('mouseenter', 'datapoints', (e) => {
-    // Change the cursor style as a UI indicator.
-    map.getCanvas().style.cursor = 'pointer';
-    
-    // Copy coordinates array.
-    const coordinates = e.features[0].geometry.coordinates.slice();
-    var description = "<strong>Car "+e.features[0].properties.title.toString()+"</strong>";
-    description += "<p>Ping age: " +((Date.now() - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
-    description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
-    description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
-    description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
-    description += "<p>ACC Speed: "+e.features[0].properties.accspeed.toString()+"</p>";
-    description += "<p>ACC Status: "+e.features[0].properties.accstatus.toString()+"</p>";
-    
-    // Ensure that if the map is zoomed out such that multiple
-    // copies of the feature are visible, the popup appears
-    // over the copy being pointed to.
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
-    
-    // Populate the popup and set its coordinates
-    // based on the feature found.
-    popup.setLngLat(coordinates).setHTML(description).addTo(map);
-  });
-    
-  map.on('mouseleave', 'datapoints', () => {
-    map.getCanvas().style.cursor = '';
-    popup.remove();
-  });
+const updateSource = setInterval(async () => {
+  var G = await getAndProcessLocationData();
+  map.getSource('G').setData(G);
+}, 5000);
 
 </script>
 
