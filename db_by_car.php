@@ -19,7 +19,7 @@ $RED='#CD1337';
 $SUPER_GRAY='#4e5255';
 $ORANGE='#ec7331';
 $YELLOW='#efe11a';
-$COFFEE_BLUE='#c0ffee'
+$COFFEE_BLUE='#c0ffee';
 
 $conn = new mysqli($servername, $username, $password, $db);
 
