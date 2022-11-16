@@ -17,7 +17,7 @@ if ($conn->connect_error)
     die("Connection failed: " . $conn->connect_error);
 }
 
-include('./phpfastcache-7.1.2/lib/Phpfastcache/Helper/Psr16Adapter.php');
+include('./current_map_experimental/vendor/autoload.php');
 use Phpfastcache\Helper\Psr16Adapter;
 $defaultDriver = 'Files';
 $Psr16Adapter = new Psr16Adapter($defaultDriver);
