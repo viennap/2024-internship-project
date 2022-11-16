@@ -14,8 +14,8 @@ $password = "wjytxeu5";
 $db = "circledb";
 
 $GREEN='#74c451';
-$GRAY='#999999';
-$RED='#CD1337';
+$BRILLIANT_SILVER_METALLIC='#999999';
+$SCARLET_EMBER='#CD1337';
 $SUPER_GRAY='#4e5255';
 $ORANGE='#ec7331';
 $YELLOW='#efe11a';
@@ -71,7 +71,7 @@ if ($result->num_rows > 0) {
         // echo "<tr style='background-color: ".$SUPER_GRAY.";'>";
       }
       else{
-        echo "<tr style='background-color: ".$GRAY.";'>";
+        echo "<tr style='background-color: ".$BRILLIANT_SILVER_METALLIC.";'>";
       }
   	// echo"<tr>";
       if ($row[current_update_min]<14182){
@@ -84,7 +84,7 @@ if ($result->num_rows > 0) {
       	echo"<td>".$row[vin]."</td>";
       	// echo"<td>".$row[battery_voltage]." </td>";
         if ($row[battery_voltage] <= 4.02){
-          echo"<td style='background-color: ".$RED."';>".$row[battery_voltage]." </td>";
+          echo"<td style='background-color: ".$SCARLET_EMBER."';>".$row[battery_voltage]." </td>";
         }
       else{
         echo"<td>".$row[battery_voltage]." </td>";
@@ -106,7 +106,7 @@ if ($result->num_rows > 0) {
       // echo"<td>".$row[acc_button_wire_connected]." </td>";
       if($row[acc_button_wire_connected]==0)
       {
-        echo "<td style='background-color: ".$RED.";'>".$row[acc_button_wire_connected]."</td>";
+        echo "<td style='background-color: ".$SCARLET_EMBER.";'>".$row[acc_button_wire_connected]."</td>";
       }
       else{
       echo "<td>".$row[acc_button_wire_connected]."</td>";
@@ -116,7 +116,7 @@ if ($result->num_rows > 0) {
       echo"<td>".$row[libpanda_git_hash]." </td>";
       // echo"<td>".$row[log_message]." </td>";
       if(substr_compare($row[log_message],"These rosnodes are down",0,13)==0){
-        echo"<td style='background-color: ".$RED.";'>".$row[log_message]." </td>";
+        echo"<td style='background-color: ".$SCARLET_EMBER.";'>".$row[log_message]." </td>";
       }
       elseif(substr_compare($row[log_message],"nominal state!",0,13)==0 && $row[current_update_min]>1) {
         echo"<td style='background-color: ".$YELLOW.";'>".$row[log_message]." </td>";
