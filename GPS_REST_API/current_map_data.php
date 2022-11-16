@@ -20,7 +20,7 @@ if ($conn->connect_error)
 #where Status='A' AND VIN='".$VIN."' ORDER BY GpsTime DESC LIMIT 60" ;
 $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime DESC) AS rn 
 FROM fact_vehicle_ping AS p WHERE p.status = 0 AND ABS((UNIX_TIMESTAMP() * 1000) - p.systime) < (1000*60*60*2) AND (p.gpstime < 2147483647700))
-SELECT vin_pings.*, dim_vehicle.veh_id FROM vin_pings 
+SELECT vin_pings.*, dim_vehicle.veh_id, dim_vehicle.route FROM vin_pings 
 join dim_vehicle on vin_pings.vin = dim_vehicle.vin WHERE rn=1";
 
 $result = $conn->query($sql) ;
@@ -46,6 +46,8 @@ $acc_status = array();
 
 $velocity = array();
 
+$route = array();
+
 if ($result->num_rows > 0) 
 {
     while($row = $result->fetch_assoc()) 
@@ -59,6 +61,7 @@ if ($result->num_rows > 0)
         $acc_status[$count] = intval($row['acc_status']);
         $carnumbers[$count] = intval($row['veh_id']);
         $velocity[$count] = floatval($row['velocity']);
+        $route[$count] = $row['route'];
 
         $coords[$count] = array();
         $coords[$count][0] = floatval($row['longitude']);
@@ -77,6 +80,7 @@ $result['systime'] = $systime;
 $result['acc_speed_setting'] = $acc_speed_setting;
 $result['acc_status'] = $acc_status;
 $result['velocity'] = $velocity;
+$result['route'] = $route;
 $result['center_lat'] = $center_lat;
 $result['center_long'] = $center_long;
 
