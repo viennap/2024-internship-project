@@ -100,7 +100,7 @@ margin-right: 5px;
   border-radius: 50%;
   width: 20px;
   height: 20px;
-  margin-right: 5px;
+  margin-right: 10px;
   opacity: 50%;
 }
 
@@ -110,6 +110,20 @@ margin-right: 5px;
 
 #ping-legend-key-active {
   background-color: #4361ee;
+}
+
+.loading_overlay {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+  background: #aaa;
+  margin-right: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  border-radius: 3px;
 }
 
 </style>
@@ -133,6 +147,9 @@ margin-right: 5px;
     <span class="ping-legend-key" id="ping-legend-key-stale"></span>
     <span class="ping-legend-name" id="ping-legend-name-stale">Stale</span>
   </div>
+</div>
+<div class="loading-overlay" id="loading-overlay-main">
+  <strong>Loading....</strong>
 </div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
@@ -203,7 +220,7 @@ async function removePopup() {
   popup.remove();
 }
 
-async function createMapLayers(G) {
+async function createMapLayers() {
   for (const route of routes) {
     for (const wb_val of wb) {
       const layerID = 'route-'+route+'-wb-'+wb_val;
@@ -325,6 +342,7 @@ async function createWbButtons() {
     input.addEventListener('change', wbButtonCallback);
   }
 }
+var updateSource;
 
 map.on('load', async () => {
   const G = await getAndProcessLocationData();
@@ -332,16 +350,19 @@ map.on('load', async () => {
     type: 'geojson',
     data: G
   });
-  await createMapLayers(G);
+  await createMapLayers();
   await createRouteButtons();
   await createWbButtons();
+  document.getElementById("loading-overlay-main").style.visibility = 'hidden';
+  updateSource = setInterval(async () => {
+    var G = await getAndProcessLocationData();
+    map.getSource('G').setData(G);
+    current_timestamp = Date.now();
+  }, 5000);
 });
-  
-const updateSource = setInterval(async () => {
-  var G = await getAndProcessLocationData();
-  map.getSource('G').setData(G);
-  current_timestamp = Date.now();
-}, 5000);
+
+
+
 
 </script>
 
