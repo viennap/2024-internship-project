@@ -17,7 +17,7 @@ if ($conn->connect_error)
     die("Connection failed: " . $conn->connect_error);
 }
 
-include('./phpfastcache-7.1.2/Helper/Psr16Adapter.php');
+include('./phpfastcache-7.1.2/lib/Phpfastcache/Helper/Psr16Adapter.php');
 use Phpfastcache\Helper\Psr16Adapter;
 $defaultDriver = 'Files';
 $Psr16Adapter = new Psr16Adapter($defaultDriver);
