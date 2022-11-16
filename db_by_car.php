@@ -19,7 +19,7 @@ $RED='#CD1337';
 $SUPER_GRAY='#4e5255';
 $ORANGE='#ec7331';
 $YELLOW='#efe11a';
-$COFFEE_BLUE='#c0ffee';
+$SAFETY_VEST_COFFEE='#c0ffee';
 
 $conn = new mysqli($servername, $username, $password, $db);
 
@@ -119,7 +119,7 @@ if ($result->num_rows > 0) {
         echo"<td style='background-color: ".$YELLOW.";'>".$row[log_message]." </td>";
       }
       elseif(substr_compare($row[log_message],"nominal state - vehicle says: controls allowable!",0,43)==0 && $row[current_update_min]<10) {
-        echo"<td style='background-color: ".$COFFEE_BLUE.";'>".$row[log_message]." </td>";
+        echo"<td style='background-color: ".$SAFETY_VEST_COFFEE.";'>".$row[log_message]." </td>";
       }
       else{
         echo"<td>".$row[log_message]." </td>";
