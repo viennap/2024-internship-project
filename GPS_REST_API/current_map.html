@@ -91,6 +91,9 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4d
 const routes = ["orange", "yellow"];
 const wb = ["-1", "0", "1"];
 
+var current_timestamp = 0;
+var stale_threshold = (1000*60*2);
+
 var map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/light-v10',
@@ -104,7 +107,7 @@ const popup = new mapboxgl.Popup({
 });
 
 async function getLocationData() {
-  const response = await fetch('https://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data.php', { method: 'GET'});
+  const response = await fetch('https://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data_experimental.php', { method: 'GET'});
   return await response.json();
 }
 
@@ -115,7 +118,7 @@ async function getAndProcessLocationData() {
   G["features"] = [];
   G["features"][0] = {};
   for (let i = 0; i < data.coords.length; i++) {
-    G["features"][i] = { "type": "Feature", "properties": { "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i], "route": data.route[i], "is_wb": data.is_wb[i]}, "geometry": { "type": "Point", "coordinates": data.coords[i] } };
+    G["features"][i] = { "type": "Feature", "properties": { "current_timestamp": Date.now(), "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i], "route": data.route[i], "is_wb": data.is_wb[i]}, "geometry": { "type": "Point", "coordinates": data.coords[i] } };
   }
   return G;
 }
@@ -164,7 +167,11 @@ async function createMapLayers(G) {
         source: 'G',
         paint: {
           'circle-radius': 14,
-        "circle-color": "#4361ee",
+        "circle-color": ["case",
+          ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
+          "#000000",
+          "#4361ee",
+        ],
         'circle-stroke-color': 'white',
         'circle-stroke-width': 1,
         'circle-opacity': 0.5
@@ -284,6 +291,7 @@ map.on('load', async () => {
 const updateSource = setInterval(async () => {
   var G = await getAndProcessLocationData();
   map.getSource('G').setData(G);
+  current_timestamp = Date.now();
 }, 5000);
 
 </script>

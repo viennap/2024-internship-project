@@ -9,14 +9,6 @@ $password = "wjytxeu5";
 $db = "circledb";
 $cacheKey = 'liveViewerCache';
 
-$conn = new mysqli($servername, $username, $password, $db);
-
-if ($conn->connect_error)
-{
-    echo $conn->connect_error;
-    die("Connection failed: " . $conn->connect_error);
-}
-
 include('./current_map_experimental/vendor/autoload.php');
 use Phpfastcache\Helper\Psr16Adapter;
 $defaultDriver = 'Files';
@@ -26,8 +18,12 @@ if ($Psr16Adapter->has($cacheKey)) {
     $output = $Psr16Adapter->get($cacheKey);
 }
 else {
-    #$sql = "SELECT gpstime as GpsTime, systime as SysTime,latitude as Latitude,longitude as Longitude FROM fact_vehicle_ping 
-    #where Status='A' AND VIN='".$VIN."' ORDER BY GpsTime DESC LIMIT 60" ;
+    $conn = new mysqli($servername, $username, $password, $db);
+    if ($conn->connect_error)
+    {
+        echo $conn->connect_error;
+        die("Connection failed: " . $conn->connect_error);
+    }
     $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime DESC) AS rn 
     FROM fact_vehicle_ping AS p WHERE p.status = 0 AND (p.gpstime < 2147483647700))
     SELECT vin_pings.*, dim_vehicle.veh_id, dim_vehicle.route FROM vin_pings 
