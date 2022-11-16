@@ -73,7 +73,7 @@ if ($result->num_rows > 0) {
         echo "<tr style='background-color: ".$GRAY.";'>";
       }
   	// echo"<tr>";
-      elseif ($row[current_update_min]<14400){
+      if ($row[current_update_min]<14400){
         echo"<td>".$row[veh_id]."</td>";
       	echo"<td>".$row[wlan0_mac]."</td>";
       	echo"<td>".$row[SSID]." </td>";
