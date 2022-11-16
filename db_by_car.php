@@ -67,14 +67,14 @@ if ($result->num_rows > 0) {
       elseif ( ($row[current_update_min]>=1) && ($row[current_update_min]<10) ){
         echo "<tr style='background-color:".$ORANGE.";'>";
       }
-      elseif ($row[current_update_min]>14400){
+      elseif ($row[current_update_min]>14182){
         echo "<tr style='background-color: ".$SUPER_GRAY.";'>";
       }
       else{
         echo "<tr style='background-color: ".$GRAY.";'>";
       }
   	// echo"<tr>";
-      if ($row[current_update_min]<14400){
+      if ($row[current_update_min]<14182){
         echo"<td>".$row[veh_id]."</td>";
       	echo"<td>".$row[wlan0_mac]."</td>";
       	echo"<td>".$row[SSID]." </td>";
