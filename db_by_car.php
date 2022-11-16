@@ -112,13 +112,13 @@ if ($result->num_rows > 0) {
       if(substr_compare($row[log_message],"These rosnodes are down",0,13)==0){
         echo"<td style='background-color: ".$RED.";'>".$row[log_message]." </td>";
       }
-      elseif(substr_compare($row[log_message],"nominal state!",0,13) && $row[current_update_min]<1) {
+      elseif(substr_compare($row[log_message],"nominal state!",0,13)==0 && $row[current_update_min]<1) {
         echo"<td style='background-color: ".$YELLOW.";'>".$row[log_message]." </td>";
       }
-      elseif(substr_compare($row[log_message],"Rsync finished, shutting system down",0,23) && $row[current_update_min]>10) {
+      elseif(substr_compare($row[log_message],"Rsync finished, shutting system down",0,23)==0 && $row[current_update_min]>10) {
         echo"<td style='background-color: ".$YELLOW.";'>".$row[log_message]." </td>";
       }
-      elseif(substr_compare($row[log_message],"nominal state - vehicle says: controls allowable!",0,43) && $row[current_update_min]<10) {
+      elseif(substr_compare($row[log_message],"nominal state - vehicle says: controls allowable!",0,43)==0 && $row[current_update_min]<10) {
         echo"<td style='background-color: ".$COFFEE_BLUE.";'>".$row[log_message]." </td>";
       }
       else{
