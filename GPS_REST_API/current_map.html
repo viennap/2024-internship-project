@@ -75,6 +75,43 @@ margin-right: 5px;
   left: 10px;
 }
 
+.map-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #fff;
+  margin-right: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  border-radius: 3px;
+}
+
+#ping-legend {
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  height: 80px;
+  margin-bottom: 40px;
+  width: 100px;
+}
+
+.ping-legend-key {
+  display: inline-block;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  opacity: 50%;
+}
+
+#ping-legend-key-stale {
+  background-color: #000000;
+}
+
+#ping-legend-key-active {
+  background-color: #4361ee;
+}
+
 </style>
 </head>
 <body>
@@ -86,6 +123,17 @@ margin-right: 5px;
 <nav id="wb-filter-group" class="filter-group">
   <strong>West/Eastbound Status</strong>
 </nav>
+<div class='map-overlay' id='ping-legend'>
+  <strong>Ping Legend</strong>
+  <div>
+    <span class="ping-legend-key" id="ping-legend-key-active"></span>
+    <span class="ping-legend-name" id="ping-legend-name-active">Active</span>
+  </div>
+  <div>
+    <span class="ping-legend-key" id="ping-legend-key-stale"></span>
+    <span class="ping-legend-name" id="ping-legend-name-stale">Stale</span>
+  </div>
+</div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
 const routes = ["orange", "yellow"];
