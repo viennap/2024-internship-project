@@ -205,7 +205,9 @@ var circle_icon_name = 'circle-icon';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
 const routes = ["orange", "yellow"];
+var routes_state = [true, true];
 const wb = ["-1", "0", "1"];
+var wb_state = [true, true, true];
 const wb_lookup = ["Eastbound", "Neither", "Westbound"]
 
 var stale_threshold = (1000*60*2);
@@ -377,11 +379,14 @@ async function createMapLayers() {
 async function routeButtonCallback(e) {
   const element = e.target;
   const route = element.id;
-  const checked = element.checked ? 'visible' : 'none';
+  const route_index = routes.indexOf(route);
+  route_state[route_index] = element.checked;
   for (const wb_val of wb) {
     const layerID = 'route-'+route+'-wb-'+wb_val;
     const pointLayerID = 'datapoints-'+layerID;
     const labelLayerID = 'datapoints_label-'+layerID;
+    const wb_index = wb.indexOf(wb_val);
+    const checked = (route_state[route_index] && wb_state[wb_index])  ? 'visible' : 'none';
     map.setLayoutProperty(
       pointLayerID,
       'visibility',
@@ -416,11 +421,14 @@ async function createRouteButtons() {
 async function wbButtonCallback(e) {
   const element = e.target;
   const wb_val = element.id;
-  const checked = element.checked ? 'visible' : 'none';
+  const wb_index = wb.indexOf(wb_val);
+  wb_state[wb_index] = element.checked;
   for (const route of routes) {
     const layerID = 'route-'+route+'-wb-'+wb_val;
     const pointLayerID = 'datapoints-'+layerID;
     const labelLayerID = 'datapoints_label-'+layerID;
+    const route_index = routes.indexOf(route);
+    const checked = (route_state[route_index] && wb_state[wb_index])  ? 'visible' : 'none';
     map.setLayoutProperty(
       pointLayerID,
       'visibility',
