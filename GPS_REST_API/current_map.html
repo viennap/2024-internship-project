@@ -224,7 +224,7 @@ async function createPopup(e) {
   description += "<p>Ping age: " +((Date.now() - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
   description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
   description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
-  description += "<p>Velocity: "+e.features[0].properties.velocity.toStxring()+"</p>";
+  description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
   description += "<p>ACC Speed: "+e.features[0].properties.accspeed.toString()+"</p>";
   description += "<p>ACC Status: "+e.features[0].properties.accstatus.toString()+"</p>";
     
