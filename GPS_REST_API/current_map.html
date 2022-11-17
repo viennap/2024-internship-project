@@ -157,6 +157,20 @@ margin-right: 5px;
 var endpoint = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data.php';
 var triangle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle.png';
 var triangle_icon_name = 'triangle-icon';
+var triangle_less_20_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-20.png';
+var triangle_less_20_icon_name = 'triangle-less-20-icon';
+var triangle_less_40_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-40.png';
+var triangle_less_40_icon_name = 'triangle-less-40-icon';
+var triangle_less_60_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-60.png';
+var triangle_less_60_icon_name = 'triangle-less-60-icon';
+var triangle_less_80_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-80.png';
+var triangle_less_80_icon_name = 'triangle-less-80-icon';
+var triangle_less_100_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-100.png';
+var triangle_less_100_icon_name = 'triangle-less-100-icon';
+var triangle_greater_100_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-greater-100.png';
+var triangle_greater_100_icon_name = 'triangle-greater-100-icon';
+var triangle_active_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-active.png';
+var triangle_active_icon_name = 'triangle-active-icon';
 var circle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Circle.png';
 var circle_icon_name = 'circle-icon';
 
@@ -191,7 +205,11 @@ async function getAndProcessLocationData() {
   G["features"] = [];
   G["features"][0] = {};
   for (let i = 0; i < data.coords.length; i++) {
-    G["features"][i] = { "type": "Feature", "properties": { "current_timestamp": Date.now(), "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i], "route": data.route[i], "is_wb": data.is_wb[i]}, "geometry": { "type": "Point", "coordinates": data.coords[i] } };
+    G["features"][i] = { 
+      "type": "Feature", 
+      "properties": { "current_timestamp": Date.now(), "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i], "route": data.route[i], "is_wb": data.is_wb[i]}, 
+      "geometry": { "type": "Point", "coordinates": data.coords[i] } 
+    };
   }
   return G;
 }
@@ -227,10 +245,10 @@ async function removePopup() {
   popup.remove();
 }
 
-async function mapAddImage(name, path) {
+async function mapAddImage(name, path, sdf) {
   map.loadImage(path, (error, image) => {
     if (error) throw error;
-    map.addImage(name, image, { 'sdf': true });
+    map.addImage(name, image, { 'sdf': sdf });
   });
 }
 
@@ -239,9 +257,15 @@ function sleep(ms) {
 }
 
 async function createMapLayers() {
-  await mapAddImage(triangle_icon_name, triangle_path);
-  await mapAddImage(circle_icon_name, circle_path);
-  while (!map.hasImage(triangle_icon_name) | !map.hasImage(circle_icon_name)) {
+  await mapAddImage(triangle_less_20_icon_name, triangle_less_20_path, false);
+  await mapAddImage(triangle_less_40_icon_name, triangle_less_40_path, false);
+  await mapAddImage(triangle_less_60_icon_name, triangle_less_60_path, false);
+  await mapAddImage(triangle_less_80_icon_name, triangle_less_80_path, false);
+  await mapAddImage(triangle_less_100_icon_name, triangle_less_100_path, false);
+  await mapAddImage(triangle_greater_100_icon_name, triangle_greater_100_path, false);
+  await mapAddImage(triangle_active_icon_name, triangle_active_path, false);
+  await mapAddImage(circle_icon_name, circle_path, true);
+  while (!map.hasImage(circle_icon_name) | !map.hasImage(triangle_active_icon_name) | !map.hasImage(triangle_less_20_icon_name) | !map.hasImage(triangle_less_40_icon_name) | !map.hasImage(triangle_less_60_icon_name) | !map.hasImage(triangle_less_80_icon_name) | !map.hasImage(triangle_less_100_icon_name) | !map.hasImage(triangle_greater_100_icon_name) ) {
     await sleep(500);
     console.log("Images loading...");
   }
@@ -253,19 +277,40 @@ async function createMapLayers() {
       const labelLayerID = 'datapoints_label-'+layerID;
       const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
       //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
-      const staleExpression = ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
+
+      const staleExpression = [">",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
+      const accActiveExpression = ["==", ["get", "accstatus"], 1];
+      const triangleActiveExpression = triangle_active_icon_name;
+      const accSetSpeedExpression = ["to-number", ["get", "accspeed"], 0.0];
+      const triangleColorExpression = ["case", 
+        ["<", accSetSpeedExpression, 20.0], triangle_less_20_icon_name, 
+        ["<", accSetSpeedExpression, 40.0], triangle_less_40_icon_name,
+        ["<", accSetSpeedExpression, 60.0], triangle_less_60_icon_name,
+        ["<", accSetSpeedExpression, 80.0], triangle_less_80_icon_name,
+        ["<", accSetSpeedExpression, 100.0], triangle_less_100_icon_name,
+        triangle_greater_100_icon_name
+      ];
+      const triangleIconExpression = ["case", accActiveExpression, triangleColorExpression, triangleActiveExpression];
       const pointLayout = {
         'icon-image' : ["case",
           staleExpression,
           circle_icon_name,
           ["==", ["get", "is_wb"], "1"],
-          triangle_icon_name,
+          triangleIconExpression,
           ["==", ["get", "is_wb"], "-1"],
-          triangle_icon_name,
+          triangleIconExpression,
           circle_icon_name
         ],
+        'icon-rotation-alignment': 'map',
+        'icon-rotate' : ["case",
+          ["==", ["get", "is_wb"], "1"],
+          -20,
+          ["==", ["get", "is_wb"], "-1"],
+          160,
+          0
+        ],
         'icon-allow-overlap': true,
-        'icon-size': 0.25
+        'icon-size': 0.5
       }
       const pointPaint = {
         'icon-color': ["case", staleExpression, "#000000", "#4361ee"],
@@ -392,7 +437,7 @@ map.on('load', async () => {
   updateSource = setInterval(async () => {
     var G = await getAndProcessLocationData();
     map.getSource('G').setData(G);
-  }, 5000);
+  }, 15000);
 });
 
 </script>
