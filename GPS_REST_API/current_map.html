@@ -155,9 +155,9 @@ margin-right: 5px;
 </div>
 <script>
 var endpoint = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data.php';
-var triangle_path = './Triangle.png';
+var triangle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle.png';
 var triangle_icon_name = 'triangle-icon';
-var circle_path = './Circle.png';
+var circle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Circle.png';
 var circle_icon_name = 'circle-icon';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
@@ -234,9 +234,18 @@ async function mapAddImage(name, path) {
   });
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function createMapLayers() {
   await mapAddImage(triangle_icon_name, triangle_path);
   await mapAddImage(circle_icon_name, circle_path);
+  while (!map.hasImage(triangle_icon_name) | !map.hasImage(circle_icon_name)) {
+    await sleep(500);
+    console.log("Images loading...");
+  }
+  console.log("Images loaded!");
   for (const route of routes) {
     for (const wb_val of wb) {
       const layerID = 'route-'+route+'-wb-'+wb_val;
