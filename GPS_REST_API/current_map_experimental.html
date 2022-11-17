@@ -257,7 +257,7 @@ async function createMapLayers() {
       const labelLayerID = 'datapoints_label-'+layerID;
       const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
       //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
-      const staleExpression = ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
+      const staleExpression = [">",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
       const pointLayout = {
         'icon-image' : ["case",
           staleExpression,
@@ -273,21 +273,9 @@ async function createMapLayers() {
       }
       const pointPaint = {
         'icon-color': '#AAAAAA',
-        'icon-opacity': 0.5
-      };
-      const trianglePaint = {
-        'icon-color': '#AAAAAA'
-      };
-      const circlePaint = {
-        'circle-radius': 14,
-        "circle-color": ["case",
-          ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
-          "#000000",
-          "#4361ee",
-        ],
-        'circle-stroke-color': 'white',
-        'circle-stroke-width': 1,
-        'circle-opacity': 0.5
+        'icon-opacity': 0.5,
+        'icon-halo-color': '#000000',
+        'icon-halo-width': 10
       };
       map.addLayer({
         id: pointLayerID,
