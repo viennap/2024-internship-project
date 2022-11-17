@@ -268,21 +268,8 @@ async function createMapLayers() {
         'icon-size': 0.25
       }
       const pointPaint = {
-        'icon-color': '#AAAAAA'
-      };
-      const trianglePaint = {
-        'icon-color': '#AAAAAA'
-      };
-      const circlePaint = {
-        'circle-radius': 14,
-        "circle-color": ["case",
-          ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
-          "#000000",
-          "#4361ee",
-        ],
-        'circle-stroke-color': 'white',
-        'circle-stroke-width': 1,
-        'circle-opacity': 0.5
+        'icon-color': ["case", staleExpression, "#000000", "#4361ee"],
+        'icon-opacity': 0.5
       };
       map.addLayer({
         id: pointLayerID,
