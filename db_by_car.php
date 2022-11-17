@@ -47,7 +47,7 @@ wlan0_mac
 ,libpanda_git_hash
 ,log_message
 ,veh_id
-FROM(SELECT * ,ROW_NUMBER() over ( PARTITION BY wlan0_mac ORDER BY update_time DESC) as rn From piStatus) as tmp join dim_vehicle on tmp.vin=dim_vehicle.vin WHERE tmp.rn =1 AND tmp.wlan0_mac AND update_time > current_timestamp()-3600 IS NOT NULL ORDER BY veh_id ASC
+FROM(SELECT * ,ROW_NUMBER() over ( PARTITION BY wlan0_mac ORDER BY update_time DESC) as rn From piStatus) as tmp join dim_vehicle on tmp.vin=dim_vehicle.vin WHERE tmp.rn =1 AND update_time > current_timestamp()-3600 AND tmp.wlan0_mac IS NOT NULL ORDER BY veh_id ASC
 ";
 
 $result = $conn->query($sql);
