@@ -157,7 +157,7 @@ margin-right: 5px;
 var endpoint = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data.php';
 var triangle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle.png';
 var triangle_icon_name = 'triangle-icon';
-var triangle_border_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-border.png';
+var triangle_border_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-sdf.png';
 var triangle_border_icon_name = 'triangle-border-icon';
 var circle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Circle.png';
 var circle_icon_name = 'circle-icon';
@@ -245,7 +245,7 @@ function sleep(ms) {
 }
 
 async function createMapLayers() {
-  await mapAddImage(triangle_border_icon_name, triangle_border_path, false);
+  await mapAddImage(triangle_border_icon_name, triangle_border_path, true);
   await mapAddImage(triangle_icon_name, triangle_path, true);
   await mapAddImage(circle_icon_name, circle_path, true);
   while (!map.hasImage(triangle_icon_name) | !map.hasImage(circle_icon_name)) {
@@ -277,6 +277,8 @@ async function createMapLayers() {
       const pointPaint = {
         'icon-color': '#AAFFBB',
         'icon-opacity': 0.5,
+        'icon-halo-color': '#000000',
+        'icon-halo-width': 10
       };
       map.addLayer({
         id: pointLayerID,
