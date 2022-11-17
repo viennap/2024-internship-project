@@ -300,6 +300,13 @@ async function createMapLayers() {
           triangleIconExpression,
           circle_icon_name
         ],
+        'icon-rotate' : ["case",
+          ["==", "is_wb", "1"],
+          -90,
+          ["==", "is_wb", "-1"],
+          90,
+          0
+        ],
         'icon-allow-overlap': true,
         'icon-size': 0.5
       }
