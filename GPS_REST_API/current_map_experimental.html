@@ -95,9 +95,17 @@ margin-right: 5px;
   width: 100px;
 }
 
-.ping-legend-key {
+.ping-legend-key-circle {
   display: inline-block;
   border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  opacity: 50%;
+}
+
+.ping-legend-key-triangle {
+  display: inline-block;
   width: 20px;
   height: 20px;
   margin-right: 10px;
@@ -142,15 +150,15 @@ margin-right: 5px;
 <div class='map-overlay' id='ping-legend'>
   <strong>Ping Legend</strong>
   <div>
-    <img class="ping-legend-key" src="https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-active.png"/>
+    <img class="ping-legend-key-triangle" src="https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-active.png"/>
     <span class="ping-legend-name" id="ping-legend-name-active">Active, west/eastbound indicated</span>
   </div>
   <div>
-    <span class="ping-legend-key" id="ping-legend-key-active"></span>
+    <span class="ping-legend-key-circle" id="ping-legend-key-active"></span>
     <span class="ping-legend-name" id="ping-legend-name-active">Active</span>
   </div>
   <div>
-    <span class="ping-legend-key" id="ping-legend-key-stale"></span>
+    <span class="ping-legend-key-circle" id="ping-legend-key-stale"></span>
     <span class="ping-legend-name" id="ping-legend-name-stale">Stale</span>
   </div>
 </div>
