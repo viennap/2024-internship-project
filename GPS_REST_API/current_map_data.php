@@ -8,6 +8,7 @@ $username = "circles";
 $password = "wjytxeu5";
 $db = "circledb";
 $cacheKey = 'liveViewerCache';
+$cacheTimeout = 15;
 
 include('./current_map_experimental/vendor/autoload.php');
 use Phpfastcache\Helper\Psr16Adapter;
@@ -95,7 +96,7 @@ else {
     $result['center_lat'] = $center_lat;
     $result['center_long'] = $center_long;
     $output = json_encode($result);
-    $Psr16Adapter->set($cacheKey, $output, 30);
+    $Psr16Adapter->set($cacheKey, $output, $cacheTimeout);
 }
 
 echo $output;
