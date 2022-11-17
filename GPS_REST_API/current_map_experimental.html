@@ -439,7 +439,7 @@ async function routeButtonCallback(e) {
   const element = e.target;
   const route = element.id;
   const route_index = routes.indexOf(route);
-  route_state[route_index] = element.checked;
+  routes_state[route_index] = element.checked;
   for (const wb_val of wb) {
     const layerID = 'route-'+route+'-wb-'+wb_val;
     const pointLayerID = 'datapoints-'+layerID;
