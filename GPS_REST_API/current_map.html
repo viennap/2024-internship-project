@@ -253,7 +253,7 @@ async function createMapLayers() {
       const labelLayerID = 'datapoints_label-'+layerID;
       const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
       //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
-      const staleExpression = [">",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
+      const staleExpression = ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
       const pointLayout = {
         'icon-image' : ["case",
           staleExpression,
