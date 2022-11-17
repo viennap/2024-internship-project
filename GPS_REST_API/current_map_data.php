@@ -8,6 +8,7 @@ $username = "circles";
 $password = "wjytxeu5";
 $db = "circledb";
 $cacheKey = 'liveViewerCache';
+$cacheTimeout = 15;
 
 include('./current_map_experimental/vendor/autoload.php');
 use Phpfastcache\Helper\Psr16Adapter;
@@ -26,7 +27,7 @@ else {
     }
     $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime DESC) AS rn 
     FROM fact_vehicle_ping AS p WHERE p.status = 0 AND (p.gpstime < 2147483647700)
-    AND ABS((UNIX_TIMESTAMP() * 1000) - p.gpstime) < (1000*60*60*24))
+    AND ABS((UNIX_TIMESTAMP() * 1000) - p.gpstime) < (1000*60*60*8))
     SELECT vin_pings.*, dim_vehicle.veh_id, dim_vehicle.route FROM vin_pings 
     join dim_vehicle on vin_pings.vin = dim_vehicle.vin WHERE rn=1";
 
@@ -95,7 +96,7 @@ else {
     $result['center_lat'] = $center_lat;
     $result['center_long'] = $center_long;
     $output = json_encode($result);
-    $Psr16Adapter->set($cacheKey, $output, 30);
+    $Psr16Adapter->set($cacheKey, $output, $cacheTimeout);
 }
 
 echo $output;

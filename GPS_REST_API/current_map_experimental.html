@@ -76,9 +76,6 @@ margin-right: 5px;
 }
 
 .map-overlay {
-  position: absolute;
-  bottom: 0;
-  right: 0;
   background: #fff;
   margin-right: 20px;
   font-family: Arial, sans-serif;
@@ -87,12 +84,27 @@ margin-right: 5px;
 }
 
 #ping-legend {
+  position: absolute;
+  bottom: 0;
+  right: 0;
   padding: 10px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   line-height: 18px;
   height: 200px;
   margin-bottom: 100px;
   width: 300px;
+}
+
+#acc-legend {
+  position: absolute;
+  bottom: 0;
+  right: 325px;
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  height: 200px;
+  margin-bottom: 100px;
+  width: 150px;
 }
 
 .ping-legend-key-circle {
@@ -118,6 +130,38 @@ margin-right: 5px;
 
 #ping-legend-key-active {
   background-color: #4361ee;
+}
+
+.acc-legend-key-square {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  opacity: 50%;
+}
+
+#acc-legend-key-square-less-20 {
+  background-color: #FF0000;
+}
+
+#acc-legend-key-square-less-40 {
+  background-color: #FF3300;
+}
+
+#acc-legend-key-square-less-60 {
+  background-color: #FF6600;
+}
+
+#acc-legend-key-square-less-80 {
+  background-color: #FF9900;
+}
+
+#acc-legend-key-square-less-100 {
+  background-color: #FFBB00;
+}
+
+#acc-legend-key-square-greater-100 {
+  background-color: #FFFF00;
 }
 
 .loading-overlay {
@@ -150,6 +194,10 @@ margin-right: 5px;
 <div class='map-overlay' id='ping-legend'>
   <strong>Ping Legend</strong>
   <div>
+    <img class="ping-legend-key-triangle" src="https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-blank.png"/>
+    <span class="ping-legend-name" id="ping-legend-name-active">Active, west/eastbound indicated, cruise control active, color indicates ACC Set Speed</span>
+  </div>
+  <div>
     <img class="ping-legend-key-triangle" src="https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-active.png"/>
     <span class="ping-legend-name" id="ping-legend-name-active">Active, west/eastbound indicated, cruise control inactive</span>
   </div>
@@ -160,6 +208,33 @@ margin-right: 5px;
   <div>
     <span class="ping-legend-key-circle" id="ping-legend-key-stale"></span>
     <span class="ping-legend-name" id="ping-legend-name-stale">Stale</span>
+  </div>
+</div>
+<div class='map-overlay' id='acc-legend'>
+  <strong>ACC Set Speed Legend</strong>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-20"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-20">0-20</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-40"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">20-40</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-60"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">40-60</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-80"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">60-80</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-100"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">80-100</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-greater-100"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">100+</span>
   </div>
 </div>
 <div class="loading-overlay" id="loading-overlay-main">
@@ -188,10 +263,13 @@ var circle_icon_name = 'circle-icon';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
 const routes = ["orange", "yellow"];
+var routes_state = [true, true];
 const wb = ["-1", "0", "1"];
+var wb_state = [true, true, true];
 const wb_lookup = ["Eastbound", "Neither", "Westbound"]
 
 var stale_threshold = (1000*60*2);
+var makingRequest = false;
 
 var map = new mapboxgl.Map({
   container: 'map',
@@ -290,7 +368,7 @@ async function createMapLayers() {
       const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
       //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
 
-      const staleExpression = [">",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
+      const staleExpression = ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
       const accActiveExpression = ["==", ["get", "accstatus"], 1];
       const triangleActiveExpression = triangle_active_icon_name;
       const accSetSpeedExpression = ["to-number", ["get", "accspeed"], 0.0];
@@ -360,11 +438,14 @@ async function createMapLayers() {
 async function routeButtonCallback(e) {
   const element = e.target;
   const route = element.id;
-  const checked = element.checked ? 'visible' : 'none';
+  const route_index = routes.indexOf(route);
+  routes_state[route_index] = element.checked;
   for (const wb_val of wb) {
     const layerID = 'route-'+route+'-wb-'+wb_val;
     const pointLayerID = 'datapoints-'+layerID;
     const labelLayerID = 'datapoints_label-'+layerID;
+    const wb_index = wb.indexOf(wb_val);
+    const checked = (routes_state[route_index] && wb_state[wb_index])  ? 'visible' : 'none';
     map.setLayoutProperty(
       pointLayerID,
       'visibility',
@@ -399,11 +480,14 @@ async function createRouteButtons() {
 async function wbButtonCallback(e) {
   const element = e.target;
   const wb_val = element.id;
-  const checked = element.checked ? 'visible' : 'none';
+  const wb_index = wb.indexOf(wb_val);
+  wb_state[wb_index] = element.checked;
   for (const route of routes) {
     const layerID = 'route-'+route+'-wb-'+wb_val;
     const pointLayerID = 'datapoints-'+layerID;
     const labelLayerID = 'datapoints_label-'+layerID;
+    const route_index = routes.indexOf(route);
+    const checked = (routes_state[route_index] && wb_state[wb_index])  ? 'visible' : 'none';
     map.setLayoutProperty(
       pointLayerID,
       'visibility',
@@ -447,8 +531,12 @@ map.on('load', async () => {
   await createWbButtons();
   document.getElementById("loading-overlay-main").style.visibility = 'hidden';
   updateSource = setInterval(async () => {
-    var G = await getAndProcessLocationData();
-    map.getSource('G').setData(G);
+    if (!makingRequest) {
+      makingRequest = true;
+      var G = await getAndProcessLocationData();
+      map.getSource('G').setData(G);
+      makingRequest = false;
+    }
   }, 15000);
 });
 
