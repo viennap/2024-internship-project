@@ -224,7 +224,7 @@ async function createPopup(e) {
   description += "<p>Ping age: " +((Date.now() - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
   description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
   description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
-  description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
+  description += "<p>Velocity: "+e.features[0].properties.velocity.toStxring()+"</p>";
   description += "<p>ACC Speed: "+e.features[0].properties.accspeed.toString()+"</p>";
   description += "<p>ACC Status: "+e.features[0].properties.accstatus.toString()+"</p>";
     
@@ -278,7 +278,7 @@ async function createMapLayers() {
       const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
       //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
 
-      const staleExpression = [">",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
+      const staleExpression = ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
       const accActiveExpression = ["==", ["get", "accstatus"], 1];
       const triangleActiveExpression = triangle_active_icon_name;
       const accSetSpeedExpression = ["to-number", ["get", "accspeed"], 0.0];
