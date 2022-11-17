@@ -157,6 +157,8 @@ margin-right: 5px;
 var endpoint = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data.php';
 var triangle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle.png';
 var triangle_icon_name = 'triangle-icon';
+var triangle_border_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-border.png';
+var triangle_border_icon_name = 'triangle-border-icon';
 var circle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Circle.png';
 var circle_icon_name = 'circle-icon';
 
@@ -231,10 +233,10 @@ async function removePopup() {
   popup.remove();
 }
 
-async function mapAddImage(name, path) {
+async function mapAddImage(name, path, sdf) {
   map.loadImage(path, (error, image) => {
     if (error) throw error;
-    map.addImage(name, image, { 'sdf': true });
+    map.addImage(name, image, { 'sdf': sdf });
   });
 }
 
@@ -243,8 +245,9 @@ function sleep(ms) {
 }
 
 async function createMapLayers() {
-  await mapAddImage(triangle_icon_name, triangle_path);
-  await mapAddImage(circle_icon_name, circle_path);
+  await mapAddImage(triangle_border_icon_name, triangle_border_path, false);
+  await mapAddImage(triangle_icon_name, triangle_path, true);
+  await mapAddImage(circle_icon_name, circle_path, true);
   while (!map.hasImage(triangle_icon_name) | !map.hasImage(circle_icon_name)) {
     await sleep(500);
     console.log("Images loading...");
@@ -263,19 +266,17 @@ async function createMapLayers() {
           staleExpression,
           circle_icon_name,
           ["==", ["get", "is_wb"], "1"],
-          triangle_icon_name,
+          triangle_border_icon_name,
           ["==", ["get", "is_wb"], "-1"],
-          triangle_icon_name,
+          triangle_border_icon_name,
           circle_icon_name
         ],
         'icon-allow-overlap': true,
         'icon-size': 0.25
       }
       const pointPaint = {
-        'icon-color': '#AAAAAA',
+        'icon-color': '#AAFFBB',
         'icon-opacity': 0.5,
-        'icon-halo-color': '#000000',
-        'icon-halo-width': 10
       };
       map.addLayer({
         id: pointLayerID,
