@@ -445,7 +445,7 @@ async function routeButtonCallback(e) {
     const pointLayerID = 'datapoints-'+layerID;
     const labelLayerID = 'datapoints_label-'+layerID;
     const wb_index = wb.indexOf(wb_val);
-    const checked = (route_state[route_index] && wb_state[wb_index])  ? 'visible' : 'none';
+    const checked = (routes_state[route_index] && wb_state[wb_index])  ? 'visible' : 'none';
     map.setLayoutProperty(
       pointLayerID,
       'visibility',
