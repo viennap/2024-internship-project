@@ -277,6 +277,7 @@ async function createMapLayers() {
       const labelLayerID = 'datapoints_label-'+layerID;
       const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
       //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
+
       const staleExpression = [">",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
       const accActiveExpression = ["==", ["get", "accstatus"], 1];
       const triangleActiveExpression = triangle_active_icon_name;
@@ -302,11 +303,11 @@ async function createMapLayers() {
         ],
         'icon-rotation-alignment': 'map',
         'icon-rotate' : ["case",
-          ["==", "is_wb", "1"],
-          -45,
-          ["==", "is_wb", "-1"],
-          45,
-          0
+          ["==", ["get", "is_wb"], "1"],
+          -20,
+          ["==", ["get", "is_wb"], "-1"],
+          -20,
+          160
         ],
         'icon-allow-overlap': true,
         'icon-size': 0.5
@@ -436,7 +437,7 @@ map.on('load', async () => {
   updateSource = setInterval(async () => {
     var G = await getAndProcessLocationData();
     map.getSource('G').setData(G);
-  }, 5000);
+  }, 15000);
 });
 
 </script>
