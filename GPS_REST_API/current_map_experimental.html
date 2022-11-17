@@ -269,6 +269,7 @@ var wb_state = [true, true, true];
 const wb_lookup = ["Eastbound", "Neither", "Westbound"]
 
 var stale_threshold = (1000*60*2);
+var makingRequest = false;
 
 var map = new mapboxgl.Map({
   container: 'map',
@@ -530,8 +531,12 @@ map.on('load', async () => {
   await createWbButtons();
   document.getElementById("loading-overlay-main").style.visibility = 'hidden';
   updateSource = setInterval(async () => {
-    var G = await getAndProcessLocationData();
-    map.getSource('G').setData(G);
+    if (!makingRequest) {
+      makingRequest = true;
+      var G = await getAndProcessLocationData();
+      map.getSource('G').setData(G);
+      makingRequest = false;
+    }
   }, 15000);
 });
 
