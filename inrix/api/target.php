@@ -17,6 +17,7 @@ $Psr16Adapter = new Psr16Adapter($defaultDriver);
 $output = "";
 
 if ($Psr16Adapter->has($cacheKey)) {
+    error_log('INFO: Successfully read from cache.')
     $output = $Psr16Adapter->get($cacheKey);
 }
 
