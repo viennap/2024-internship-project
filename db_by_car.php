@@ -36,7 +36,6 @@ WITH tmp AS (
         ROW_NUMBER() over ( PARTITION BY wlan0_mac ORDER BY update_time DESC) as rn
     From piStatus
     WHERE 1=1
-        AND rn = 1
         AND update_time > UNIX_TIMESTAMP() - 3600 * 24
         AND wlan0_mac IS NOT NULL
 )
@@ -59,6 +58,7 @@ SELECT
     veh_id
 FROM dim_vehicle v
 LEFT JOIN tmp on 1=1
+    AND tmp.rn = 1
     AND tmp.vin = v.vin
 ORDER BY veh_id ASC
 ";
