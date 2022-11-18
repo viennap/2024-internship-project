@@ -11,7 +11,7 @@ $db = "circledb";
 $cacheKey = 'inrixTargetCache';
 $cacheTimeout = 15;
 
-include('../GPS_REST_API/current_map_experimental/vendor/autoload.php');
+include('../../GPS_REST_API/current_map_experimental/vendor/autoload.php');
 use Phpfastcache\Helper\Psr16Adapter;
 $defaultDriver = 'Files';
 $Psr16Adapter = new Psr16Adapter($defaultDriver);
