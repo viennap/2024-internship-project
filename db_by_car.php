@@ -30,24 +30,37 @@ if ($conn->connect_error)
 }
 
 $sql = "
+WITH tmp AS (
+    SELECT
+        *,
+        ROW_NUMBER() over ( PARTITION BY wlan0_mac ORDER BY update_time DESC) as rn
+    From piStatus
+    WHERE 1=1
+        AND tmp.rn = 1
+        AND tmp.update_time > UNIX_TIMESTAMP() - 3600 * 24
+        AND tmp.wlan0_mac IS NOT NULL
+)
 SELECT
-wlan0_mac
-,SSID
-,wlan0_ip
-,eth0_ip
-,concat(wlan0_upload_rate_kb,' || ',wlan0_download_rate_kb) AS wlan0_up_download_kb
-,dim_vehicle.vin
-,battery_voltage
-,external_power
-,(100 - ROUND((CAST(REPLACE(tmp.available_ram,'G','') as DOUBLE)/CAST(REPLACE(tmp.total_ram,'G','') as DOUBLE))*100,0)) AS total_ram_used_percent
-,total_memory_used_percent
-,concat(cpu_load_1min,' || ',cpu_load_5min,' || ',cpu_load_15min) AS cpu_load_1_5_15min
-,TIMESTAMPDIFF(MINUTE, SUBSTRING(CAST(FROM_UNIXTIME(update_time) AS NCHAR),1,19),current_timestamp()) AS current_update_min
-,acc_button_wire_connected
-,libpanda_git_hash
-,log_message
-,veh_id
-FROM(SELECT * ,ROW_NUMBER() over ( PARTITION BY wlan0_mac ORDER BY update_time DESC) as rn From piStatus) as tmp join dim_vehicle on tmp.vin=dim_vehicle.vin WHERE tmp.rn =1 AND tmp.update_time>(unix_timestamp()-36000) AND tmp.wlan0_mac IS NOT NULL ORDER BY veh_id ASC
+    wlan0_mac,
+    SSID,
+    wlan0_ip,
+    eth0_ip,
+    concat(wlan0_upload_rate_kb, ' || ', wlan0_download_rate_kb) AS wlan0_up_download_kb,
+    dim_vehicle.vin,
+    battery_voltage,
+    external_power,
+    (100 - ROUND((CAST(REPLACE(tmp.available_ram, 'G', '') as DOUBLE) / CAST(REPLACE(tmp.total_ram, 'G', '') as DOUBLE)) * 100,0)) AS total_ram_used_percent,
+    total_memory_used_percent,
+    concat(cpu_load_1min,' || ',cpu_load_5min,' || ',cpu_load_15min) AS cpu_load_1_5_15min,
+    TIMESTAMPDIFF(MINUTE, SUBSTRING(CAST(FROM_UNIXTIME(update_time) AS NCHAR),1,19),current_timestamp()) AS current_update_min,
+    acc_button_wire_connected,
+    libpanda_git_hash,
+    log_message,
+    veh_id
+FROM dim_vehicle v
+LEFT JOIN tmp on 1=1
+    AND tmp.vin = v.vin
+ORDER BY veh_id ASC
 ";
 
 $result = $conn->query($sql);
