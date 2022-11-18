@@ -36,9 +36,9 @@ WITH tmp AS (
         ROW_NUMBER() over ( PARTITION BY wlan0_mac ORDER BY update_time DESC) as rn
     From piStatus
     WHERE 1=1
-        AND tmp.rn = 1
-        AND tmp.update_time > UNIX_TIMESTAMP() - 36000
-        AND tmp.wlan0_mac IS NOT NULL
+        AND rn = 1
+        AND update_time > UNIX_TIMESTAMP() - 36000
+        AND wlan0_mac IS NOT NULL
 )
 SELECT
     wlan0_mac,
