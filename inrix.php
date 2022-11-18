@@ -1,3 +1,11 @@
+<html>
+<head>
+<title>The Latest piStatus information --- Details</title>
+<meta http-equiv="refresh" content="300" >
+</head>
+<body>
+<center>
+
 <?php
 // open the file in a binary mode
 $name = '/isis/home/hanw/circles/visual/by_date/20221118/fig/0-heatmap.png';
@@ -11,3 +19,7 @@ header("Content-Length: " . filesize($name));
 fpassthru($fp);
 exit;
 ?>
+  
+</center>
+</body>
+</html>
