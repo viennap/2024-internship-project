@@ -43,6 +43,8 @@ header("Content-Type: application/json");
 $output = json_encode(get_all_data());
 $Psr16Adapter->set($cacheKey, $output, $cacheTimeout);
 
+error_log('INFO: The speed planner cache is getting populated.');
+
 $conn->close();
 
 echo $output;
