@@ -62,76 +62,76 @@ echo"<tr>";
 
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
-      if ($row[current_update_min]<1){
+      if ($row['current_update_min']<1){
         echo "<tr style='background-color: ".$GREEN.";'>";
       }
-      elseif ( ($row[current_update_min]>=1) && ($row[current_update_min]<10) ){
+      elseif ( ($row['current_update_min']>=1) && ($row['current_update_min']<10) ){
         echo "<tr style='background-color:".$ORANGE.";'>";
       }
-      elseif ($row[current_update_min]>14182){
+      elseif ($row['current_update_min']>14182){
         // echo "<tr style='background-color: ".$SUPER_GRAY.";'>";
       }
       else{
         echo "<tr style='background-color: ".$GRAY.";'>";
       }
   	// echo"<tr>";
-      if ($row[current_update_min]<14182){
-        echo"<td>".$row[veh_id]."</td>";
-      	echo"<td>".$row[wlan0_mac]."</td>";
-      	echo"<td>".$row[SSID]." </td>";
-      	echo"<td>".$row[wlan0_ip]." </td>";
-      	echo"<td>".$row[eth0_ip]." </td>";
-      	echo"<td>".$row[wlan0_up_download_kb]." </td>";
-      	echo"<td>".$row[vin]."</td>";
-      	// echo"<td>".$row[battery_voltage]." </td>";
-        if ($row[battery_voltage] <= 4.02){
-          echo"<td style='background-color: ".$RED."';>".$row[battery_voltage]." </td>";
+      if ($row['current_update_min']<14182){
+        echo"<td>".$row['veh_id']."</td>";
+      	echo"<td>".$row['wlan0_mac']."</td>";
+      	echo"<td>".$row['SSID']." </td>";
+      	echo"<td>".$row['wlan0_ip']." </td>";
+      	echo"<td>".$row['eth0_ip']." </td>";
+      	echo"<td>".$row['wlan0_up_download_kb']." </td>";
+      	echo"<td>".$row['vin']."</td>";
+      	// echo"<td>".$row['battery_voltage']." </td>";
+        if ($row['battery_voltage'] <= 4.02){
+          echo"<td style='background-color: ".$RED."';>".$row['battery_voltage']." </td>";
         }
         else{
-          echo"<td>".$row[battery_voltage]." </td>";
+          echo"<td>".$row['battery_voltage']." </td>";
         }
-      	echo"<td>".$row[external_power]." </td>";
-      	echo"<td>".$row[total_ram_used_percent]." </td>";
-      	echo"<td>".$row[total_memory_used_percent]." </td>";
-      	echo"<td>".$row[cpu_load_1_5_15min]." </td>";
-      	// echo"<td>".$row[current_update_min]." </td>";
-      if($row[current_update_min]>720)
+      	echo"<td>".$row['external_power']." </td>";
+      	echo"<td>".$row['total_ram_used_percent']." </td>";
+      	echo"<td>".$row['total_memory_used_percent']." </td>";
+      	echo"<td>".$row['cpu_load_1_5_15min']." </td>";
+      	// echo"<td>".$row['current_update_min']." </td>";
+      if($row['current_update_min']>720)
                                   {
-               echo "<td style='background-color: ".$SUPER_GRAY.";'>".$row[current_update_min]."</td>";
+               echo "<td style='background-color: ".$SUPER_GRAY.";'>".$row['current_update_min']."</td>";
 
                              }
                              else
                              {
-               echo "<td>".$row[current_update_min]."</td>";
+               echo "<td>".$row['current_update_min']."</td>";
                              }
-      // echo"<td>".$row[acc_button_wire_connected]." </td>";
-      if($row[acc_button_wire_connected]==0)
+      // echo"<td>".$row['acc_button_wire_connected']." </td>";
+      if($row['acc_button_wire_connected']==0)
       {
-        echo "<td style='background-color: ".$RED.";'>".$row[acc_button_wire_connected]."</td>";
+        echo "<td style='background-color: ".$RED.";'>".$row['acc_button_wire_connected']."</td>";
       }
       else{
-      echo "<td>".$row[acc_button_wire_connected]."</td>";
+      echo "<td>".$row['acc_button_wire_connected']."</td>";
 
       }
-      echo"<td>".$row[veh_id]."</td>";
-      echo"<td>".$row[libpanda_git_hash]." </td>";
-      // echo"<td>".$row[log_message]." </td>";
-      if(substr_compare($row[log_message],"These rosnodes are down",0,13)==0){
-        echo"<td style='background-color: ".$RED.";'>".$row[log_message]." </td>";
+      echo"<td>".$row['veh_id']."</td>";
+      echo"<td>".$row['libpanda_git_hash']." </td>";
+      // echo"<td>".$row['log_message']." </td>";
+      if(substr_compare($row['log_message'],"These rosnodes are down",0,13)==0){
+        echo"<td style='background-color: ".$RED.";'>".$row['log_message']." </td>";
       }
-      elseif(substr_compare($row[log_message],"nominal state!",0,13)==0 && $row[current_update_min]>1) {
-        echo"<td style='background-color: ".$YELLOW.";'>".$row[log_message]." </td>";
+      elseif(substr_compare($row['log_message'],"nominal state!",0,13)==0 && $row['current_update_min']>1) {
+        echo"<td style='background-color: ".$YELLOW.";'>".$row['log_message']." </td>";
       }
-      elseif(substr_compare($row[log_message],"Rsync finished, shutting system down",0,23)!=0 && $row[current_update_min]>10) {
-        echo"<td style='background-color: ".$YELLOW.";'>".$row[log_message]." </td>";
+      elseif(substr_compare($row['log_message'],"Rsync finished, shutting system down",0,23)!=0 && $row['current_update_min']>10) {
+        echo"<td style='background-color: ".$YELLOW.";'>".$row['log_message']." </td>";
       }
-      elseif(substr_compare($row[log_message],"nominal state - vehicle says: controls allowable!",0,43)==0 && $row[current_update_min]<10) {
-        echo"<td style='background-color: ".$SAFETY_VEST_COFFEE.";'>".$row[log_message]." </td>";
+      elseif(substr_compare($row['log_message'],"nominal state - vehicle says: controls allowable!",0,43)==0 && $row['current_update_min']<10) {
+        echo"<td style='background-color: ".$SAFETY_VEST_COFFEE.";'>".$row['log_message']." </td>";
       }
       else{
-        echo"<td>".$row[log_message]." </td>";
+        echo"<td>".$row['log_message']." </td>";
       }
-      echo"<td>".$row[veh_id]."</td>";
+      echo"<td>".$row['veh_id']."</td>";
     	echo"</tr>";
       }
     }
