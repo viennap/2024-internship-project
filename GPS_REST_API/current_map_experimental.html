@@ -293,6 +293,7 @@ async function getLocationData() {
     t_range: timeSliceRange,
 	}), { method: 'GET'});
 	nextBufferStart = nextBufferStart + timeSliceRange;
+	console.log(response.body);
   return await response.json();
 }
 
