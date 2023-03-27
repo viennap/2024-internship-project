@@ -580,6 +580,7 @@ map.on('load', async () => {
 			let process_result = await getAndProcessLocationData();
       let G = await stepThroughBuffer(stepThroughPeriod * stepThroughSpeed);
       map.getSource('G').setData(G);
+			console.log(G);
 			makingRequest = false;
     }
   }, stepThroughPeriod);
