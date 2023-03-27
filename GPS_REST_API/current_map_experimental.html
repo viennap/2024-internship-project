@@ -260,7 +260,7 @@ var triangle_active_icon_name = 'triangle-active-icon';
 var circle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Circle.png';
 var circle_icon_name = 'circle-icon';
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
+mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleG9zYWR2ZW50dXJlciIsImEiOiJjbGQ1OXpiZmMwMHB4M250YThuam96cG8xIn0.jGZDzEDeb3Arci9RvKyHYQ';
 const routes = ["orange", "yellow"];
 var routes_state = [true, true];
 const wb = ["-1", "0", "1"];
@@ -291,7 +291,7 @@ async function getLocationData() {
   const response = await fetch(endpoint + new URLSearchParams({
     t_origin: nextBufferStart,
     t_range: timeSliceRange,
-	}, { method: 'GET'});
+	}), { method: 'GET'});
 	nextBufferStart = nextBufferStart + timeSliceRange;
   return await response.json();
 }
