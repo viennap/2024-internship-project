@@ -334,6 +334,7 @@ async function stepThroughBuffer(amount) {
   while (((current_value = globalBuffer.shift()) != undefined) && (current_value['properties']['systime'] < currentTimestamp)) {
 		let title = current_value['properties']['title'];
 		current_G_dictionary[title] = current_value;
+		console.log(current_value['properties']['systime']);
 	}
 	if (current_value != undefined) {
 		globalBuffer.unshift(current_value);
@@ -565,7 +566,6 @@ var stepThroughSpeed = 2;
 map.on('load', async () => {
   let process_result = await getAndProcessLocationData();
 	let G = await stepThroughBuffer(stepThroughPeriod * stepThroughSpeed);
-	console.log(G);
   map.addSource('G', {
     type: 'geojson',
     data: G
@@ -579,7 +579,6 @@ map.on('load', async () => {
 			makingRequest = true;
 			let process_result = await getAndProcessLocationData();
       let G = await stepThroughBuffer(stepThroughPeriod * stepThroughSpeed);
-			console.log(G);
       map.getSource('G').setData(G);
 			makingRequest = false;
     }
