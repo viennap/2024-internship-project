@@ -565,6 +565,7 @@ var stepThroughSpeed = 2;
 
 map.on('load', async () => {
   const G = await getAndProcessLocationData();
+	console.log(G);
   map.addSource('G', {
     type: 'geojson',
     data: G
