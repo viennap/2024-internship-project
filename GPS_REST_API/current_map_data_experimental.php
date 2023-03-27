@@ -66,9 +66,7 @@ if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
     $center_lat = $center_lat + ($row['latitude'] / $result->num_rows);
     $center_long = $center_long + ($row['longitude'] / $result->num_rows);
-		$rn = int($row['rn']);
-		if (array_key_exists($rn, $final_result))
-
+		
     $final_result['time_entries']['gpstime'][$count] = floatval($row['gpstime']);
     $final_result['time_entries']['systime'][$count] = floatval($row['systime']);
     $final_result['time_entries']['acc_speed_setting'][$count] = floatval($row['acc_speed_setting']);
