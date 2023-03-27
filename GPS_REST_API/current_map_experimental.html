@@ -335,7 +335,7 @@ async function stepThroughBuffer(amount) {
 		current_G_dictionary[title] = current_value;
 	}
 	for (let k in current_G_dictionary) {
-		current_G_dictionary[k]["current_timestamp"] = currentTimestamp;
+		current_G_dictionary[k]["properties"]["current_timestamp"] = currentTimestamp;
 	}
 	if (current_value != undefined) {
 		globalBuffer.unshift(current_value);
@@ -352,7 +352,8 @@ async function createPopup(e) {
   // Copy coordinates array.
   const coordinates = e.features[0].geometry.coordinates.slice();
   var description = "<strong>Car "+e.features[0].properties.title.toString()+"</strong>";
-  description += "<p>Ping age: " +((e.features[0].properties.current_timestamp - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
+	console.log(e.features[0].properties.current_timestamp, e.features[0].properties.systime)
+  description += "<p>Ping age: " +((e.features[0].properties.current_timestamp - (e.features[0].properties.systime)) / 1000).toString() + " seconds ago</p>";
   description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
   description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
   description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
