@@ -327,8 +327,10 @@ async function getAndProcessLocationData() {
 async function stepThroughBuffer(amount) {
 	currentTimestamp = currentTimestamp + amount;
 	let current_value = undefined;
-	var current_G = {};
-	current_G["type"] = "FeatureCollection";
+	var G = {};
+  G["type"] = "FeatureCollection";
+  G["features"] = [];
+  G["features"][0] = {};
   while (((current_value = globalBuffer.shift()) != undefined) && (current_value['properties']['systime'] < currentTimestamp)) {
 		let title = current_value['properties']['title'];
 		current_G_dictionary[title] = current_value;
@@ -336,10 +338,10 @@ async function stepThroughBuffer(amount) {
 	if (current_value != undefined) {
 		globalBuffer.unshift(current_value);
 	}
-	current_G["features"] = [];
-	current_G["features"][0] = {};
+	G["features"] = [];
+	G["features"][0] = {};
   //current_G["features"] = Object.values(current_G_dictionary);
-	return current_G;
+	return G;
 }
 
 async function createPopup(e) {
