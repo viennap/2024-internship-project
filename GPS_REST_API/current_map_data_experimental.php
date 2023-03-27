@@ -13,9 +13,8 @@ if ($conn->connect_error) {
     echo $conn->connect_error;
     die("Connection failed: " . $conn->connect_error);
 }
-$sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime ASC) AS rn
-FROM fact_vehicle_ping AS p WHERE p.status = 0 AND (p.systime < 2147483647700)
-AND (p.systime - ?) BETWEEN 0 AND ?)
+$sql = "WITH vin_pings AS ( SELECT p.* FROM fact_vehicle_ping AS p
+WHERE p.status = 0 AND (p.systime < 2147483647700) AND (p.systime - ?) BETWEEN 0 AND ?)
 SELECT vin_pings.*, dim_vehicle.veh_id, dim_vehicle.route FROM vin_pings
 join dim_vehicle on vin_pings.vin = dim_vehicle.vin ORDER BY systime";
 
@@ -66,7 +65,7 @@ if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
     $center_lat = $center_lat + ($row['latitude'] / $result->num_rows);
     $center_long = $center_long + ($row['longitude'] / $result->num_rows);
-		
+
     $final_result['time_entries']['gpstime'][$count] = floatval($row['gpstime']);
     $final_result['time_entries']['systime'][$count] = floatval($row['systime']);
     $final_result['time_entries']['acc_speed_setting'][$count] = floatval($row['acc_speed_setting']);
