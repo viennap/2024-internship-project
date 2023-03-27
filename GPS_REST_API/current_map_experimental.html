@@ -339,8 +339,7 @@ async function stepThroughBuffer(amount) {
 		globalBuffer.unshift(current_value);
 	}
 	G["features"] = [];
-	G["features"][0] = {};
-  //current_G["features"] = Object.values(current_G_dictionary);
+  G["features"] = Object.values(current_G_dictionary);
 	return G;
 }
 
