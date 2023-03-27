@@ -450,7 +450,7 @@ async function createMapLayers() {
         source: 'G',
         layout: pointLayout,
         paint: pointPaint,
-        filter: layerFilter
+        filter: []
       });
       map.addLayer({
         id: labelLayerID,
@@ -465,7 +465,7 @@ async function createMapLayers() {
           'text-offset': [0, 1.25],
           'text-anchor': 'top'
         },
-        filter: layerFilter
+        filter: []
       });
       map.on('mouseenter', pointLayerID, createPopup);
       map.on('mouseleave', pointLayerID, removePopup);
