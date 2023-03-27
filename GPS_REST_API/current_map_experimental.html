@@ -336,7 +336,7 @@ async function stepThroughBuffer(amount) {
 	if (current_value != undefined) {
 		globalBuffer.unshift(current_value);
 	}
-  current_G["features"] = current_G_dictionary.values();
+  current_G["features"] = Object.values(current_G_dictionary);
 	return current_G;
 }
 
