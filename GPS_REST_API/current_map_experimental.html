@@ -317,7 +317,7 @@ async function getAndProcessLocationData() {
 					"title": time_entries.carnumbers[i],
 					"route": time_entries.route[i], "is_wb": time_entries.is_wb[i]
 				},
-	      "geometry": { "type": "Point", "coordinates": data.coords[i] }
+	      "geometry": { "type": "Point", "coordinates": time_entries.coords[i] }
 	    };
 			globalBuffer.push(value);
 	  }
