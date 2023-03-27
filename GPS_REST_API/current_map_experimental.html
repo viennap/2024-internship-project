@@ -304,10 +304,19 @@ async function getAndProcessLocationData() {
 	console.log(globalBuffer.length);
 	if (globalBuffer.length == 0) {
 	  const data = await getLocationData();
-	  for (let i = 0; i < data.coords.length; i++) {
+		const time_entries = data["time_entries"];
+	  for (let i = 0; i < time_entries.coords.length; i++) {
 			let value = {
 	      "type": "Feature",
-	      "properties": { "current_timestamp": Date.now(), "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i], "route": data.route[i], "is_wb": data.is_wb[i]},
+	      "properties": { "current_timestamp": Date.now(),
+					"gpstime": time_entries.gpstime[i],
+					"systime": time_entries.systime[i],
+					"accspeed": time_entries.acc_speed_setting[i],
+					"accstatus": time_entries.acc_status[i],
+					"velocity": time_entries.velocity[i],
+					"title": time_entries.carnumbers[i],
+					"route": time_entries.route[i], "is_wb": time_entries.is_wb[i]
+				},
 	      "geometry": { "type": "Point", "coordinates": data.coords[i] }
 	    };
 			globalBuffer.push(value);
