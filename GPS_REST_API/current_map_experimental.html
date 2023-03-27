@@ -293,7 +293,6 @@ async function getLocationData() {
     t_range: timeSliceRange,
 	}), { method: 'GET'});
 	nextBufferStart = nextBufferStart + timeSliceRange;
-	console.log(response);
   return await response.json();
 }
 
@@ -334,7 +333,6 @@ async function stepThroughBuffer(amount) {
   while (((current_value = globalBuffer.shift()) != undefined) && (current_value['properties']['systime'] < currentTimestamp)) {
 		let title = current_value['properties']['title'];
 		current_G_dictionary[title] = current_value;
-		console.log(current_value['properties']['systime']);
 	}
 	if (current_value != undefined) {
 		globalBuffer.unshift(current_value);
