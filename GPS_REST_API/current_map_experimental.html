@@ -329,6 +329,7 @@ async function stepThroughBuffer(amount) {
 	let current_value = undefined;
 	var current_G = {};
 	current_G["type"] = "FeatureCollection";
+	current_G["features"][0] = {};
   while (((current_value = globalBuffer.shift()) != undefined) && (current_value['properties']['systime'] < currentTimestamp)) {
 		let title = current_value['properties']['title'];
 		current_G_dictionary[title] = current_value;
@@ -574,7 +575,6 @@ map.on('load', async () => {
 			makingRequest = true;
 			let process_result = await getAndProcessLocationData();
       let G = await stepThroughBuffer(stepThroughPeriod * stepThroughSpeed);
-			console.log(G);
       map.getSource('G').setData(G);
 			makingRequest = false;
     }
