@@ -334,6 +334,9 @@ async function stepThroughBuffer(amount) {
 		let title = current_value['properties']['title'];
 		current_G_dictionary[title] = current_value;
 	}
+	for (let k in current_G_dictionary) {
+		current_G_dictionary[k]["current_timestamp"] = currentTimestamp;
+	}
 	if (current_value != undefined) {
 		globalBuffer.unshift(current_value);
 	}
