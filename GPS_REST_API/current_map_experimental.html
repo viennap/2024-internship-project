@@ -285,7 +285,7 @@ const popup = new mapboxgl.Popup({
 var startingTimestamp = 1668686400000;
 var currentTimestamp = startingTimestamp;
 var nextBufferStart = startingTimestamp;
-var timeSliceRange = 10 * 60 * (1000);
+var timeSliceRange = 60 * 60 * (1000);
 
 async function getLocationData() {
   const response = await fetch(endpoint + new URLSearchParams({
