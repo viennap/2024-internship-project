@@ -7,95 +7,89 @@ $servername = "127.0.0.1";
 $username = "circles";
 $password = "wjytxeu5";
 $db = "circledb";
-$cacheKey = 'liveViewerCache';
 
-include('./current_map_experimental/vendor/autoload.php');
-use Phpfastcache\Helper\Psr16Adapter;
-$defaultDriver = 'Files';
-$Psr16Adapter = new Psr16Adapter($defaultDriver);
-$output = "";
-if ($Psr16Adapter->has($cacheKey)) {
-    $output = $Psr16Adapter->get($cacheKey);
+$conn = new mysqli($servername, $username, $password, $db);
+if ($conn->connect_error) {
+    echo $conn->connect_error;
+    die("Connection failed: " . $conn->connect_error);
 }
-else {
-    $conn = new mysqli($servername, $username, $password, $db);
-    if ($conn->connect_error)
-    {
-        echo $conn->connect_error;
-        die("Connection failed: " . $conn->connect_error);
-    }
-    $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime DESC) AS rn 
-    FROM fact_vehicle_ping AS p WHERE p.status = 0 AND (p.gpstime < 2147483647700))
-    SELECT vin_pings.*, dim_vehicle.veh_id, dim_vehicle.route FROM vin_pings 
-    join dim_vehicle on vin_pings.vin = dim_vehicle.vin WHERE rn=1";
+$sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime ASC) AS rn
+FROM fact_vehicle_ping AS p WHERE p.status = 0 AND (p.systime < 2147483647700)
+AND (p.systime - ?) BETWEEN 0 AND ?)
+SELECT vin_pings.*, dim_vehicle.veh_id, dim_vehicle.route FROM vin_pings
+join dim_vehicle on vin_pings.vin = dim_vehicle.vin ORDER BY systime";
 
-    $result = $conn->query($sql) ;
-    if (!$result) {
+$statement = $conn->prepare($sql);
+$t_origin = (int)$_GET['t_origin'];
+$t_range = (int)$_GET['t_range'];
+$statement->bind_param('ii', $t_origin, $t_range);
+$statement->execute();
+$result = $statement->get_result();
+
+if (!$result) {
     echo $conn->error;
     die("Query failed: " . $conn->error);
-    }
-    $count = 0;
-
-    $center_long = 0.0;
-    $center_lat = 0.0;
-
-    $gpstime = array();
-
-    $coords = array();
-
-    $carnumbers = array();
-
-    $systime = array();
-
-    $acc_speed_setting = array();
-    $acc_status = array();
-
-    $velocity = array();
-
-    $route = array();
-
-    $is_wb = array();
-
-    if ($result->num_rows > 0) 
-    {
-        while($row = $result->fetch_assoc()) 
-        {
-            $center_lat = $center_lat + ($row['latitude'] / $result->num_rows);
-            $center_long = $center_long + ($row['longitude'] / $result->num_rows);
-
-            $gpstime[$count] = floatval($row['gpstime']);
-            $systime[$count] = floatval($row['systime']);
-            $acc_speed_setting[$count] = floatval($row['acc_speed_setting']);
-            $acc_status[$count] = intval($row['acc_status']);
-            $carnumbers[$count] = intval($row['veh_id']);
-            $velocity[$count] = floatval($row['velocity']);
-            $route[$count] = $row['route'];
-            $is_wb[$count] = $row['is_wb'];
-
-            $coords[$count] = array();
-            $coords[$count][0] = floatval($row['longitude']);
-            $coords[$count][1] = floatval($row['latitude']);
-            $coords[$count][2] = (int)($row['veh_id']);
-            $count = $count + 1;
-
-        }
-    }
-
-    $result = array();
-    $result['coords'] = $coords;
-    $result['gpstime'] = $gpstime;
-    $result['carnumbers'] = $carnumbers;
-    $result['systime'] = $systime;
-    $result['acc_speed_setting'] = $acc_speed_setting;
-    $result['acc_status'] = $acc_status;
-    $result['velocity'] = $velocity;
-    $result['route'] = $route;
-    $result['is_wb'] = $is_wb;
-    $result['center_lat'] = $center_lat;
-    $result['center_long'] = $center_long;
-    $output = json_encode($result);
-    $Psr16Adapter->set($cacheKey, $output, 30);
 }
+
+$center_long = 0.0;
+$center_lat = 0.0;
+$count = 0;
+
+function create_sub_list() {
+	$result = array();
+	$gpstime = array();
+	$coords = array();
+	$carnumbers = array();
+	$systime = array();
+	$acc_speed_setting = array();
+	$acc_status = array();
+	$velocity = array();
+	$route = array();
+	$is_wb = array();
+
+	$result['coords'] = $coords;
+	$result['gpstime'] = $gpstime;
+	$result['carnumbers'] = $carnumbers;
+	$result['systime'] = $systime;
+	$result['acc_speed_setting'] = $acc_speed_setting;
+	$result['acc_status'] = $acc_status;
+	$result['velocity'] = $velocity;
+	$result['route'] = $route;
+	$result['is_wb'] = $is_wb;
+	return $result;
+}
+
+$final_result = array();
+$final_result['time_entries'] = create_sub_list();
+
+if ($result->num_rows > 0) {
+  while($row = $result->fetch_assoc()) {
+    $center_lat = $center_lat + ($row['latitude'] / $result->num_rows);
+    $center_long = $center_long + ($row['longitude'] / $result->num_rows);
+		$rn = int($row['rn']);
+		if (array_key_exists($rn, $final_result))
+
+    $final_result['time_entries']['gpstime'][$count] = floatval($row['gpstime']);
+    $final_result['time_entries']['systime'][$count] = floatval($row['systime']);
+    $final_result['time_entries']['acc_speed_setting'][$count] = floatval($row['acc_speed_setting']);
+    $final_result['time_entries']['acc_status'][$count] = intval($row['acc_status']);
+    $final_result['time_entries']['carnumbers'][$count] = intval($row['veh_id']);
+    $final_result['time_entries']['velocity'][$count] = floatval($row['velocity']);
+    $final_result['time_entries']['route'][$count] = $row['route'];
+    $final_result['time_entries']['is_wb'][$count] = $row['is_wb'];
+
+    $final_result['time_entries']['coords'][$count] = array();
+    $final_result['time_entries']['coords'][$count][0] = floatval($row['longitude']);
+    $final_result['time_entries']['coords'][$count][1] = floatval($row['latitude']);
+    $final_result['time_entries']['coords'][$count][2] = (int)($row['veh_id']);
+    $count = $count + 1;
+
+  }
+}
+
+$final_result['center_lat'] = $center_lat;
+$final_result['center_long'] = $center_long;
+$output = json_encode($final_result);
 
 echo $output;
 ?>
