@@ -352,7 +352,7 @@ async function createPopup(e) {
   // Copy coordinates array.
   const coordinates = e.features[0].geometry.coordinates.slice();
   var description = "<strong>Car "+e.features[0].properties.title.toString()+"</strong>";
-  description += "<p>Ping age: " +((Date.now() - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
+  description += "<p>Ping age: " +((e.features[0].properties.current_timestamp - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
   description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
   description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
   description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
