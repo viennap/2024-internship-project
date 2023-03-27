@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 $servername = "127.0.0.1";
 $username = "circles";
 $password = "wjytxeu5";
-$db = "circledb";
+$db = "circledb_experiment";
 
 $conn = new mysqli($servername, $username, $password, $db);
 if ($conn->connect_error) {
