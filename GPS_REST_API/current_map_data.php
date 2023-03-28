@@ -25,6 +25,7 @@ else {
         echo $conn->connect_error;
         die("Connection failed: " . $conn->connect_error);
     }
+		echo "Loading up!";
     $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime DESC) AS rn
     FROM fact_vehicle_ping AS p WHERE p.status = 0 AND (p.gpstime < 2147483647700)
     AND ABS((UNIX_TIMESTAMP() * 1000) - p.systime) < (1000*60*60*8))
