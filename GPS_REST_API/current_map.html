@@ -25,7 +25,7 @@ color: #fff;
 border-radius: 0 0 3px 3px;
 border: none;
 }
- 
+
 .filter-group input[type='checkbox'] {
 display: none;
 }
@@ -47,17 +47,17 @@ cursor: pointer;
 padding: 10px;
 border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
- 
+
 .filter-group input[type='checkbox'] + label {
 background-color: #3386c0;
 text-transform: capitalize;
 }
- 
+
 .filter-group input[type='checkbox'] + label:hover,
 .filter-group input[type='checkbox']:checked + label {
 background-color: #4ea0da;
 }
- 
+
 .filter-group input[type='checkbox']:checked + label:before {
 content: '✔';
 margin-right: 5px;
@@ -295,10 +295,10 @@ async function getAndProcessLocationData() {
   G["features"] = [];
   G["features"][0] = {};
   for (let i = 0; i < data.coords.length; i++) {
-    G["features"][i] = { 
-      "type": "Feature", 
-      "properties": { "current_timestamp": Date.now(), "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i], "route": data.route[i], "is_wb": data.is_wb[i]}, 
-      "geometry": { "type": "Point", "coordinates": data.coords[i] } 
+    G["features"][i] = {
+      "type": "Feature",
+      "properties": { "current_timestamp": Date.now(), "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i], "route": data.route[i], "is_wb": data.is_wb[i]},
+      "geometry": { "type": "Point", "coordinates": data.coords[i] }
     };
   }
   return G;
@@ -307,7 +307,7 @@ async function getAndProcessLocationData() {
 async function createPopup(e) {
   // Change the cursor style as a UI indicator.
   map.getCanvas().style.cursor = 'pointer';
-    
+
   // Copy coordinates array.
   const coordinates = e.features[0].geometry.coordinates.slice();
   var description = "<strong>Car "+e.features[0].properties.title.toString()+"</strong>";
@@ -317,14 +317,14 @@ async function createPopup(e) {
   description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
   description += "<p>ACC Speed: "+e.features[0].properties.accspeed.toString()+"</p>";
   description += "<p>ACC Status: "+e.features[0].properties.accstatus.toString()+"</p>";
-    
+
   // Ensure that if the map is zoomed out such that multiple
   // copies of the feature are visible, the popup appears
   // over the copy being pointed to.
   while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
   }
-    
+
   // Populate the popup and set its coordinates
   // based on the feature found.
   popup.setLngLat(coordinates).setHTML(description).addTo(map);
@@ -365,15 +365,15 @@ async function createMapLayers() {
       const layerID = 'route-'+route+'-wb-'+wb_val;
       const pointLayerID = 'datapoints-'+layerID;
       const labelLayerID = 'datapoints_label-'+layerID;
-      const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
+      //const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
       //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
 
       const staleExpression = ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
       const accActiveExpression = ["==", ["get", "accstatus"], 1];
       const triangleActiveExpression = triangle_active_icon_name;
       const accSetSpeedExpression = ["to-number", ["get", "accspeed"], 0.0];
-      const triangleColorExpression = ["case", 
-        ["<", accSetSpeedExpression, 20.0], triangle_less_20_icon_name, 
+      const triangleColorExpression = ["case",
+        ["<", accSetSpeedExpression, 20.0], triangle_less_20_icon_name,
         ["<", accSetSpeedExpression, 40.0], triangle_less_40_icon_name,
         ["<", accSetSpeedExpression, 60.0], triangle_less_60_icon_name,
         ["<", accSetSpeedExpression, 80.0], triangle_less_80_icon_name,
@@ -411,8 +411,7 @@ async function createMapLayers() {
         type: 'symbol',
         source: 'G',
         layout: pointLayout,
-        paint: pointPaint,
-        filter: layerFilter
+        paint: pointPaint
       });
       map.addLayer({
         id: labelLayerID,
@@ -426,8 +425,7 @@ async function createMapLayers() {
           ],
           'text-offset': [0, 1.25],
           'text-anchor': 'top'
-        },
-        filter: layerFilter
+        }
       });
       map.on('mouseenter', pointLayerID, createPopup);
       map.on('mouseleave', pointLayerID, removePopup);
