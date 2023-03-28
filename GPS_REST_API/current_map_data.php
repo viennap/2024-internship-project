@@ -73,7 +73,7 @@ else {
             $acc_status[$count] = intval($row['acc_status']);
             $carnumbers[$count] = 0;
             $velocity[$count] = floatval($row['velocity']);
-            $route[$count] = $row['route'];
+            $route[$count] = "Westbound";
             $is_wb[$count] = $row['is_wb'];
 
             $coords[$count] = array();
