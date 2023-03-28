@@ -25,12 +25,11 @@ else {
         echo $conn->connect_error;
         die("Connection failed: " . $conn->connect_error);
     }
-		echo "Loading up!";
+
     $sql = "WITH vin_pings AS ( SELECT p.*, ROW_NUMBER() OVER (PARTITION BY vin ORDER BY systime DESC) AS rn
     FROM fact_vehicle_ping AS p WHERE p.status = 0 AND (p.gpstime < 2147483647700)
     AND ABS((UNIX_TIMESTAMP() * 1000) - p.systime) < (1000*60*60*8))
-    SELECT vin_pings.*, dim_vehicle.veh_id, dim_vehicle.route FROM vin_pings
-    join dim_vehicle on vin_pings.vin = dim_vehicle.vin WHERE rn=1";
+    SELECT vin_pings.*, dim_vehicle.veh_id, dim_vehicle.route FROM vin_pings WHERE rn=1";
 
     $result = $conn->query($sql) ;
     if (!$result) {
@@ -72,7 +71,7 @@ else {
             $systime[$count] = floatval($row['systime']);
             $acc_speed_setting[$count] = floatval($row['acc_speed_setting']);
             $acc_status[$count] = intval($row['acc_status']);
-            $carnumbers[$count] = intval($row['veh_id']);
+            $carnumbers[$count] = 0;
             $velocity[$count] = floatval($row['velocity']);
             $route[$count] = $row['route'];
             $is_wb[$count] = $row['is_wb'];
@@ -80,7 +79,7 @@ else {
             $coords[$count] = array();
             $coords[$count][0] = floatval($row['longitude']);
             $coords[$count][1] = floatval($row['latitude']);
-            $coords[$count][2] = (int)($row['veh_id']);
+            $coords[$count][2] = 0;
             $count = $count + 1;
 
         }
