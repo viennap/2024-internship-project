@@ -42,6 +42,7 @@ else {
     $center_long = 0.0;
     $center_lat = 0.0;
 
+		$vin = array();
     $gpstime = array();
 
     $coords = array();
@@ -66,6 +67,7 @@ else {
             $center_lat = $center_lat + ($row['latitude'] / $result->num_rows);
             $center_long = $center_long + ($row['longitude'] / $result->num_rows);
 
+						$vin[$count] = $row['vin'];
             $gpstime[$count] = floatval($row['gpstime']);
             $systime[$count] = floatval($row['systime']);
             $acc_speed_setting[$count] = floatval($row['acc_speed_setting']);
@@ -85,6 +87,7 @@ else {
     }
 
     $result = array();
+		$result['vin'] = $vin;
     $result['coords'] = $coords;
     $result['gpstime'] = $gpstime;
     $result['carnumbers'] = $carnumbers;
