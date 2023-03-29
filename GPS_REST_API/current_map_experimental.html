@@ -180,6 +180,13 @@ margin-right: 5px;
   width: 100px;
 }
 
+.time-overlay {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	font-family: Arial, sans-serif;
+}
+
 </style>
 </head>
 <body>
@@ -239,6 +246,7 @@ margin-right: 5px;
 <div class="loading-overlay" id="loading-overlay-main">
   <strong>Loading....</strong>
 </div>
+<h1 class="time-overlay" id="time-overlay-main">6:00 AM</h1>
 <script>
 var endpoint = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data_experimental.php?';
 var triangle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle.png';
@@ -282,7 +290,8 @@ const popup = new mapboxgl.Popup({
   closeOnClick: false
 });
 
-var startingTimestamp = 1668686400000;
+//var startingTimestamp = 1668686400000;
+var startingTimestamp = 1668690000000;
 var currentTimestamp = startingTimestamp;
 var nextBufferStart = startingTimestamp;
 var timeSliceRange = 60 * 60 * (1000);
@@ -559,13 +568,18 @@ async function createWbButtons() {
     input.addEventListener('change', wbButtonCallback);
   }
 }
+
+async function updateTimeMarker() {
+	document.getElementById('time-overlay-main').innerHTML = (new Date(currentTimestamp)).toString();
+}
+
 var updateSource;
 
 var stepThroughPeriod = 100;
 var stepThroughSpeed = 10;
 
 map.on('load', async () => {
-  let process_result = await getAndProcessLocationData();
+  await getAndProcessLocationData();
 	let G = await stepThroughBuffer(stepThroughPeriod * stepThroughSpeed);
   map.addSource('G', {
     type: 'geojson',
@@ -578,10 +592,10 @@ map.on('load', async () => {
   updateSource = setInterval(async () => {
     if (!makingRequest) {
 			makingRequest = true;
-			let process_result = await getAndProcessLocationData();
+			await getAndProcessLocationData();
       let G = await stepThroughBuffer(stepThroughPeriod * stepThroughSpeed);
       map.getSource('G').setData(G);
-			console.log(G);
+			await updateTimeMarker();
 			makingRequest = false;
     }
   }, stepThroughPeriod);
