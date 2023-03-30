@@ -200,14 +200,6 @@ margin-right: 5px;
 <div class='map-overlay' id='ping-legend'>
   <strong>Ping Legend</strong>
   <div>
-    <img class="ping-legend-key-triangle" src="https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-blank.png"/>
-    <span class="ping-legend-name" id="ping-legend-name-active">Active, west/eastbound indicated, cruise control active, color indicates ACC Set Speed</span>
-  </div>
-  <div>
-    <img class="ping-legend-key-triangle" src="https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-active.png"/>
-    <span class="ping-legend-name" id="ping-legend-name-active">Active, west/eastbound indicated, cruise control inactive</span>
-  </div>
-  <div>
     <span class="ping-legend-key-circle" id="ping-legend-key-active"></span>
     <span class="ping-legend-name" id="ping-legend-name-active">Active</span>
   </div>
@@ -433,6 +425,7 @@ async function createMapLayers() {
       const accActiveExpression = ["==", ["get", "accstatus"], 1];
       const triangleActiveExpression = triangle_active_icon_name;
       const accSetSpeedExpression = ["to-number", ["get", "accspeed"], 0.0];
+			const velocityExpression = ["to-number", ["get", "velocity"], 0.0];
       const triangleColorExpression = ["case",
         ["<", accSetSpeedExpression, 20.0], triangle_less_20_icon_name,
         ["<", accSetSpeedExpression, 40.0], triangle_less_40_icon_name,
@@ -447,24 +440,34 @@ async function createMapLayers() {
           staleExpression,
           circle_icon_name,
           ["==", ["get", "is_wb"], 1],
-          triangleIconExpression,
+          circle_icon_name,
           ["==", ["get", "is_wb"], -1],
-          triangleIconExpression,
+          circle_icon_name,
           circle_icon_name
         ],
         'icon-rotation-alignment': 'map',
         'icon-rotate' : ["case",
           ["==", ["get", "is_wb"], 1],
-          -20,
+          -180,
           ["==", ["get", "is_wb"], -1],
-          160,
+          0,
           0
         ],
         'icon-allow-overlap': true,
-        'icon-size': 0.5
+        'icon-size': 0.35
       }
       const pointPaint = {
-        'icon-color': ["case", staleExpression, "#000000", "#4361ee"],
+        'icon-color': ["case",
+					staleExpression, "#000000",
+					["all", ["<", accSetSpeedExpression, 20.0], ["<", velocityExpression, 20.0]], "#FF0000",
+					["all", ["<", accSetSpeedExpression, 40.0], ["<", velocityExpression, 40.0]], "#FF3300",
+					["all", ["<", accSetSpeedExpression, 60.0], ["<", velocityExpression, 60.0]], "#FF6600",
+					["all", ["<", accSetSpeedExpression, 80.0], ["<", velocityExpression, 80.0]], "#FF9900",
+					["all", ["<", accSetSpeedExpression, 100.0], ["<", velocityExpression, 100.0]], "#FFBB00",
+					["all", ["<", accSetSpeedExpression, 120.0], ["<", velocityExpression, 120.0]], "#FFFF00",
+					"#4361ee"
+				],
+					//"#4361ee"],
         'icon-opacity': 0.5
       };
       map.addLayer({
