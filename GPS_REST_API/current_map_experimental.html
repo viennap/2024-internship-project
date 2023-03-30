@@ -246,7 +246,7 @@ margin-right: 5px;
 <div class="loading-overlay" id="loading-overlay-main">
   <strong>Loading....</strong>
 </div>
-<h1 class="time-overlay" id="time-overlay-main">6:00 AM</h1>
+<h1 class="time-overlay" id="time-overlay-main"></h1>
 <script>
 var endpoint = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data_experimental.php?';
 var triangle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle.png';
@@ -268,12 +268,21 @@ var triangle_active_icon_name = 'triangle-active-icon';
 var circle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Circle.png';
 var circle_icon_name = 'circle-icon';
 
+var args = new URLSearchParams(window.location.search);
+
+function getArgParam(p, d) {
+	if (args.has(p)) {
+		return parseInt(args.get(p));
+	}
+	return d;
+}
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleG9zYWR2ZW50dXJlciIsImEiOiJjbGZ2OTMyNTQwNHg2M2pwbGMyNzY4NHF0In0.pfOqFjKztgzmHRmpkAlXZQ';
 const routes = ["orange", "yellow"];
 var routes_state = [true, true];
 const wb = [-1, 0, 1];
 var wb_state = [true, true, true];
-const wb_lookup = ["Eastbound", "Neither", "Westbound"]
+const wb_lookup = ["Eastbound", "Neither", "Westbound"];
 
 var stale_threshold = (1000*60*2);
 var makingRequest = false;
@@ -290,11 +299,12 @@ const popup = new mapboxgl.Popup({
   closeOnClick: false
 });
 
-//var startingTimestamp = 1668686400000;
-var startingTimestamp = 1668690000000;
+//Default to 7 AM thursday
+var startingTimestamp = getArgParam("startingTimestamp", 1668690000000);
 var currentTimestamp = startingTimestamp;
 var nextBufferStart = startingTimestamp;
-var timeSliceRange = 60 * 60 * (1000);
+//Default to 4 hours
+var timeSliceRange = getArgParam("bufferSize", 240 * 60 * (1000));
 
 async function getLocationData() {
   const response = await fetch(endpoint + new URLSearchParams({
@@ -309,7 +319,6 @@ var globalBuffer = [];
 var current_G_dictionary = {};
 
 async function getAndProcessLocationData() {
-	console.log(globalBuffer.length);
 	if (globalBuffer.length == 0) {
 	  const data = await getLocationData();
 		const time_entries = data["time_entries"];
@@ -362,7 +371,6 @@ async function createPopup(e) {
   // Copy coordinates array.
   const coordinates = e.features[0].geometry.coordinates.slice();
   var description = "<strong>Car "+e.features[0].properties.title.toString()+"</strong>";
-	console.log(e.features[0].properties.current_timestamp, e.features[0].properties.systime)
   description += "<p>Ping age: " +((e.features[0].properties.current_timestamp - (e.features[0].properties.systime)) / 1000).toString() + " seconds ago</p>";
   description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
   description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
@@ -571,7 +579,8 @@ async function updateTimeMarker() {
 var updateSource;
 
 var stepThroughPeriod = 100;
-var stepThroughSpeed = 10;
+//Default to 10x
+var stepThroughSpeed = getArgParam("speed", 10);
 
 map.on('load', async () => {
   await getAndProcessLocationData();
@@ -589,7 +598,6 @@ map.on('load', async () => {
 			makingRequest = true;
 			await getAndProcessLocationData();
       let G = await stepThroughBuffer(stepThroughPeriod * stepThroughSpeed);
-			console.log(G);
       map.getSource('G').setData(G);
 			await updateTimeMarker();
 			makingRequest = false;
