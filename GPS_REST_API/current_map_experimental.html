@@ -421,7 +421,7 @@ async function createMapLayers() {
       const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
       //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
 
-      const staleExpression = ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
+      const staleExpression = ["<",["to-number", ["get", "systime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
       const accActiveExpression = ["==", ["get", "accstatus"], 1];
       const triangleActiveExpression = triangle_active_icon_name;
       const accSetSpeedExpression = ["to-number", ["get", "accspeed"], 0.0];
