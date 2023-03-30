@@ -73,7 +73,7 @@ if ($result->num_rows > 0) {
     $final_result['time_entries']['carnumbers'][$count] = intval($row['veh_id']);
     $final_result['time_entries']['velocity'][$count] = floatval($row['velocity']);
     $final_result['time_entries']['route'][$count] = $row['route'];
-    $final_result['time_entries']['is_wb'][$count] = $row['is_wb'];
+    $final_result['time_entries']['is_wb'][$count] = intval($row['is_wb']);
 
     $final_result['time_entries']['coords'][$count] = array();
     $final_result['time_entries']['coords'][$count][0] = floatval($row['longitude']);
