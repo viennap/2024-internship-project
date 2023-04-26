@@ -264,7 +264,7 @@ var circle_icon_name = 'circle-icon';
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
 const routes = ["orange", "yellow"];
 var routes_state = [true, true];
-const wb = ["-1", "0", "1"];
+const wb = [-1, 0, 1];
 var wb_state = [true, true, true];
 const wb_lookup = ["Eastbound", "Neither", "Westbound"]
 
@@ -365,7 +365,7 @@ async function createMapLayers() {
       const layerID = 'route-'+route+'-wb-'+wb_val;
       const pointLayerID = 'datapoints-'+layerID;
       const labelLayerID = 'datapoints_label-'+layerID;
-      //const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
+      const layerFilter = ['all', ['==', 'route', route], ['==', 'is_wb', wb_val]];
       //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
 
       const staleExpression = ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
@@ -411,7 +411,8 @@ async function createMapLayers() {
         type: 'symbol',
         source: 'G',
         layout: pointLayout,
-        paint: pointPaint
+        paint: pointPaint,
+				filter: layerFilter
       });
       map.addLayer({
         id: labelLayerID,
@@ -425,7 +426,8 @@ async function createMapLayers() {
           ],
           'text-offset': [0, 1.25],
           'text-anchor': 'top'
-        }
+        },
+				filter: layerFilter
       });
       map.on('mouseenter', pointLayerID, createPopup);
       map.on('mouseleave', pointLayerID, removePopup);
