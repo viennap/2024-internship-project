@@ -300,6 +300,7 @@ async function createMapLayers() {
   const accActiveExpression = ["==", ["get", "accstatus"], 1];
   const triangleActiveExpression = triangle_active_icon_name;
   const accSetSpeedExpression = ["to-number", ["get", "accspeed"], 0.0];
+	const velocityExpression = ["to-number", ["get", "velocity"], 0.0];
   const triangleColorExpression = ["case",
     ["<", accSetSpeedExpression, 20.0], triangle_less_20_icon_name,
     ["<", accSetSpeedExpression, 40.0], triangle_less_40_icon_name,
