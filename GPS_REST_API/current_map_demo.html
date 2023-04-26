@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Circles Experiment</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0%; bottom: 0; width: 100%; }
+
+.map-overlay {
+  background: #fff;
+  margin-right: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  border-radius: 3px;
+}
+
+#ping-legend {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  height: 200px;
+  margin-bottom: 100px;
+  width: 300px;
+}
+
+#acc-legend {
+  position: absolute;
+  bottom: 0;
+  right: 325px;
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  height: 200px;
+  margin-bottom: 100px;
+  width: 150px;
+}
+
+.ping-legend-key-circle {
+  display: inline-block;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  opacity: 50%;
+}
+
+.ping-legend-key-triangle {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  opacity: 50%;
+}
+
+#ping-legend-key-stale {
+  background-color: #000000;
+}
+
+#ping-legend-key-active {
+  background-color: #4361ee;
+}
+
+.acc-legend-key-square {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  opacity: 50%;
+}
+
+#acc-legend-key-square-less-20 {
+  background-color: #FF0000;
+}
+
+#acc-legend-key-square-less-40 {
+  background-color: #FF3300;
+}
+
+#acc-legend-key-square-less-60 {
+  background-color: #FF6600;
+}
+
+#acc-legend-key-square-less-80 {
+  background-color: #FF9900;
+}
+
+#acc-legend-key-square-less-100 {
+  background-color: #FFBB00;
+}
+
+#acc-legend-key-square-greater-100 {
+  background-color: #FFFF00;
+}
+
+.loading-overlay {
+  position: absolute;
+  bottom: 50%;
+  right: calc(50% - 50px);
+  background: #ddd;
+  margin-left: 200px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  border-radius: 3px;
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  height: 40px;
+  width: 100px;
+}
+
+</style>
+</head>
+<body>
+<p><?php echo json_encode($coords); ?></p>
+<div id="map"></div>
+<div class='map-overlay' id='ping-legend'>
+  <strong>Ping Legend</strong>
+  <div>
+    <img class="ping-legend-key-triangle" src="https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-blank.png"/>
+    <span class="ping-legend-name" id="ping-legend-name-active">Active, west/eastbound indicated, cruise control active, color indicates ACC Set Speed</span>
+  </div>
+  <div>
+    <img class="ping-legend-key-triangle" src="https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-active.png"/>
+    <span class="ping-legend-name" id="ping-legend-name-active">Active, west/eastbound indicated, cruise control inactive</span>
+  </div>
+  <div>
+    <span class="ping-legend-key-circle" id="ping-legend-key-active"></span>
+    <span class="ping-legend-name" id="ping-legend-name-active">Active</span>
+  </div>
+  <div>
+    <span class="ping-legend-key-circle" id="ping-legend-key-stale"></span>
+    <span class="ping-legend-name" id="ping-legend-name-stale">Stale</span>
+  </div>
+</div>
+<div class='map-overlay' id='acc-legend'>
+  <strong>ACC Set Speed Legend</strong>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-20"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-20">0-20</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-40"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">20-40</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-60"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">40-60</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-80"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">60-80</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-less-100"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">80-100</span>
+  </div>
+  <div>
+    <span class="acc-legend-key-square" id="acc-legend-key-square-greater-100"></span>
+    <span class="acc-legend-name" id="acc-legend-name-less-40">100+</span>
+  </div>
+</div>
+<div class="loading-overlay" id="loading-overlay-main">
+  <strong>Loading....</strong>
+</div>
+<script>
+var endpoint = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/current_map_data.php';
+var triangle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle.png';
+var triangle_icon_name = 'triangle-icon';
+var triangle_less_20_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-20.png';
+var triangle_less_20_icon_name = 'triangle-less-20-icon';
+var triangle_less_40_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-40.png';
+var triangle_less_40_icon_name = 'triangle-less-40-icon';
+var triangle_less_60_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-60.png';
+var triangle_less_60_icon_name = 'triangle-less-60-icon';
+var triangle_less_80_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-80.png';
+var triangle_less_80_icon_name = 'triangle-less-80-icon';
+var triangle_less_100_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-less-100.png';
+var triangle_less_100_icon_name = 'triangle-less-100-icon';
+var triangle_greater_100_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-greater-100.png';
+var triangle_greater_100_icon_name = 'triangle-greater-100-icon';
+var triangle_active_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Triangle-active.png';
+var triangle_active_icon_name = 'triangle-active-icon';
+var circle_path = 'https://ransom.isis.vanderbilt.edu/GPS_REST_API/Circle.png';
+var circle_icon_name = 'circle-icon';
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoic3RyeW0iLCJhIjoiY2tydG4xamU1M2lyejJydGo0OWE4djcxbSJ9.BB-TcmFTyakTjI0J15jonQ';
+const routes = ["orange", "yellow"];
+var routes_state = [true, true];
+const wb = [-1, 0, 1];
+var wb_state = [true, true, true];
+const wb_lookup = ["Eastbound", "Neither", "Westbound"]
+
+var stale_threshold = (1000*60*2);
+var makingRequest = false;
+
+var map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v10',
+  center: [-86.65905585185185,  36.051528734567896],
+  zoom: 16
+});
+
+const popup = new mapboxgl.Popup({
+  closeButton: false,
+  closeOnClick: false
+});
+
+async function getLocationData() {
+  const response = await fetch(endpoint, { method: 'GET'});
+  return await response.json();
+}
+
+async function getAndProcessLocationData() {
+  const data = await getLocationData();
+  var G = {};
+  G["type"] = "FeatureCollection";
+  G["features"] = [];
+  G["features"][0] = {};
+  for (let i = 0; i < data.coords.length; i++) {
+    G["features"][i] = {
+      "type": "Feature",
+      "properties": { "current_timestamp": Date.now(), "gpstime": data.gpstime[i], "systime": data.systime[i], "accspeed": data.acc_speed_setting[i], "accstatus": data.acc_status[i], "velocity": data.velocity[i], "title": data.carnumbers[i], "route": data.route[i], "is_wb": data.is_wb[i]},
+      "geometry": { "type": "Point", "coordinates": data.coords[i] }
+    };
+  }
+  return G;
+}
+
+async function createPopup(e) {
+  // Change the cursor style as a UI indicator.
+  map.getCanvas().style.cursor = 'pointer';
+
+  // Copy coordinates array.
+  const coordinates = e.features[0].geometry.coordinates.slice();
+  var description = "<strong>Car "+e.features[0].properties.title.toString()+"</strong>";
+  description += "<p>Ping age: " +((Date.now() - (e.features[0].properties.gpstime)) / 1000).toString() + " seconds ago</p>";
+  description += "<p>GPS Timestamp: "+e.features[0].properties.gpstime.toString()+"</p>";
+  description += "<p>SYS Timestamp: "+e.features[0].properties.systime.toString()+"</p>";
+  description += "<p>Velocity: "+e.features[0].properties.velocity.toString()+"</p>";
+  description += "<p>ACC Speed: "+e.features[0].properties.accspeed.toString()+"</p>";
+  description += "<p>ACC Status: "+e.features[0].properties.accstatus.toString()+"</p>";
+
+  // Ensure that if the map is zoomed out such that multiple
+  // copies of the feature are visible, the popup appears
+  // over the copy being pointed to.
+  while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  }
+
+  // Populate the popup and set its coordinates
+  // based on the feature found.
+  popup.setLngLat(coordinates).setHTML(description).addTo(map);
+}
+
+async function removePopup() {
+  map.getCanvas().style.cursor = '';
+  popup.remove();
+}
+
+async function mapAddImage(name, path, sdf) {
+  map.loadImage(path, (error, image) => {
+    if (error) throw error;
+    map.addImage(name, image, { 'sdf': sdf });
+  });
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function createMapLayers() {
+  await mapAddImage(triangle_less_20_icon_name, triangle_less_20_path, false);
+  await mapAddImage(triangle_less_40_icon_name, triangle_less_40_path, false);
+  await mapAddImage(triangle_less_60_icon_name, triangle_less_60_path, false);
+  await mapAddImage(triangle_less_80_icon_name, triangle_less_80_path, false);
+  await mapAddImage(triangle_less_100_icon_name, triangle_less_100_path, false);
+  await mapAddImage(triangle_greater_100_icon_name, triangle_greater_100_path, false);
+  await mapAddImage(triangle_active_icon_name, triangle_active_path, false);
+  await mapAddImage(circle_icon_name, circle_path, true);
+  while (!map.hasImage(circle_icon_name) | !map.hasImage(triangle_active_icon_name) | !map.hasImage(triangle_less_20_icon_name) | !map.hasImage(triangle_less_40_icon_name) | !map.hasImage(triangle_less_60_icon_name) | !map.hasImage(triangle_less_80_icon_name) | !map.hasImage(triangle_less_100_icon_name) | !map.hasImage(triangle_greater_100_icon_name) ) {
+    await sleep(500);
+    console.log("Images loading...");
+  }
+  console.log("Images loaded!");
+  const layerID = 'main';
+  const pointLayerID = 'datapoints-'+layerID;
+  const labelLayerID = 'datapoints_label-'+layerID;
+  //["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]],
+
+  const staleExpression = ["<",["to-number", ["get", "gpstime"], 0.0], ["-", ["get", "current_timestamp"], stale_threshold]];
+  const accActiveExpression = ["==", ["get", "accstatus"], 1];
+  const triangleActiveExpression = triangle_active_icon_name;
+  const accSetSpeedExpression = ["to-number", ["get", "accspeed"], 0.0];
+  const triangleColorExpression = ["case",
+    ["<", accSetSpeedExpression, 20.0], triangle_less_20_icon_name,
+    ["<", accSetSpeedExpression, 40.0], triangle_less_40_icon_name,
+    ["<", accSetSpeedExpression, 60.0], triangle_less_60_icon_name,
+    ["<", accSetSpeedExpression, 80.0], triangle_less_80_icon_name,
+    ["<", accSetSpeedExpression, 100.0], triangle_less_100_icon_name,
+    triangle_greater_100_icon_name
+  ];
+  const triangleIconExpression = ["case", accActiveExpression, triangleColorExpression, triangleActiveExpression];
+	const pointLayout = {
+		'icon-image' : ["case",
+			staleExpression,
+			circle_icon_name,
+			["==", ["get", "is_wb"], 1],
+			circle_icon_name,
+			["==", ["get", "is_wb"], -1],
+			circle_icon_name,
+			circle_icon_name
+		],
+		'icon-rotation-alignment': 'map',
+		'icon-rotate' : ["case",
+			["==", ["get", "is_wb"], 1],
+			-180,
+			["==", ["get", "is_wb"], -1],
+			0,
+			0
+		],
+		'icon-allow-overlap': true,
+		'icon-size': 0.35
+	}
+	const pointPaint = {
+		'icon-color': ["case",
+			staleExpression, "#000000",
+			["all", ["<", accSetSpeedExpression, 20.0], ["<", velocityExpression, 20.0]], "#FF0000",
+			["all", ["<", accSetSpeedExpression, 40.0], ["<", velocityExpression, 40.0]], "#FF3300",
+			["all", ["<", accSetSpeedExpression, 60.0], ["<", velocityExpression, 60.0]], "#FF6600",
+			["all", ["<", accSetSpeedExpression, 80.0], ["<", velocityExpression, 80.0]], "#FF9900",
+			["all", ["<", accSetSpeedExpression, 100.0], ["<", velocityExpression, 100.0]], "#FFBB00",
+			["all", ["<", accSetSpeedExpression, 120.0], ["<", velocityExpression, 120.0]], "#FFFF00",
+			"#4361ee"
+		],
+			//"#4361ee"],
+		'icon-opacity': 0.5
+	};
+  map.addLayer({
+    id: pointLayerID,
+    type: 'symbol',
+    source: 'G',
+    layout: pointLayout,
+    paint: pointPaint,
+		filter: layerFilter,
+		visibility: 'visible'
+  });
+  map.addLayer({
+    id: labelLayerID,
+    type: 'symbol',
+    source: 'G',
+    'layout': {
+      'text-field': ['get', 'title'],
+      'text-font': [
+        'Open Sans Semibold',
+        'Arial Unicode MS Bold'
+      ],
+      'text-offset': [0, 1.25],
+      'text-anchor': 'top'
+    },
+		filter: layerFilter,
+		visibility: 'visible'
+  });
+  map.on('mouseenter', pointLayerID, createPopup);
+  map.on('mouseleave', pointLayerID, removePopup);
+}
+
+
+var updateSource;
+
+map.on('load', async () => {
+  const G = await getAndProcessLocationData();
+  map.addSource('G', {
+    type: 'geojson',
+    data: G
+  });
+  await createMapLayers();
+  document.getElementById("loading-overlay-main").style.visibility = 'hidden';
+  updateSource = setInterval(async () => {
+    if (!makingRequest) {
+      makingRequest = true;
+      var G = await getAndProcessLocationData();
+      map.getSource('G').setData(G);
+      makingRequest = false;
+    }
+  }, 15000);
+});
+
+</script>
+
+</body>
+</html>
