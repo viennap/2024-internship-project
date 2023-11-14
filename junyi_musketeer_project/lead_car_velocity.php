@@ -13,7 +13,13 @@ if ($conn->connect_error)
 }
 
 function getLeadVin() {
-	return "4";
+	$sql = "select value from JUNYI_CONFIG where name = 'lead_vin'";
+	$result = $conn->query($sql);
+	if ($result->num_rows > 0) {
+		$row = $result->fetch_assoc();
+		return $row["value"];
+	}
+	return "NONE";
 }
 
 echo getLeadVin();
