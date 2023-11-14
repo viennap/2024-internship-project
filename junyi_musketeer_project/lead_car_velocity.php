@@ -30,12 +30,12 @@ function getLeadVelocity($conn) {
 	$result = $stmt->get_result();
 	if ($result->num_rows > 0) {
 		$row = $result->fetch_assoc();
-		return $row["velocity"];
+		return $row;
 	}
-	return 0;
+	return array();
 }
 
-$velocity = getLeadVelocity($conn);
-echo $velocity;
+$result = getLeadVelocity($conn);
+echo json_encode($velocity);
 
 ?>
