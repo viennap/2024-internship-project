@@ -40,7 +40,7 @@ if ($path_count == "11")
                 echo "Connected successfully\n";
 
                 $stmt = $conn->prepare("INSERT INTO JUNYI_FACT_VEHICLE_PING (vin, gpstime, systime, latitude, longitude, status, velocity, acceleration, acc_status, acc_speed_setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-								$stmt->bind_param("siiddsddii", '$VIN', $GpsTime , $SysTime, $Latitude, $Longitude, '$Status', $CANSpeed, $CANAcceleration, $ACCStatus, $ACCSpeedSetting);
+								$stmt->bind_param("siiddsddii", $VIN, $GpsTime , $SysTime, $Latitude, $Longitude, $Status, $CANSpeed, $CANAcceleration, $ACCStatus, $ACCSpeedSetting);
 
                 if ($stmt->execute() === TRUE)
                 {
