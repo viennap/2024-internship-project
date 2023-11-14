@@ -12,7 +12,7 @@ if ($conn->connect_error)
 				die("Connection failed: " . $conn->connect_error);
 }
 
-function getLeadVin() {
+function getLeadVin($conn) {
 	$sql = "select * from JUNYI_CONFIG where name = 'lead_vin'";
 	$result = $conn->query($sql);
 	if ($result->num_rows > 0) {
@@ -22,6 +22,6 @@ function getLeadVin() {
 	return "NONE";
 }
 
-echo getLeadVin();
+echo getLeadVin($conn);
 
 ?>
