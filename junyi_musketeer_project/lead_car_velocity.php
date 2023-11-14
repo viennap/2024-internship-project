@@ -28,11 +28,13 @@ function getLeadVelocity($conn) {
 	$stmt->bind_param("s", $vin);
 	$stmt->execute();
 	$result = $stmt->get_result();
+	$return_value = array();
+	$return_value["lead_car"] = NULL;
 	if ($result->num_rows > 0) {
 		$row = $result->fetch_assoc();
-		return json_encode($row);
+		return $return_value["lead_car"] = $row;
 	}
-	return '{}';
+	return json_encode($return_value);
 }
 
 $result = getLeadVelocity($conn);
