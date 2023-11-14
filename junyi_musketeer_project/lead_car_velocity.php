@@ -32,7 +32,7 @@ function getLeadVelocity($conn) {
 	$return_value["lead_car"] = NULL;
 	if ($result->num_rows > 0) {
 		$row = $result->fetch_assoc();
-		return $return_value["lead_car"] = $row;
+		$return_value["lead_car"] = $row;
 	}
 	return json_encode($return_value);
 }
