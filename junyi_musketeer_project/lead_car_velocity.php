@@ -22,6 +22,20 @@ function getLeadVin($conn) {
 	return "NONE";
 }
 
-echo getLeadVin($conn);
+function getLeadVelocity($conn) {
+	$vin = getLeadVin($conn);
+	$stmt = $conn->prepare("select * from JUNYI_FACT_VEHICLE_PING WHERE vin = '?' order by systime desc limit 1");
+	$stmt->bind_param("s", $vin);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	if ($result->num_rows > 0) {
+		$row = $result->fetch_assoc();
+		return $row["velocity"];
+	}
+	return 0;
+}
+
+$velocity = getLeadVelocity($conn);
+echo $velocity;
 
 ?>
