@@ -36,6 +36,6 @@ function getLeadVelocity($conn) {
 }
 
 $result = getLeadVelocity($conn);
-echo json_encode($velocity);
+echo json_encode($result);
 
 ?>
