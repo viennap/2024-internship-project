@@ -24,7 +24,7 @@ function getLeadVin($conn) {
 
 function getLeadVelocity($conn) {
 	$vin = getLeadVin($conn);
-	$stmt = $conn->prepare("select * from JUNYI_FACT_VEHICLE_PING WHERE vin = '?' order by systime desc limit 1");
+	$stmt = $conn->prepare("select * from JUNYI_FACT_VEHICLE_PING WHERE vin=? order by systime desc limit 1");
 	$stmt->bind_param("s", $vin);
 	$stmt->execute();
 	$result = $stmt->get_result();
