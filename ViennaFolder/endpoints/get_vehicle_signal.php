@@ -207,7 +207,7 @@ if (array_key_exists("trajectory_id", $_GET) and array_key_exists("signal_name",
 
   if ($signal_name == "speed") {
     $result = array("time" => $time_speed, "signal" => $average_speed);
-  } elseif {
+  } elseif ($signal_name == "steer") {
     $result = array("time" => $time_steer, "signal" => $message_steer);
   } else {
     die("Invalid signal name.");
