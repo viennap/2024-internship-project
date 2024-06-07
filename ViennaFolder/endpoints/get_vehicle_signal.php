@@ -213,9 +213,6 @@ if (array_key_exists("trajectory_id", $_GET) and array_key_exists("signal_name",
     die("Invalid signal name.");
   }
   
-
-  $result = array("time" => $time, "signal" => $signal);
-  
   header("Content-Type: application/json");
   echo json_encode($result);
 }
