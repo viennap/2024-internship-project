@@ -7,8 +7,6 @@ error_reporting(E_ALL);
 if (array_key_exists("trajectory_id", $_GET) and array_key_exists("signal_name", $_GET)) {
   $trajectory_id = $_GET["trajectory_id"];
 	$signal_name = $_GET["signal_name"];
-	echo "Trajectory ID: " . $trajectory_id . "\n";
-  echo "Signal Name: " . $signal_name . "\n";
 
   $time = array(1701389314.333874,
   1701389316.330543,
