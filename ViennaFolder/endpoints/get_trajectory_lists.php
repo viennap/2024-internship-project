@@ -7,13 +7,14 @@ error_reporting(E_ALL);
 $dict = array(); 
 
 if (array_key_exists("start_time", $_GET) and array_key_exists("end_time", $_GET)) {
-    $trajectory_id = "libpanda/2021_01_04";
+    $trajectory_id = "asdf";
     $start_time = 1701389314.4;
     $end_time = 1701389496.6;
 
     $latitude = array(36.368492126464844, 36.37989807128906);
     $longitude = array(-87.04999542236328,-87.05628967285156);
     
+    /*
     $dict["trajectories"] = array(); 
     $dict["trajectories"][$trajectory_id] = array();
     $dict["trajectories"][$trajectory_id]["id"] = $trajectory_id;
@@ -21,6 +22,7 @@ if (array_key_exists("start_time", $_GET) and array_key_exists("end_time", $_GET
     $dict["trajectories"][$trajectory_id]["end_time"] = $end_time; 
     $dict["trajectories"][$trajectory_id]["latitude"] = $latitude;
     $dict["trajectories"][$trajectory_id]["longitude"] = $longitude;
+    */
 
     $base_dir = "/volume1/ViennaData/NonDashcamData/libpanda";
     $directories = scandir($base_dir);
@@ -31,7 +33,7 @@ if (array_key_exists("start_time", $_GET) and array_key_exists("end_time", $_GET
     
     foreach ($directories as $directory) {
         $trajectory_path = "$base_dir/$directory";
-        if (is_dir($trajectory_path)) {
+        if (is_dir($trajectory_path) and $directory !== "." and $directory !== "..") {
             $trajectory_id = "libpanda/$directory";
 
             $dict["trajectories"][$trajectory_id]["id"] = $trajectory_id; 
