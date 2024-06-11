@@ -17,7 +17,7 @@ if (array_key_exists("start_time", $_GET) and array_key_exists("end_time", $_GET
     
     $dict["trajectories"] = array(); 
     $dict["trajectories"][$trajectory_id] = array();
-    array_push($dict[$trajectory_id], $start_time, $end_time);
+    array_push($dict["trajectories"][$trajectory_id], $start_time, $end_time);
     
     $result = $dict; 
 
