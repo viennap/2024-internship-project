@@ -30,27 +30,25 @@ if (array_key_exists("start_time", $_GET) and array_key_exists("end_time", $_GET
     // trajectory_id is relative path of folder (e.g., "libpanda/2021_01_04")
     
     foreach ($directories as $directory) {
-        if ($directory !== '.' && $directory !== '..') {
-            $trajectory_path = "$base_dir/$directory";
-            if (is_dir($trajectory_path)) {
-                $trajectory_id = "libpanda/$directory";
+        $trajectory_path = "$base_dir/$directory";
+        if (is_dir($trajectory_path)) {
+            $trajectory_id = "libpanda/$directory";
 
-                $dict["trajectories"][$trajectory_id]["id"] = $trajectory_id; 
-                $dict["trajectories"][$trajectory_id]["start_time"] = $start_time; 
-                $dict["trajectories"][$trajectory_id]["end_time"] = $end_time; 
-                $dict["trajectories"][$trajectory_id]["latitude"] = $latitude;
-                $dict["trajectories"][$trajectory_id]["longitude"] = $longitude;
-                
-                /*
-                $dict["trajectories"][$trajectory_id] = array(
-                    "id" => $trajectory_id,
-                    "start_time" => $start_time, 
-                    "end_time" => $end_time,
-                    "latitude" => $latitude,
-                    "longitude" => $longitude
-                );*/
-            }
-        }
+            $dict["trajectories"][$trajectory_id]["id"] = $trajectory_id; 
+            $dict["trajectories"][$trajectory_id]["start_time"] = $start_time; 
+            $dict["trajectories"][$trajectory_id]["end_time"] = $end_time; 
+            $dict["trajectories"][$trajectory_id]["latitude"] = $latitude;
+            $dict["trajectories"][$trajectory_id]["longitude"] = $longitude;
+            
+            /*
+            $dict["trajectories"][$trajectory_id] = array(
+                "id" => $trajectory_id,
+                "start_time" => $start_time, 
+                "end_time" => $end_time,
+                "latitude" => $latitude,
+                "longitude" => $longitude
+            );*/
+        }        
     }
 
     // array_push($dict["trajectories"][$trajectory_id], $latitude, $longitude, );
