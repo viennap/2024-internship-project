@@ -4,7 +4,7 @@ def application(environ, start_response):
     output = bytes(str(environ), encoding = 'utf-8')
 
     input = environ.get('PATH_INFO')
-    print(input);
+    print(input)
 
     response_headers = [('Content-type', 'text/plain'),
                         ('Content-Length', str(len(output)))]
