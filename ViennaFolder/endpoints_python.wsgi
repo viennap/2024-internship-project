@@ -16,8 +16,8 @@ def application(environ, start_response):
             "longitude": longitude
         }
 
-        output = b'Vehicle Trajectory!'
-        output = bytes(str(result))
+        # output = b'Vehicle Trajectory!'
+        output = json.dumps(result).encode('utf-8')
 
     elif path == 'get_vehicle_signal.php':
         output = b'Vehicle Signal!'
