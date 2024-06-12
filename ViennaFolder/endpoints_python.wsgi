@@ -17,7 +17,7 @@ def application(environ, start_response):
         }
 
         output = b'Vehicle Trajectory!'
-        output = result
+        output = bytes(str(result))
 
     elif path == 'get_vehicle_signal.php':
         output = b'Vehicle Signal!'
