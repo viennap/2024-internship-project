@@ -1,11 +1,7 @@
 import json
 import os
 
-def application(environ, start_response):
-    status = '200 OK'
-    output = b'Hello World!'
-    output = bytes(str(environ), encoding = 'utf-8')
-    
+def application_handler(environ):
     path = environ.get('PATH_INFO', '').lstrip('/')
 
     if path == 'get_vehicle_trajectory':
@@ -20,7 +16,7 @@ def application(environ, start_response):
         }
 
         # output = b'Vehicle Trajectory!'
-        output = json.dumps(result).encode('utf-8')
+        output = json.dumps(result)
 
     elif path == 'get_vehicle_signal':
         query = environ.get('QUERY_STRING', '').lstrip('/')
@@ -236,17 +232,24 @@ def application(environ, start_response):
 
             output = json.dumps(result).encode('utf-8')
         else:
-            output = b'Invalid query input'
+            output = 'Invalid query input'
         
         # output = b'Vehicle Signal!'
     elif path == 'get_trajectory_lists':
 
-        output = b'Trajectory lists!'
+        output = 'Trajectory lists!'
     else:
-        output = b'Invalid endpoint'
+        output = 'Invalid endpoint'
 
-    # output = bytes(str(environ), encoding = 'utf-8')
-                   
+    return output
+
+def application(environ, start_response):
+    status = '200 OK'
+    environ_output = bytes(str(environ), encoding = 'utf-8')
+    
+    handler_output = bytes(application_handler(environ), encoding='utf-8')
+
+    output = (b',').join(environ_output, handler_output)
     response_headers = [('Content-type', 'text/plain'),
                         ('Content-Length', str(len(output)))]
     start_response(status, response_headers)
