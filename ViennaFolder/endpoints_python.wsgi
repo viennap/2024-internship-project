@@ -23,9 +23,15 @@ def application(environ, start_response):
         output = json.dumps(result).encode('utf-8')
 
     elif path == 'get_vehicle_signal':
-        # Same thing as above?
+        query = environ.get('QUERY_STRING', '').lstrip('/')
+        if query == 'signal_name=steer':
+            output = b'Steer'
+        elif query == 'signal_name=speed':
+            output = b'Speed'
+        else:
+            output = b'Invalid query input'
         
-        output = b'Vehicle Signal!'
+        # output = b'Vehicle Signal!'
     elif path == 'get_trajectory_lists':
 
         output = b'Trajectory lists!'
