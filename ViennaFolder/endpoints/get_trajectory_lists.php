@@ -41,18 +41,19 @@ if (array_key_exists("start_time", $_GET) and array_key_exists("end_time", $_GET
             $dict["trajectories"][$trajectory_id]["end_time"] = $end_time; 
             $dict["trajectories"][$trajectory_id]["latitude"] = $latitude;
             $dict["trajectories"][$trajectory_id]["longitude"] = $longitude;
-            
-            /*
+        }        
+    }
+
+    /*
             $dict["trajectories"][$trajectory_id] = array(
                 "id" => $trajectory_id,
                 "start_time" => $start_time, 
                 "end_time" => $end_time,
                 "latitude" => $latitude,
                 "longitude" => $longitude
-            );*/
-        }        
-    }
-
+            );
+    */
+        
     // array_push($dict["trajectories"][$trajectory_id], $latitude, $longitude, );
 
     $result = $dict; 
