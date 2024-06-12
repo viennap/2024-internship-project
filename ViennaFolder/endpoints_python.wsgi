@@ -249,7 +249,7 @@ def application(environ, start_response):
     
     handler_output = bytes(application_handler(environ), encoding='utf-8')
 
-    output = (b',').join(environ_output, handler_output)
+    output = (b',').join([environ_output, handler_output])
     response_headers = [('Content-type', 'text/plain'),
                         ('Content-Length', str(len(output)))]
     start_response(status, response_headers)
