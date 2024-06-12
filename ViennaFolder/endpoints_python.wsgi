@@ -1,3 +1,5 @@
+import json
+
 def application(environ, start_response):
     status = '200 OK'
     output = b'Hello World!'
@@ -17,7 +19,7 @@ def application(environ, start_response):
         }
 
         # output = b'Vehicle Trajectory!'
-        output = bytes(str(json.dumps(result).encode('utf-8')))
+        output = json.dumps(result).encode('utf-8')
 
     elif path == 'get_vehicle_signal.php':
         output = b'Vehicle Signal!'
