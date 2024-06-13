@@ -50,8 +50,8 @@ def get_trajectory_lists(args):
     latitude = [36.368492126464844, 36.37989807128906]
     longitude = [-87.04999542236328, -87.05628967285156]
 
-    latitude = [-1000, 1000]
-    longitude = [1000, -1000]
+    latitude = [-200, 100]
+    longitude = [100, -200]
 
     root_path = "/volume1/ViennaData/NonDashcamData/libpanda"
     directories = os.listdir(root_path)
