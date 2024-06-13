@@ -43,15 +43,17 @@ def get_vehicle_signal(args):
 
 def get_trajectory_lists(args):
     trajectory_id = "asdf"
-    start_time = args["signal_name"][0]
-    end_time = args["signal_name"][1]
+    # start_time = args["signal_name"][0]
+    # end_time = args["signal_name"][1]
 
     # lat/long = [start lat/long, end lat/long]
     latitude = [36.368492126464844, 36.37989807128906]
     longitude = [-87.04999542236328,-87.05628967285156]
 
-    directories = os.listdir("/")
-    # volume1/ViennaData/NonDashcamData/libpanda
+    directories = os.listdir("/volume1/ViennaData/NonDashcamData/libpanda")
+
+    print("hi")
+
     # Iterate through the "libpanda" folder and create new 
     # trajectory_id => (trajectory_id, start_time, ...) entry, where
     # trajectory_id is relative path of folder (e.g., "libpanda/2021_01_04")
