@@ -1,5 +1,6 @@
 import json
 import os
+import glob
 from urllib.parse import urlparse, parse_qs
 
 
@@ -56,12 +57,20 @@ def get_trajectory_lists(args):
     for dir in directories:
         if dir != "." and dir != "..":
             trajectory_id = os.path.join(root_path, dir)
+            can_file = glob.glob("/volume1/ViennaData/NonDashcamData/libpanda/**2T3Y1RFV8KC014025_CAN_Messages.csv", recursive = True)
+            gps_file = glob.glob("/volume1/ViennaData/NonDashcamData/libpanda/**2T3Y1RFV8KC014025_GPS_Messages.csv", recursive = True)
+            
+            # use glob to find can and gps files
+            # peek into the files to look at latitude and longitude
+
             result["trajectories"][trajectory_id] = {
                 "id": trajectory_id,
                 "start_time": start_time,
                 "end_time": end_time,
                 "latitude": latitude,
-                "longitude": longitude
+                "longitude": longitude,
+                "CAN": can_file,
+                "GPS": gps_file
             }
 
     return result
