@@ -69,7 +69,7 @@ def get_trajectory_lists(args):
                 can_file = can_file[0]
                 gps_file = gps_file[0]
                 
-                # df = pd.read_csv(gps_file)
+                df = pd.read_csv(gps_file)
 
                 # criteria
                 # first entry gps Systime >= start_time and last entry gps System <= end_time
@@ -84,7 +84,7 @@ def get_trajectory_lists(args):
                     "CAN": can_file,
                     "GPS": gps_file
                 }
-
+                
                 # result = df['Systime']
     
     return result
