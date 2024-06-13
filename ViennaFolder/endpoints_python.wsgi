@@ -44,11 +44,11 @@ def get_vehicle_signal(args):
     return result
 
 def get_trajectory_lists(args):
-    start_time = args["start_time"][0]
-    end_time = args["end_time"][0]
+    start_time = args["start_time"]
+    end_time = args["end_time"]
 
     latitude = [36.368492126464844, 36.37989807128906]
-    longitude = [-87.04999542236328,-87.05628967285156]
+    longitude = [-87.04999542236328, -87.05628967285156]
 
     root_path = "/volume1/ViennaData/NonDashcamData/libpanda"
     directories = os.listdir(root_path)
@@ -56,16 +56,16 @@ def get_trajectory_lists(args):
     result = {"trajectories": {}}
 
     for dir in directories:
-        if dir != "." and dir != "..":
+        if dir not in (".", ".."):
             trajectory_id = os.path.join(root_path, dir)
-            # use glob to find can and gps files
-            # peek into the files to look at latitude and longitude
+      
             can_file_glob_path = os.path.join(trajectory_id, "*_CAN_Messages.csv")
             gps_file_glob_path = os.path.join(trajectory_id, "*_GPS_Messages.csv")
 
             can_file = glob.glob(can_file_glob_path)
             gps_file = glob.glob(gps_file_glob_path)
-            if ((len(can_file) > 0) and (len(gps_file) > 0)):
+
+            if len(can_file) > 0 and len(gps_file) > 0:
                 can_file = can_file[0]
                 gps_file = gps_file[0]
                 
@@ -74,18 +74,18 @@ def get_trajectory_lists(args):
                 first_time = df['Systime'].iloc[0]
                 last_time = df['Systime'].iloc[-1]
 
-                if (first_time >= start_time) and (last_time <= end_time) :
+                if (first_time >= start_time) and (last_time <= end_time):
                     result["trajectories"][trajectory_id] = {
-                    "id": trajectory_id,
-                    "start_time": start_time,
-                    "end_time": end_time,
-                    "latitude": latitude,
-                    "longitude": longitude,
-                    "CAN": can_file,
-                    "GPS": gps_file,
-                    "first_time": first_time,
-                    "last_time": last_time
-                }
+                        "id": trajectory_id,
+                        "start_time": start_time,
+                        "end_time": end_time,
+                        "latitude": latitude,
+                        "longitude": longitude,
+                        "CAN": can_file,
+                        "GPS": gps_file,
+                        "first_time": first_time,
+                        "last_time": last_time
+                    }
                 
     return result
 
