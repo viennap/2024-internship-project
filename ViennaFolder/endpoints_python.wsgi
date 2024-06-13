@@ -75,7 +75,7 @@ def get_trajectory_lists(args):
 
                 latitude = df['Latitude'].tolist()
                 longitude = df['Longitude'].tolist()
-                
+
                 result["trajectories"][trajectory_id] = {
                     "id": trajectory_id,
                     "start_time": start_time,
@@ -85,10 +85,6 @@ def get_trajectory_lists(args):
                     "CAN": can_file,
                     "GPS": gps_file
                 }
-                
-                result = df.to_string()
-
-                # result = df['Systime']
     
     return result
 
