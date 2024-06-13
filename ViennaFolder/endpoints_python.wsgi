@@ -244,19 +244,49 @@ def application_handler(environ):
 
     return output
 
+
+def get_vehicle_trajectory(args):
+    result = {}
+    result["endpoint"] = "/get_vehicle_trajectory"
+    result["args"] = args
+    return result
+
+def get_vehicle_signal(args):
+    result = {}
+    result["endpoint"] = "/get_vehicle_signal"
+    result["args"] = args
+    return result
+
+def get_trajectory_lists(args):
+    result = {}
+    result["endpoint"] = "/get_trajectory_lists"
+    result["args"] = args
+    return result
+
+dispatch_table = {}
+dispatch_table["/get_vehicle_trajectory"] = get_vehicle_trajectory
+dispatch_table["/get_vehicle_signal"] = get_vehicle_signal
+dispatch_table["/get_trajectory_lists"] = get_trajectory_lists
+
 def application(environ, start_response):
-    status = '200 OK'
-    #environ_output = bytes(str(environ), encoding = 'utf-8')
     endpoint = environ["PATH_INFO"]
     query_string = environ["QUERY_STRING"]
     query_string_dictionary = parse_qs(query_string)
 
-    #handler_output = bytes(application_handler(endpoint, query_string_dictionary), encoding='utf-8')
-    handler_output = (b',').join([bytes(str(endpoint), encoding='utf-8'), bytes(str(query_string_dictionary), encoding='utf-8')])
+    if endpoint in dispatch_table:
+        status = '200 OK'
+        handler_output_dictionary = dispatch_table[endpoint](query_string_dictionary)
+        handler_output = json.dumps(handler_output_dictionary).encode('utf-8')
 
+        response_headers = [('Content-type', 'application/json'),
+                            ('Content-Length', str(len(handler_output)))]
+        start_response(status, response_headers)
+    else:
+        status = '404 Not Found'
 
-    response_headers = [('Content-type', 'application/json'),
-                        ('Content-Length', str(len(handler_output)))]
-    start_response(status, response_headers)
+        handler_output = b'Endpoint not found!'
+        response_headers = [('Content-type', 'text/plain'),
+                            ('Content-Length', str(len(handler_output)))]
+        start_response(status, response_headers)
 
     return [handler_output]
