@@ -44,8 +44,8 @@ def get_vehicle_signal(args):
     return result
 
 def get_trajectory_lists(args):
-    start_time = args["start_time"]
-    end_time = args["end_time"]
+    start_time = args["start_time"][0]
+    end_time = args["end_time"][0]
 
     latitude = [36.368492126464844, 36.37989807128906]
     longitude = [-87.04999542236328, -87.05628967285156]
@@ -88,22 +88,19 @@ def get_trajectory_lists(args):
                 last_long = df['Long'].iloc[-1]
 
                 if first_lat >= latitude[0] and first_lat <= latitude[1] and first_long >= longitude[1] and first_long <= longitude[0] and last_lat >= latitude[0] and last_lat <= latitude[1] and last_long >= longitude[1] and last_long <= longitude[0]:
-                        result["trajectories"][trajectory_id] = {
-                                "id": trajectory_id,
-                                "start_time": start_time,
-                                "end_time": end_time,
-                                "latitude": latitude,
-                                "longitude": longitude,
-                                "CAN": can_file,
-                                "GPS": gps_file,
-                                "first_time": first_time,
-                                "last_time": last_time    
-                        }
-                
-                # if first_time >= start_time and last_time <= end_time:
+                        if first_time >= start_time and last_time <= end_time:
 
-                    
-                
+                            result["trajectories"][trajectory_id] = {
+                                    "id": trajectory_id,
+                                    "start_time": start_time,
+                                    "end_time": end_time,
+                                    "latitude": latitude,
+                                    "longitude": longitude,
+                                    "CAN": can_file,
+                                    "GPS": gps_file,
+                                    "first_time": first_time,
+                                    "last_time": last_time    
+                            } 
     return result
 
 dispatch_table = {}
