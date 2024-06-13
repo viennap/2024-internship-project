@@ -85,6 +85,8 @@ def get_trajectory_lists(args):
                     "GPS": gps_file
                 }
                 
+                result = df.to_string()
+
                 # result = df['Systime']
     
     return result
