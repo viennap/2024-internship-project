@@ -71,10 +71,11 @@ def get_trajectory_lists(args):
                 
                 df = pd.read_csv(gps_file)
 
-                # criteria
-                # first entry gps Systime >= start_time and last entry gps System <= end_time
-                # rectangular box lat/long coordinates
+                df = df[(df['Systime'] >= start_time) & (df['Systime'] <= end_time)]
 
+                latitude = df['Latitude'].tolist()
+                longitude = df['Longitude'].tolist()
+                
                 result["trajectories"][trajectory_id] = {
                     "id": trajectory_id,
                     "start_time": start_time,
@@ -85,7 +86,7 @@ def get_trajectory_lists(args):
                     "GPS": gps_file
                 }
                 
-                result = bytes(df.to_string())
+                result = df.to_string()
 
                 # result = df['Systime']
     
