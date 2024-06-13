@@ -95,11 +95,11 @@ def get_trajectory_lists(args):
                 new_trajectory = { 
                     "id": trajectory_id,
                     "requested_time_range": {start_time, end_time},
-                    "requested_gps_range": {[bottom_left_long, bottom_left_lat], [top_right_long, top_right_lat]},
+                    "requested_gps_range": [{"Longitude": bottom_left_long, "Latitude": bottom_left_lat}, {"Longitude": top_right_long, "Latitude": top_right_lat}],
                     "CAN": can_file,
                     "GPS": gps_file,
                     "time_range": {first_time, last_time},
-                    "gps_range": {[first_long, first_lat], [last_long, last_lat]}
+                    "gps_range": [{"Longitude": first_long, "Latitude": first_lat}, {"Longitude": last_long, "Latitude": last_lat}]
                 }
 
                 if first_lat >= latitude[0] and first_lat <= latitude[1] and first_long >= longitude[1] and first_long <= longitude[0] and last_lat >= latitude[0] and last_lat <= latitude[1] and last_long >= longitude[1] and last_long <= longitude[0]:
