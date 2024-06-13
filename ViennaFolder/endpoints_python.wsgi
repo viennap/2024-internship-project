@@ -43,8 +43,8 @@ def get_vehicle_signal(args):
 
 def get_trajectory_lists(args):
     trajectory_id = "asdf"
-    # start_time = args["signal_name"][0]
-    # end_time = args["signal_name"][1]
+    start_time = args["start_time"]
+    end_time = args["end_time"]
 
     # lat/long = [start lat/long, end lat/long]
     latitude = [36.368492126464844, 36.37989807128906]
