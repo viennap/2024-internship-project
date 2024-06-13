@@ -82,7 +82,7 @@ def get_trajectory_lists(args):
                     "GPS": gps_file
                 }
 
-                result = gps_file[0]
+                result = gps_file
     
     return result
 
