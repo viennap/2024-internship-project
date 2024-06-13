@@ -51,16 +51,18 @@ def get_trajectory_lists(args):
 
     directories = os.listdir("/volume1/ViennaData/NonDashcamData/libpanda")
 
-    result = {}
-    
+    result = {"trajectories": {}}
+
     for dir in directories:
         if dir != "." and dir != "..":
             trajectory_id = "libpanda/" + dir
-            result["trajectories"][trajectory_id]["id"] = trajectory_id
-        #     result["trajectories"][trajectory_id]["start_time"] = start_time
-        #     result["trajectories"][trajectory_id]["end_time"] = end_time
-        #     result["trajectories"][trajectory_id]["latitude"] = latitude
-        #     result["trajectories"][trajectory_id]["longitude"] = longitude
+            result["trajectories"][trajectory_id] = {
+                "id": trajectory_id,
+                "start_time": start_time,
+                "end_time": end_time,
+                "latitude": latitude,
+                "longitude": longitude
+            }
 
     return result
 
