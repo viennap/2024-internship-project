@@ -37,6 +37,8 @@ def get_vehicle_signal(args):
     else:
         result = "Invalid signal name."
 
+    result = args
+    
     return result
 
 def get_trajectory_lists(args):
