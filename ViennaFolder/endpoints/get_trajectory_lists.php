@@ -14,16 +14,6 @@ if (array_key_exists("start_time", $_GET) and array_key_exists("end_time", $_GET
     $latitude = array(36.368492126464844, 36.37989807128906);
     $longitude = array(-87.04999542236328,-87.05628967285156);
     
-    /*
-    $dict["trajectories"] = array(); 
-    $dict["trajectories"][$trajectory_id] = array();
-    $dict["trajectories"][$trajectory_id]["id"] = $trajectory_id;
-    $dict["trajectories"][$trajectory_id]["start_time"] = $start_time; 
-    $dict["trajectories"][$trajectory_id]["end_time"] = $end_time; 
-    $dict["trajectories"][$trajectory_id]["latitude"] = $latitude;
-    $dict["trajectories"][$trajectory_id]["longitude"] = $longitude;
-    */
-
     $base_dir = "/volume1/ViennaData/NonDashcamData/libpanda";
     $directories = scandir($base_dir);
 
@@ -54,9 +44,7 @@ if (array_key_exists("start_time", $_GET) and array_key_exists("end_time", $_GET
             );
     */
         
-    // array_push($dict["trajectories"][$trajectory_id], $latitude, $longitude, );
-
-    $result = $dict; 
+$result = $dict; 
 
     header("Content-Type: application/json");
     echo json_encode($result);
