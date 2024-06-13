@@ -72,7 +72,7 @@ def get_trajectory_lists(args):
                 df = pd.read_csv(gps_file)
 
                 first_time = df['Systime'].iloc[0]
-                last_time = df['Systime'].iloc[len(df)-1]
+                last_time = df['Systime'].iloc[-1]
 
                 result = "hi"
                 # if (first_time >= start_time) and (last_time <= end_time):
