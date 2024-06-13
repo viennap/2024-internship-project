@@ -74,9 +74,8 @@ def get_trajectory_lists(args):
                 first_time = df['Systime'][0]
                 last_time = df['Systime'][len(df)-1]
 
-                df = (first_time >= start_time) and (last_time <= end_time)
-
-                result["trajectories"][trajectory_id] = {
+                if (first_time >= start_time) & (last_time <= end_time) :
+                    result["trajectories"][trajectory_id] = {
                     "id": trajectory_id,
                     "start_time": start_time,
                     "end_time": end_time,
@@ -87,8 +86,7 @@ def get_trajectory_lists(args):
                     "first_time": first_time,
                     "last_time": last_time
                 }
-
-    
+                
     return result
 
 dispatch_table = {}
