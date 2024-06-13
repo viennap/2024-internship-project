@@ -104,7 +104,8 @@ def get_trajectory_lists(args):
                                     "CAN": can_file,
                                     "GPS": gps_file,
                                     "first_time": first_time,
-                                    "last_time": last_time    
+                                    "last_time": last_time,
+                                    "bottom_left_lat": bottom_left_lat
                             } 
     return result
 
