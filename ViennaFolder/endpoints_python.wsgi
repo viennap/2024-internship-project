@@ -1,5 +1,6 @@
 import json
 import os
+from urllib.parse import urlparse, parse_qs
 
 def application_handler(environ):
     path = environ.get('PATH_INFO', '').lstrip('/')
@@ -245,13 +246,17 @@ def application_handler(environ):
 
 def application(environ, start_response):
     status = '200 OK'
-    environ_output = bytes(str(environ), encoding = 'utf-8')
-    
-    handler_output = bytes(application_handler(environ), encoding='utf-8')
+    #environ_output = bytes(str(environ), encoding = 'utf-8')
+    endpoint = environ["PATH_INFO"]
+    query_string = environ["QUERY_STRING"]
+    query_string_dictionary = parse_qs(query_string)
 
-    output = (b',').join([environ_output, handler_output])
-    response_headers = [('Content-type', 'text/plain'),
-                        ('Content-Length', str(len(output)))]
+    #handler_output = bytes(application_handler(endpoint, query_string_dictionary), encoding='utf-8')
+    handler_output = (b',').join([bytes(endpoint, encoding='utf-8'), bytes(query_string_dictionary, encoding='utf-8')])
+    
+
+    response_headers = [('Content-type', 'application/json'),
+                        ('Content-Length', str(len(handler_output)))]
     start_response(status, response_headers)
 
-    return [output]
+    return [handler_output]
