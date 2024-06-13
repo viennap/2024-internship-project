@@ -84,8 +84,8 @@ def get_trajectory_lists(args):
                     "CAN": can_file,
                     "GPS": gps_file
                 }
-                
-                result = df['Systime']
+
+                # result = df['Systime']
     
     return result
 
