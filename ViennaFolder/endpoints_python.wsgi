@@ -54,7 +54,7 @@ def get_trajectory_lists(args):
     result = {}
     
     for dir in directories:
-        
+        result = {}
         # if dir != "." and dir != "..":
         #     trajectory_id = "libpanda/" + dir
 
