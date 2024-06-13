@@ -37,8 +37,6 @@ def get_vehicle_signal(args):
         }
     else:
         result = "Invalid signal name."
-
-    result = args["signal_name"]
     
     return result
 
