@@ -25,11 +25,13 @@ def get_vehicle_signal(args):
 
     result = {}
     if args["signal_name"] == "steer" :
+        result = "Hello"
         result = {
             "time": time_steer,
             "signal": message_steer
         }
     elif args["signal_name"] == "speed":
+        result = "Hi"
         result = {
             "time": time_speed,
             "signal": average_speed
@@ -37,7 +39,7 @@ def get_vehicle_signal(args):
     else:
         result = "Invalid signal name."
 
-    result = args["signal_name"]
+    # result = args["signal_name"]
 
     return result
 
