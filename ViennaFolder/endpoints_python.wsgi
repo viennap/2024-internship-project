@@ -42,7 +42,6 @@ def get_vehicle_signal(args):
     return result
 
 def get_trajectory_lists(args):
-    trajectory_id = "asdf"
     start_time = args["start_time"][0]
     end_time = args["end_time"][0]
 
