@@ -232,7 +232,6 @@ def application_handler(environ):
             }
 
             output = json.dumps(result).encode('utf-8')
-            bytes(str(), encoding = 'utf-8')
         else:
             output = 'Invalid query input'
         
