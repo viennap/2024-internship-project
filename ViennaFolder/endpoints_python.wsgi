@@ -57,8 +57,10 @@ def get_trajectory_lists(args):
     for dir in directories:
         if dir != "." and dir != "..":
             trajectory_id = os.path.join(root_path, dir)
-            can_file = glob.glob("/volume1/ViennaData/NonDashcamData/libpanda/**2T3Y1RFV8KC014025_CAN_Messages.csv", recursive = True)
-            gps_file = glob.glob("/volume1/ViennaData/NonDashcamData/libpanda/**2T3Y1RFV8KC014025_GPS_Messages.csv", recursive = True)
+            can_file_glob_path = os.path.join(trajectory_id, "*_CAN_Messages.csv")
+            gps_file_glob_path = os.path.join(trajectory_id, "*_GPS_Messages.csv")
+            can_file = glob.glob(can_file_glob_path)
+            gps_file = glob.glob(gps_file_glob_path)
             
             # use glob to find can and gps files
             # peek into the files to look at latitude and longitude
