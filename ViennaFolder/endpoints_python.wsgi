@@ -73,8 +73,8 @@ def get_trajectory_lists(args):
 
                 # df = df[(df['Systime'] >= start_time) & (df['Systime'] <= end_time)]
 
-                latitude = df['Lat'][0]
-                longitude = df['Long'][0]
+                first_time = df['Systime'][0]
+                last_time = df['Systime'][len(df)-1]
 
                 result["trajectories"][trajectory_id] = {
                     "id": trajectory_id,
@@ -83,8 +83,11 @@ def get_trajectory_lists(args):
                     "latitude": latitude,
                     "longitude": longitude,
                     "CAN": can_file,
-                    "GPS": gps_file
+                    "GPS": gps_file,
+                    "first_time": first_time,
+                    "last_time": last_time
                 }
+
     
     return result
 
