@@ -109,9 +109,9 @@ def get_trajectory_lists(args):
                     if first_time >= start_time and last_time <= end_time:
                         result["trajectories"][trajectory_id] = new_trajectory
                     else:
-                        result["rejected_trajectories"] = new_trajectory
+                        result["rejected_trajectories"][trajectory_id] = new_trajectory
                 else:
-                    result["rejected_trajectories"] = new_trajectory
+                    result["rejected_trajectories"][trajectory_id] = new_trajectory
                     
     return result
 
