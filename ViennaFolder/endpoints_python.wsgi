@@ -38,6 +38,11 @@ def get_vehicle_signal(args):
     else:
         result = "Invalid signal name."
     
+    result = {
+        "time": time_steer,
+        "signal": message_steer
+    }
+    
     return result
 
 def get_trajectory_lists(args):
