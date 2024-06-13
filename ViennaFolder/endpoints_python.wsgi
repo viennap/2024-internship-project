@@ -74,19 +74,18 @@ def get_trajectory_lists(args):
                 first_time = df['Systime'].iloc[0]
                 last_time = df['Systime'].iloc[-1]
 
-                result = "hi"
                 # if (first_time >= start_time) and (last_time <= end_time):
-                #     result["trajectories"][trajectory_id] = {
-                #         "id": trajectory_id,
-                #         "start_time": start_time,
-                #         "end_time": end_time,
-                #         "latitude": latitude,
-                #         "longitude": longitude,
-                #         "CAN": can_file,
-                #         "GPS": gps_file,
-                #         "first_time": first_time,
-                #         "last_time": last_time
-                #     }
+                result["trajectories"][trajectory_id] = {
+                        "id": trajectory_id,
+                        "start_time": start_time,
+                        "end_time": end_time,
+                        "latitude": latitude,
+                        "longitude": longitude,
+                        "CAN": can_file,
+                        "GPS": gps_file,
+                        "first_time": first_time,
+                        "last_time": last_time    
+                }
                 
     return result
 
