@@ -94,16 +94,13 @@ def get_trajectory_lists(args):
                 last_long = df['Long'].iloc[-1]
                 new_trajectory = { 
                     "id": trajectory_id,
-                    "start_time": start_time,
-                    "end_time": end_time,
-                    "latitude": latitude,
-                    "longitude": longitude,
+                    "requested_time_range": {start_time, end_time},
+                    "requested_gps_range": {[bottom_left_long, bottom_left_lat], [top_right_long, top_right_lat]},
                     "CAN": can_file,
                     "GPS": gps_file,
-                    "first_time": first_time,
-                    "last_time": last_time,
-                    "bottom_left_lat": bottom_left_lat
-                } 
+                    "time_range": {first_time, last_time},
+                    "gps_range": {[first_long, first_lat], [last_long, last_lat]}
+                }
 
                 if first_lat >= latitude[0] and first_lat <= latitude[1] and first_long >= longitude[1] and first_long <= longitude[0] and last_lat >= latitude[0] and last_lat <= latitude[1] and last_long >= longitude[1] and last_long <= longitude[0]:
                     if first_time >= start_time and last_time <= end_time:
