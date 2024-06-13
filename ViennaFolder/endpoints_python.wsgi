@@ -52,16 +52,15 @@ def get_trajectory_lists(args):
 
     directories = os.listdir("/volume1/ViennaData/NonDashcamData/libpanda")
 
-    print("hi")
-
     # Iterate through the "libpanda" folder and create new 
     # trajectory_id => (trajectory_id, start_time, ...) entry, where
     # trajectory_id is relative path of folder (e.g., "libpanda/2021_01_04")
 
-
     result = {}
     result["endpoint"] = "/get_trajectory_lists"
     result["args"] = args
+
+    result = directories
 
     return result
 
