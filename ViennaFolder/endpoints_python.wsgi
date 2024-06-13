@@ -59,8 +59,8 @@ def get_trajectory_lists(args):
             trajectory_id = os.path.join(root_path, dir)
             can_file_glob_path = os.path.join(trajectory_id, "*_CAN_Messages.csv")
             gps_file_glob_path = os.path.join(trajectory_id, "*_GPS_Messages.csv")
-            can_file = glob.glob(can_file_glob_path)
-            gps_file = glob.glob(gps_file_glob_path)
+            can_file = glob.glob(can_file_glob_path)[0]
+            gps_file = glob.glob(gps_file_glob_path)[0]
             
             # use glob to find can and gps files
             # peek into the files to look at latitude and longitude
