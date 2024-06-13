@@ -60,7 +60,7 @@ def get_trajectory_lists(args):
     result["endpoint"] = "/get_trajectory_lists"
     result["args"] = args
 
-    result = directories
+    result = args
 
     return result
 
