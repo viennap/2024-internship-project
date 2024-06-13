@@ -14,6 +14,8 @@ def get_vehicle_trajectory(args):
         "latitude": latitude,
         "longitude": longitude
     }
+
+    result = args["signal_name"]
     
     return result
 
@@ -25,6 +27,7 @@ def get_vehicle_signal(args):
 
     result = {}
     signal = args["signal_name"]
+
     if signal == 'steer':
         result = {
             "time": time_steer,
@@ -37,12 +40,7 @@ def get_vehicle_signal(args):
         }
     else:
         result = "Invalid signal name."
-    
-    result = {
-        "time": time_steer,
-        "signal": message_steer
-    }
-    
+        
     return result
 
 def get_trajectory_lists(args):
