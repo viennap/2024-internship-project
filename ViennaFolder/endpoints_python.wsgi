@@ -2,6 +2,7 @@ import json
 import os
 import glob
 from urllib.parse import urlparse, parse_qs
+import pandas as pd
 
 
 def get_vehicle_trajectory(args):
@@ -68,6 +69,8 @@ def get_trajectory_lists(args):
                 can_file = can_file[0]
                 gps_file = gps_file[0]
                 
+                df = pd.read_csv(gps_file)
+
                 # criteria
                 # first entry gps Systime >= start_time and last entry gps System <= end_time
                 # rectangular box lat/long coordinates
@@ -81,8 +84,8 @@ def get_trajectory_lists(args):
                     "CAN": can_file,
                     "GPS": gps_file
                 }
-
-                result = gps_file
+                
+                result = df['Systime']
     
     return result
 
