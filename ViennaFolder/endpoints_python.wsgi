@@ -81,6 +81,8 @@ def get_trajectory_lists(args):
                     "CAN": can_file,
                     "GPS": gps_file
                 }
+
+                result = gps_file[0]
     
     return result
 
