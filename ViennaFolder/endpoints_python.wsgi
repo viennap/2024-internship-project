@@ -46,9 +46,15 @@ def get_vehicle_signal(args):
 def get_trajectory_lists(args):
     start_time = args["start_time"][0]
     end_time = args["end_time"][0]
+    
+    bottom_left_lat = args["bottom_left_lat"][0]
+    bottom_left_long = args["bottom_left_long"][0]
 
-    latitude = [36.368492126464844, 36.37989807128906]
-    longitude = [-87.04999542236328, -87.05628967285156]
+    top_right_lat = args["top_right_long"][0]
+    top_right_long = args["top_right_long"][0]
+
+    # latitude = [36.368492126464844, 36.37989807128906]
+    # longitude = [-87.04999542236328, -87.05628967285156]
 
     # (-90, 32) is bottom left
     # (-80, 40) is top right
@@ -89,7 +95,6 @@ def get_trajectory_lists(args):
 
                 if first_lat >= latitude[0] and first_lat <= latitude[1] and first_long >= longitude[1] and first_long <= longitude[0] and last_lat >= latitude[0] and last_lat <= latitude[1] and last_long >= longitude[1] and last_long <= longitude[0]:
                         if first_time >= start_time and last_time <= end_time:
-
                             result["trajectories"][trajectory_id] = {
                                     "id": trajectory_id,
                                     "start_time": start_time,
