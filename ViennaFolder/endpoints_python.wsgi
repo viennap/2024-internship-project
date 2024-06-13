@@ -14,8 +14,6 @@ def get_vehicle_trajectory(args):
         "latitude": latitude,
         "longitude": longitude
     }
-
-    result = args["signal_name"]
     
     return result
 
