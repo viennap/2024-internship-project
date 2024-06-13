@@ -60,7 +60,7 @@ def get_trajectory_lists(args):
     result["endpoint"] = "/get_trajectory_lists"
     result["args"] = args
 
-    result = args
+    result = [start_time, end_time]
 
     return result
 
