@@ -13,11 +13,11 @@ def get_vehicle_trajectory(args):
     df = pd.read_csv(args["GPS"][0])
     result = {}
     result = {
-        "time": df['Systime'],
-        "latitude": df['Lat'],
-        "longitude": df['Long']
+        "time": df['Systime'].to_list(),
+        "latitude": df['Lat'].to_list(),
+        "longitude": df['Long'].to_list()
     }
-    
+
     return result
 
 def get_vehicle_signal(args):
