@@ -98,14 +98,14 @@ def get_vehicle_signal(args):
     if signal == 'steer':
         result_steer = r.steer_angle()
         result = {
-            "time": result_steer['time'],
-            "signal": result_steer['message']
+            "time": result_steer['Time'],
+            "signal": result_steer['Message']
         }
     elif signal == 'speed':
         result_steer = r.speed()
         result = {
-            "time": result_steer['time'],
-            "signal": result_steer['message']
+            "time": result_steer['Time'],
+            "signal": result_steer['Message']
         }
     else:
         result = "Invalid signal name."
