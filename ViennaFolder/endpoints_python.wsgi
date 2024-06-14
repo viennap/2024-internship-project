@@ -79,19 +79,24 @@ def get_trajectory_lists(args):
             gps_file = glob.glob(gps_file_glob_path)
 
             if len(can_file) > 0 and len(gps_file) > 0:
-                can_file = can_file[0]
                 gps_file = gps_file[0]
+                can_file = can_file[0]
                 
-                df = pd.read_csv(gps_file)
+                gps_df = pd.read_csv(gps_file)
 
-                first_time = df['Systime'].iloc[0]
-                last_time = df['Systime'].iloc[-1]
+                first_time = gps_df['Systime'].iloc[0]
+                last_time = gps_df['Systime'].iloc[-1]
 
-                first_lat = df['Lat'].iloc[0]
-                last_lat = df['Lat'].iloc[-1]
+                first_lat = gps_df['Lat'].iloc[0]
+                last_lat = gps_df['Lat'].iloc[-1]
 
-                first_long = df['Long'].iloc[0]
-                last_long = df['Long'].iloc[-1]
+                first_long = gps_df['Long'].iloc[0]
+                last_long = gps_df['Long'].iloc[-1]
+
+                # can_df = pd.read_csv(can_file)
+                # speed = can_df['Speed'].tolist() if 'Speed' in can_df.columns else None
+                # steering_angle = can_df['SteeringAngle'].tolist() if 'SteeringAngle' in can_df.columns else None
+
                 new_trajectory = { 
                     "id": trajectory_id,
                     "requested_time_range": [start_time, end_time],
@@ -102,6 +107,19 @@ def get_trajectory_lists(args):
                     "gps_range": [{"Longitude": first_long, "Latitude": first_lat}, {"Longitude": last_long, "Latitude": last_lat}]
                 }
 
+                args = {
+                    'signal_name': 'speed'
+                }
+                res = get_vehicle_signal(args)
+                new_trajectory["speed"] = res["signal"]
+                
+                args = {
+                    'signal_name': 'steer'
+                }
+                res = get_vehicle_signal(args)
+                new_trajectory["steer"] = res["steer"]
+                
+
                 if first_lat >= latitude[0] and first_lat <= latitude[1] and first_long >= longitude[1] and first_long <= longitude[0] and last_lat >= latitude[0] and last_lat <= latitude[1] and last_long >= longitude[1] and last_long <= longitude[0]:
                     if first_time >= start_time and last_time <= end_time:
                         result["trajectories"][trajectory_id] = new_trajectory
@@ -109,7 +127,11 @@ def get_trajectory_lists(args):
                         result["rejected_trajectories"][trajectory_id] = new_trajectory
                 else:
                     result["rejected_trajectories"][trajectory_id] = new_trajectory
-                    
+                
+        # get the corresponding speed and steering angle for each of the trajectories we have retrieved via the trajectory_id     
+
+
+             
     return result
 
 dispatch_table = {}
