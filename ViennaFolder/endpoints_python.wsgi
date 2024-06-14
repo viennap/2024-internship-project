@@ -107,31 +107,13 @@ def get_trajectory_lists(args):
                     "gps_range": [{"Longitude": first_long, "Latitude": first_lat}, {"Longitude": last_long, "Latitude": last_lat}]
                 }
 
-                args = {
-                    'signal_name': 'speed'
-                }
-                res = get_vehicle_signal(args)
-                new_trajectory["speed"] = res["signal"]
-                
-                args = {
-                    'signal_name': 'steer'
-                }
-                res = get_vehicle_signal(args)
-                new_trajectory["steer"] = res["steer"]
-                
-
                 if first_lat >= latitude[0] and first_lat <= latitude[1] and first_long >= longitude[1] and first_long <= longitude[0] and last_lat >= latitude[0] and last_lat <= latitude[1] and last_long >= longitude[1] and last_long <= longitude[0]:
                     if first_time >= start_time and last_time <= end_time:
                         result["trajectories"][trajectory_id] = new_trajectory
                     else:
                         result["rejected_trajectories"][trajectory_id] = new_trajectory
                 else:
-                    result["rejected_trajectories"][trajectory_id] = new_trajectory
-                
-        # get the corresponding speed and steering angle for each of the trajectories we have retrieved via the trajectory_id     
-
-
-             
+                    result["rejected_trajectories"][trajectory_id] = new_trajectory             
     return result
 
 dispatch_table = {}
