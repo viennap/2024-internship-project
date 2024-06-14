@@ -7,7 +7,7 @@ import strym
 from strym import strymread
 import vin_parser as vp
 
-def vin(csvfile):
+def get_vin(csvfile):
     # we use underscores to split up the filename
     splits = csvfile.split('_')
     candidates = []
@@ -26,7 +26,7 @@ def vin(csvfile):
     return csvfile
 
 def generate_dbc_path(csv_path):
-    vin = vin(csv_path)
+    vin = get_vin(csv_path)
     brand = "toyota"
     model = "rav4"
     year = "2019"
