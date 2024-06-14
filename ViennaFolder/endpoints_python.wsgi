@@ -71,7 +71,7 @@ def get_trajectory_lists(args):
 
     for dir in directories:
         if dir not in (".", ".."):
-            trajectory_id = os.path.join(root_path, dir)
+            trajectory_id = dir
       
             can_file_glob_path = os.path.join(trajectory_id, "*_CAN_Messages.csv")
             gps_file_glob_path = os.path.join(trajectory_id, "*_GPS_Messages.csv")
@@ -107,9 +107,7 @@ def get_trajectory_lists(args):
                     "time_range": [first_time, last_time],
                     "gps_range": [{"Longitude": first_long, "Latitude": first_lat}, {"Longitude": last_long, "Latitude": last_lat}]
                 }
-                
-                
-
+    
                 if first_lat >= latitude[0] and first_lat <= latitude[1] and first_long >= longitude[1] and first_long <= longitude[0] and last_lat >= latitude[0] and last_lat <= latitude[1] and last_long >= longitude[1] and last_long <= longitude[0]:
                     if first_time >= start_time and last_time <= end_time:
                         result["trajectories"][trajectory_id] = new_trajectory
