@@ -73,8 +73,8 @@ def get_trajectory_lists(args):
         if dir not in (".", ".."):
             trajectory_id = dir
       
-            can_file_glob_path = os.path.join(trajectory_id, "*_CAN_Messages.csv")
-            gps_file_glob_path = os.path.join(trajectory_id, "*_GPS_Messages.csv")
+            can_file_glob_path = os.path.join(os.path.join(root_path, trajectory_id), "*_CAN_Messages.csv")
+            gps_file_glob_path = os.path.join(os.path.join(root_path, trajectory_id), "*_GPS_Messages.csv")
 
             can_file = glob.glob(can_file_glob_path)
             gps_file = glob.glob(gps_file_glob_path)
