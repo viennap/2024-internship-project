@@ -95,8 +95,12 @@ def get_trajectory_lists(args):
                     "time_range": [first_time, last_time],
                     "gps_range": [{"Longitude": first_long, "Latitude": first_lat}, {"Longitude": last_long, "Latitude": last_lat}]
                 }
-    
-                if first_lat >= latitude[0] and first_lat <= latitude[1] and first_long >= longitude[1] and first_long <= longitude[0] and last_lat >= latitude[0] and last_lat <= latitude[1] and last_long >= longitude[1] and last_long <= longitude[0]:
+
+                # latitude[0] is bottom_left_lat
+                # latitude[1] is top_right_lat
+                # longitude[0] is top_right_long
+                # longitude[1] is bottom_left_long
+                if first_lat >= bottom_left_lat and first_lat <= top_right_lat and first_long >= top_right_long and first_long <= bottom_left_long and last_lat >= bottom_left_lat and last_lat <= top_right_lat and last_long >= top_right_long and last_long <= bottom_left_long:
                     if first_time >= start_time and last_time <= end_time:
                         result["trajectories"][trajectory_id] = new_trajectory
                     else:
