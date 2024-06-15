@@ -235,9 +235,10 @@ def application(environ, start_response):
             response_headers = [('Content-type', 'application/json'),
                                 ('Content-Length', str(len(handler_output)))]
         elif isinstance(handler_output, CSVFile):
+            name = handler_output.name
             handler_output = handler_output.contents
             response_headers = [('Content-type', 'text/csv'),
-                                ('Content-Disposition', 'attachment; filename="{}"'.format(handler_output.name)),
+                                ('Content-Disposition', 'attachment; filename="{}"'.format(name)),
                                 ('Content-Length', str(len(handler_output)))]
         start_response(status, response_headers)
     else:
