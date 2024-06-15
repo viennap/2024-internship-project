@@ -94,22 +94,19 @@ def get_vehicle_signal(args):
 
     result = {}
     signal = args["signal_name"][0] # the first (and only) value of signal_name key is either "steer" or "speed"
+    result_signal = None
 
     if signal == 'steer':
-        result_steer = r.steer_angle()
-        result = {
-            "time": result_steer['Time'],
-            "signal": result_steer['Message']
-        }
+        result_signal = r.steer_angle()
     elif signal == 'speed':
-        result_steer = r.speed()
-        result = {
-            "time": result_steer['Time'],
-            "signal": result_steer['Message']
-        }
+        result_signal = r.speed()
     else:
-        result = "Invalid signal name."
-    
+        return {"error" : "Invalid signal name!"}
+    }
+    result = {
+        "time": result_signal['Time'].to_list(),
+        "signal": result_signal['Message'].to_list()
+    }
     return result
 
 def get_trajectory_lists(args):
