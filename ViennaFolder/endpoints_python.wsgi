@@ -7,6 +7,16 @@ import strym
 from strym import strymread
 import vin_parser as vp
 
+class VideoFile:
+    def __init__(self, name, contents):
+        self.name = name
+        self.contents = contents
+
+class CSVFile:
+    def __init__(self, name, contents):
+        self.name = name
+        self.contents = contents
+
 def get_vin(csvfile):
     # we use underscores to split up the filename
     splits = csvfile.split('_')
@@ -176,10 +186,40 @@ def get_trajectory_lists(args):
                     result["rejected_trajectories"][trajectory_id] = new_trajectory             
     return result
 
+def get_vehicle_can(args):
+    directories = os.listdir(root_path)
+    trajectory_id = args["trajectory_id"][0]
+    result = {}
+    if trajectory_id in directories:
+        full_folder_path = os.path.join(root_path, trajectory_id)
+        glob_search = os.path.join(full_folder_path, "*_CAN_Messages.csv")
+        variable_glob_results = glob.glob(glob_search)
+
+        if len(variable_glob_results) > 0:
+            basename = os.path.basename(variable_glob_results[0])
+            contents = open(variable_glob_results[0], 'rb').read()
+            return CSVFile(basename, contents)
+
+def get_vehicle_gps(args):
+    directories = os.listdir(root_path)
+    trajectory_id = args["trajectory_id"][0]
+    result = {}
+    if trajectory_id in directories:
+        full_folder_path = os.path.join(root_path, trajectory_id)
+        glob_search = os.path.join(full_folder_path, "*_GPS_Messages.csv")
+        variable_glob_results = glob.glob(glob_search)
+
+        if len(variable_glob_results) > 0:
+            basename = os.path.basename(variable_glob_results[0])
+            contents = open(variable_glob_results[0], 'rb').read()
+            return CSVFile(basename, contents)
+
 dispatch_table = {}
 dispatch_table["/get_vehicle_trajectory"] = get_vehicle_trajectory
 dispatch_table["/get_vehicle_signal"] = get_vehicle_signal
 dispatch_table["/get_trajectory_lists"] = get_trajectory_lists
+dispatch_table["/get_vehicle_can"] = get_vehicle_can
+dispatch_table["get_vehicle_gps"] = get_vehicle_gps
 
 def application(environ, start_response):
     endpoint = environ["PATH_INFO"]
@@ -188,11 +228,17 @@ def application(environ, start_response):
 
     if endpoint in dispatch_table:
         status = '200 OK'
-        handler_output_dictionary = dispatch_table[endpoint](query_string_dictionary)
-        handler_output = json.dumps(handler_output_dictionary).encode('utf-8')
-
-        response_headers = [('Content-type', 'application/json'),
-                            ('Content-Length', str(len(handler_output)))]
+        handler_output = dispatch_table[endpoint](query_string_dictionary)
+        response_headers = None
+        if isinstance(handler_output, dict):
+            handler_output = json.dumps(handler_output).encode('utf-8')
+            response_headers = [('Content-type', 'application/json'),
+                                ('Content-Length', str(len(handler_output)))]
+        elif isinstance(handler_output, CSVFile):
+            handler_output = handler_output.content
+            response_headers = [('Content-type', 'text/csv'),
+                                ('Content-Disposition', 'attachment; filename="{}"'.format(handler_output.name)),
+                                ('Content-Length', str(len(handler_output)))]
         start_response(status, response_headers)
     else:
         status = '404 Not Found'
