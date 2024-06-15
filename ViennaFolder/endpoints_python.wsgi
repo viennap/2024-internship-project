@@ -102,7 +102,7 @@ def get_vehicle_signal(args):
         result_signal = r.speed()
     else:
         return {"error" : "Invalid signal name!"}
-    }
+    
     result = {
         "time": result_signal['Time'].to_list(),
         "signal": result_signal['Message'].to_list()
