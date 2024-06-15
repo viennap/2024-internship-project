@@ -219,7 +219,7 @@ dispatch_table["/get_vehicle_trajectory"] = get_vehicle_trajectory
 dispatch_table["/get_vehicle_signal"] = get_vehicle_signal
 dispatch_table["/get_trajectory_lists"] = get_trajectory_lists
 dispatch_table["/get_vehicle_can"] = get_vehicle_can
-dispatch_table["get_vehicle_gps"] = get_vehicle_gps
+dispatch_table["/get_vehicle_gps"] = get_vehicle_gps
 
 def application(environ, start_response):
     endpoint = environ["PATH_INFO"]
