@@ -44,7 +44,7 @@ def generate_dbc_path(csv_path):
     except:
         print('No valid vin... Continuing as Toyota RAV4. If this is inaccurate, please append VIN number to csvfile prefixed with an underscore.')
 
-    inferred_dbc = "endpoint_venv/lib/python3.8/site-packages/strym/dbc/{}_{}_{}.dbc".format(brand, model, year)
+    inferred_dbc = "/var/www/html/ViennaFolder/endpoint_venv/lib/python3.8/site-packages/strym/dbc/{}_{}_{}.dbc".format(brand, model, year)
     return inferred_dbc
 
 root_path = "/volume1/ViennaData/NonDashcamData/libpanda"
