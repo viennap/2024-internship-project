@@ -126,11 +126,11 @@ def get_trajectory_lists(args):
     if start_time > end_time :
         return {"error": "start_time is greater than end_time"}
     
-    bottom_left_lat = args["bottom_left_lat"][0]
-    bottom_left_long = args["bottom_left_long"][0]
+    bottom_left_lat = float(args["bottom_left_lat"][0])
+    bottom_left_long = float(args["bottom_left_long"][0])
 
-    top_right_lat = args["top_right_long"][0]
-    top_right_long = args["top_right_long"][0]
+    top_right_lat = float(args["top_right_long"][0])
+    top_right_long = float(args["top_right_long"][0])
 
     directories = os.listdir(root_path)
 
@@ -152,14 +152,14 @@ def get_trajectory_lists(args):
                 
                 gps_df = pd.read_csv(gps_file)
 
-                first_time = gps_df['Systime'].iloc[0]
-                last_time = gps_df['Systime'].iloc[-1]
+                first_time = float(gps_df['Systime'].iloc[0])
+                last_time = float(gps_df['Systime'].iloc[-1])
 
-                first_lat = gps_df['Lat'].iloc[0]
-                last_lat = gps_df['Lat'].iloc[-1]
+                first_lat = float(gps_df['Lat'].iloc[0])
+                last_lat = float(gps_df['Lat'].iloc[-1])
 
-                first_long = gps_df['Long'].iloc[0]
-                last_long = gps_df['Long'].iloc[-1]
+                first_long = float(gps_df['Long'].iloc[0])
+                last_long = float(gps_df['Long'].iloc[-1])
 
                 # can_df = pd.read_csv(can_file)
                 # speed = can_df['Speed'].tolist() if 'Speed' in can_df.columns else None
