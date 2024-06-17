@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Vehicle Speed </title>
+        <script src = "https://cdn.jsdelivr.net/npm/chart.js"> </script>
+    </head>
+
+    <body onload = "createChart()">
+
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
+    
+            
+            <script>
+                function createChart() {
+                    const ctx = document.getElementById('myChart');
+                    
+                    const xhr = new XMLHttpRequest();
+                    // xhr.open('GET', 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints/get_vehicle_signal.php?trajectory_id=100&signal_name=speed');
+                    xhr.open('GET', 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_signal?signal_name=speed&trajectory_id=2021-01-04-22-36-11_2T3Y1RFV8KC014025');
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            const parsed = JSON.parse(xhr.responseText);
+
+                            new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: parsed['time'],
+                                datasets: [{
+                                    label: 'Wheel Speed',
+                                    data: parsed['signal'],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                                }
+                            }
+                            });
+                        }
+                    }
+                    xhr.send(); 
+                }
+                
+            </script>
+            
+    </body>
+</html>

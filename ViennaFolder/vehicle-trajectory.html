@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+        <title>Vehicle Trajectory</title>
+        <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+        <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+    </head>
+
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+    
+    <body onload = "createPlot()"> 
+        
+    <div id="map"></div>
+
+        <script>
+            function createPlot() {
+                const ctx = document.getElementById('map');
+
+                const xhr = new XMLHttpRequest();
+
+                let map = null;
+                let GeoJSON = {};
+                
+                //xhr.open('GET', 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints/get_vehicle_trajectory.php?trajectory_id=100&signal_name=50');
+                xhr.open('GET', 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=2021-01-04-22-36-11_2T3Y1RFV8KC014025');
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        const parsed = JSON.parse(xhr.responseText);
+                        console.log(parsed);
+                        // parsed['time']
+                        // parsed['latitude']
+                        // parsed['longitude']
+                        console.log(parsed['latitude']);
+                        mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
+                        map = new mapboxgl.Map({
+                        container: 'map',
+                        center: [parsed['longitude'].at(-1), parsed['latitude'].at(-1)], // centered at Nashville
+                        zoom: 19
+                        });
+                        // console.log(parsed['latitude'].at(-1));
+                        // console.log(parsed['longitude'].at(-1));
+
+                        GeoJSON["features"] = [];
+                        GeoJSON["properties"] = {};
+                        GeoJSON["type"] = "FeatureCollection";
+
+                        let route = {};
+                        route["type"] = "Feature";
+                        route["properties"] = {};
+                        route["geometry"] = {};
+
+                        route["geometry"]["type"] = "MultiLineString";
+                        route["geometry"]["coordinates"] = [[]];
+
+                        for (let i = 0; i < parsed['latitude'].length; i++) {
+                            let pair = [parsed['longitude'].at(i), parsed['latitude'].at(i)];
+                            route["geometry"]["coordinates"][0].push(pair); 
+                        }
+
+                        GeoJSON["features"].push(route); 
+
+                        console.log(GeoJSON);
+
+                        map.on('load', async() => {
+                            map.addSource("my-route", {
+                                "type": "geojson",
+                                "data": GeoJSON
+                            });
+
+                            map.addLayer({
+                                id: 'my-route-layer',
+                                source: 'my-route',
+                                type: 'line',
+                                layout: {
+                                    'line-join': 'round',
+                                    'line-cap': 'round'
+                                },
+                                paint: {
+                                    'line-color': '#FF0000',
+                                    'line-width': 5,
+                                    'line-opacity': 0.8,
+                                }
+                            });
+                        });
+                    }
+                }
+                xhr.send(); 
+                
+            }
+        </script>
+    </body>
+</html>
