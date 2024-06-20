@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
+import "./styles.css";
+
+import { Line } from "react-chartjs-2";
+import {CategoryScale} from 'chart.js'; 
+import Chart from "chart.js/auto";
+Chart.register(CategoryScale);
+
+let data = null;
 
 export default function VehicleSteer() {
     useEffect(() => {
@@ -10,26 +17,16 @@ export default function VehicleSteer() {
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     const parsed = JSON.parse(xhr.responseText);
+                    console.log(parsed);
                     
-                    /*
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: parsed['time'],
-                            datasets: [{
-                                label: 'Steering Angle',
-                                data: parsed['signal'],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });         */          
+                    data = {
+                        labels: parsed['time'],
+                        datasets: [{
+                            label: 'Steering Angle',
+                            data: parsed['signal'],
+                            borderWidth: 1
+                        }]
+                    };
                 } 
                 else {
                     console.log('Error fetching data.')
@@ -39,10 +36,14 @@ export default function VehicleSteer() {
         }
         createPlot();
     }, [])
-    
-    return (
-        <div>
-          <div id = 'map' style={{ position: 'absolute', top: 0, bottom: 0, width: '100%' }}/>
-        </div>
-    );
+
+    if (!data) {
+        return <div>Help...</div>;
+    }
+
+  return (
+    <div className="VehicleSteer">
+      <Line data={data} />
+    </div>
+  );
 }
