@@ -27,9 +27,7 @@
   background-color: #ffffff;
   margin-left: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
   gap: 20px;
-  height: 100%;
 }
 
 .item {
@@ -38,7 +36,8 @@
   padding: 20px;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
+  width: 1000px;
+  height: 180px;
   justify-content: center;
-  align-items: top; 
+  align-items: top;
 }
