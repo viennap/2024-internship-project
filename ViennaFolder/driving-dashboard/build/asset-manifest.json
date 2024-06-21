@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/ViennaFolder/driving-dashboard/build/static/css/main.f736318f.css",
-    "main.js": "/ViennaFolder/driving-dashboard/build/static/js/main.400e4de7.js",
+    "main.css": "/ViennaFolder/driving-dashboard/build/static/css/main.91e4ac4c.css",
+    "main.js": "/ViennaFolder/driving-dashboard/build/static/js/main.018db179.js",
     "index.html": "/ViennaFolder/driving-dashboard/build/index.html",
-    "main.f736318f.css.map": "/ViennaFolder/driving-dashboard/build/static/css/main.f736318f.css.map",
-    "main.400e4de7.js.map": "/ViennaFolder/driving-dashboard/build/static/js/main.400e4de7.js.map"
+    "main.91e4ac4c.css.map": "/ViennaFolder/driving-dashboard/build/static/css/main.91e4ac4c.css.map",
+    "main.018db179.js.map": "/ViennaFolder/driving-dashboard/build/static/js/main.018db179.js.map"
   },
   "entrypoints": [
-    "static/css/main.f736318f.css",
-    "static/js/main.400e4de7.js"
+    "static/css/main.91e4ac4c.css",
+    "static/js/main.018db179.js"
   ]
 }
