@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import VehicleTrajectory from './VehicleTrajectory';
-import VehicleSteer from './VehicleSteer';
+import App from './App';
+import './styles.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <VehicleTrajectory /> */}
-   <VehicleSteer /> 
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );

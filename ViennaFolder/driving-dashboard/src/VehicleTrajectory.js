@@ -76,7 +76,7 @@ export default function VehicleTrajectory() {
     
     return (
         <div>
-          <div id = 'map' style={{ position: 'absolute', top: 0, bottom: 0, width: '100%' }}/>
+          <div id = 'map' style={{ position: 'absolute', left: 20, right: 20, top: 20, bottom: 10, width: '49%' }}/>
         </div>
     );
 }
