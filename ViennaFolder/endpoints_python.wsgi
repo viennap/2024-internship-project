@@ -151,8 +151,8 @@ def get_trajectory_lists(args):
                 can_file = can_file[0]
                 
                 gps_df = pd.read_csv(gps_file)
-                gps_df = gps_df.loc[gps_df['Status'] == 'A'] 
-                
+                # gps_df = gps_df.loc[gps_df['Status'] == 'A'] 
+
                 first_time = float(gps_df['Gpstime'].iloc[0])
                 last_time = float(gps_df['Gpstime'].iloc[-1])
 
