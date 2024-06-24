@@ -129,7 +129,7 @@ def get_trajectory_lists(args):
     bottom_left_lat = float(args["bottom_left_lat"][0])
     bottom_left_long = float(args["bottom_left_long"][0])
 
-    top_right_lat = float(args["top_right_long"][0])
+    top_right_lat = float(args["top_right_lat"][0])
     top_right_long = float(args["top_right_long"][0])
 
     directories = os.listdir(root_path)
@@ -173,10 +173,6 @@ def get_trajectory_lists(args):
                     "gps_range": [{"Longitude": first_long, "Latitude": first_lat}, {"Longitude": last_long, "Latitude": last_lat}]
                 }
 
-                # latitude[0] is bottom_left_lat
-                # latitude[1] is top_right_lat
-                # longitude[0] is top_right_long
-                # longitude[1] is bottom_left_long
                 if valid_longitude(first_long, last_long, bottom_left_long, top_right_long) and valid_latitude(first_lat, last_lat, bottom_left_lat, top_right_lat):
                     # if first_time >= start_time and last_time <= end_time:
                     #     result["trajectories"][trajectory_id] = new_trajectory
@@ -187,24 +183,34 @@ def get_trajectory_lists(args):
                     result["rejected_trajectories"][trajectory_id] = new_trajectory             
     return result
 
+# -86.7628492, -86.7628287, -90, -80
 def valid_longitude(first_long, last_long, bottom_left_long, top_right_long):
-    smaller_long = bottom_left_long
-    bigger_long = top_right_long
-    if bottom_left_long > top_right_long:
-        smaller_long = top_right_long
-        bigger_long = bottom_left_long
+    smaller_long = bottom_left_long # smaller_long = -90
+    bigger_long = top_right_long # bigger_long = -80
+    if smaller_long > bigger_long: # -90 is not bigger than -80
+        temp = smaller_long 
+        smaller_long = bigger_long
+        bigger_long = temp
     
+    # -86.7628492 >= -90
+    # -86.7628492 <= -80
+    # -86.7628287 >= -90
+    # -86.7628287 <= -80
     if first_long >= smaller_long and first_long <= bigger_long and last_long >= smaller_long and last_long <= bigger_long:
         return True
     return False
 
+# 36.1307245, 36.1306873, 30, -80
 def valid_latitude(first_lat, last_lat, bottom_left_lat, top_right_lat):
-    smaller_lat = bottom_left_lat
-    bigger_lat = top_right_lat
-    if bottom_left_lat > top_right_lat:
-        smaller_lat = top_right_lat
-        bigger_lat = bottom_left_lat
+    smaller_lat = bottom_left_lat # smaller_lat = 30
+    bigger_lat = top_right_lat # bigger_lat = -80
+    if smaller_lat > bigger_lat: # smaller_lat IS bigger; swap
+        temp = smaller_lat # temp = 30
+        smaller_lat = bigger_lat # smaller_lat = -80
+        bigger_lat = temp # bigger_lat = 30
     
+    # 36.1307245 >= -80
+    # 36.1307245 <= 30
     if first_lat >= smaller_lat and first_lat <= bigger_lat and last_lat >= smaller_lat and last_lat <= bigger_lat:
         return True
     return False
