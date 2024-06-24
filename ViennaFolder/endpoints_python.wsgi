@@ -120,8 +120,8 @@ def get_vehicle_signal(args):
     return result
 
 def get_trajectory_lists(args):
-    start_time = args["start_time"][0]
-    end_time = args["end_time"][0]
+    start_time = int(args["start_time"][0])
+    end_time = int(args["end_time"][0])
 
     if start_time > end_time :
         return {"error": start_time + " " + end_time}
