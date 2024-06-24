@@ -174,10 +174,11 @@ def get_trajectory_lists(args):
                 }
 
                 if valid_longitude(first_long, last_long, bottom_left_long, top_right_long) and valid_latitude(first_lat, last_lat, bottom_left_lat, top_right_lat):
-                    if first_time >= start_time and last_time <= end_time:
-                        result["trajectories"][trajectory_id] = new_trajectory
-                    else:
-                        result["rejected_trajectories"][trajectory_id] = new_trajectory
+                    # if first_time >= start_time and last_time <= end_time:
+                    #     result["trajectories"][trajectory_id] = new_trajectory
+                    # else:
+                    #     result["rejected_trajectories"][trajectory_id] = new_trajectory
+                    result["trajectories"][trajectory_id] = new_trajectory
                 else:
                     result["rejected_trajectories"][trajectory_id] = new_trajectory             
     return result
