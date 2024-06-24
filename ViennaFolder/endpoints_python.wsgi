@@ -124,7 +124,7 @@ def get_trajectory_lists(args):
     end_time = args["end_time"][0]
 
     if start_time > end_time :
-        return {start_time + " " + end_time}
+        return {"error": start_time + " " + end_time}
     
     bottom_left_lat = float(args["bottom_left_lat"][0])
     bottom_left_long = float(args["bottom_left_long"][0])
