@@ -183,7 +183,8 @@ def get_trajectory_lists(args):
                     else:
                         result["rejected_trajectories"][trajectory_id] = new_trajectory
                 else:
-                    result["rejected_trajectories"][trajectory_id] = new_trajectory             
+                    return "Invalid longitude and/or latitude"
+                    # result["rejected_trajectories"][trajectory_id] = new_trajectory             
     return result
 
 def valid_longitude(first_long, last_long, bottom_left_long, top_right_long):
