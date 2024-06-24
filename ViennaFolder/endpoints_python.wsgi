@@ -124,7 +124,7 @@ def get_trajectory_lists(args):
     end_time = args["end_time"][0]
 
     if start_time > end_time :
-        return {"error": "start_time is greater than end_time"}
+        return {start_time + " " + end_time}
     
     bottom_left_lat = float(args["bottom_left_lat"][0])
     bottom_left_long = float(args["bottom_left_long"][0])
@@ -178,39 +178,29 @@ def get_trajectory_lists(args):
                         result["trajectories"][trajectory_id] = new_trajectory
                     else:
                         result["rejected_trajectories"][trajectory_id] = new_trajectory
-                    # result["trajectories"][trajectory_id] = new_trajectory
                 else:
                     result["rejected_trajectories"][trajectory_id] = new_trajectory             
     return result
 
-# -86.7628492, -86.7628287, -90, -80
 def valid_longitude(first_long, last_long, bottom_left_long, top_right_long):
-    smaller_long = bottom_left_long # smaller_long = -90
-    bigger_long = top_right_long # bigger_long = -80
-    if smaller_long > bigger_long: # -90 is not bigger than -80
+    smaller_long = bottom_left_long 
+    bigger_long = top_right_long 
+    if smaller_long > bigger_long:
         temp = smaller_long 
         smaller_long = bigger_long
         bigger_long = temp
-    
-    # -86.7628492 >= -90
-    # -86.7628492 <= -80
-    # -86.7628287 >= -90
-    # -86.7628287 <= -80
     if first_long >= smaller_long and first_long <= bigger_long and last_long >= smaller_long and last_long <= bigger_long:
         return True
     return False
 
-# 36.1307245, 36.1306873, 30, -80
 def valid_latitude(first_lat, last_lat, bottom_left_lat, top_right_lat):
-    smaller_lat = bottom_left_lat # smaller_lat = 30
-    bigger_lat = top_right_lat # bigger_lat = -80
-    if smaller_lat > bigger_lat: # smaller_lat IS bigger; swap
-        temp = smaller_lat # temp = 30
-        smaller_lat = bigger_lat # smaller_lat = -80
-        bigger_lat = temp # bigger_lat = 30
+    smaller_lat = bottom_left_lat
+    bigger_lat = top_right_lat
+    if smaller_lat > bigger_lat:
+        temp = smaller_lat 
+        smaller_lat = bigger_lat
+        bigger_lat = temp
     
-    # 36.1307245 >= -80
-    # 36.1307245 <= 30
     if first_lat >= smaller_lat and first_lat <= bigger_lat and last_lat >= smaller_lat and last_lat <= bigger_lat:
         return True
     return False
