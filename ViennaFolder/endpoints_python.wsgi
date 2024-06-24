@@ -120,8 +120,8 @@ def get_vehicle_signal(args):
     return result
 
 def get_trajectory_lists(args):
-    start_time = int(args["start_time"][0])
-    end_time = int(args["end_time"][0])
+    start_time = float(args["start_time"][0])
+    end_time = float(args["end_time"][0])
 
     if start_time > end_time :
         return {"error": "start_time: " + start_time + "is greater than end_time: " + end_time}
@@ -151,9 +151,10 @@ def get_trajectory_lists(args):
                 can_file = can_file[0]
                 
                 gps_df = pd.read_csv(gps_file)
-
-                first_time = float(gps_df['Systime'].iloc[0])
-                last_time = float(gps_df['Systime'].iloc[-1])
+                gps_df = gps_df.loc[gps_df['Status'] == 'A'] 
+                
+                first_time = float(gps_df['Gpstime'].iloc[0])
+                last_time = float(gps_df['Gpstime'].iloc[-1])
 
                 first_lat = float(gps_df['Lat'].iloc[0])
                 last_lat = float(gps_df['Lat'].iloc[-1])
