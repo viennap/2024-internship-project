@@ -177,7 +177,7 @@ def get_trajectory_lists(args):
                 # latitude[1] is top_right_lat
                 # longitude[0] is top_right_long
                 # longitude[1] is bottom_left_long
-                if first_lat >= bottom_left_lat and first_lat <= top_right_lat and first_long >= top_right_long and first_long <= bottom_left_long and last_lat >= bottom_left_lat and last_lat <= top_right_lat and last_long >= top_right_long and last_long <= bottom_left_long:
+                if valid_longitude(first_long, last_long, bottom_left_long, top_right_long) and valid_latitude(first_lat, last_lat, bottom_left_lat, top_right_lat):
                     if first_time >= start_time and last_time <= end_time:
                         result["trajectories"][trajectory_id] = new_trajectory
                     else:
@@ -185,6 +185,28 @@ def get_trajectory_lists(args):
                 else:
                     result["rejected_trajectories"][trajectory_id] = new_trajectory             
     return result
+
+def valid_longitude(first_long, last_long, bottom_left_long, top_right_long):
+    smaller_long = bottom_left_long
+    bigger_long = top_right_long
+    if bottom_left_long > top_right_long:
+        smaller_long = top_right_long
+        bigger_long = bottom_left_long
+    
+    if first_long >= smaller_long and first_long <= bigger_long and last_long >= smaller_long and last_long <= bigger_long:
+        return True
+    return False
+
+def valid_latitude(first_lat, last_lat, bottom_left_lat, top_right_lat):
+    smaller_lat = bottom_left_lat
+    bigger_lat = top_right_lat
+    if bottom_left_lat > top_right_lat:
+        smaller_lat = top_right_lat
+        bigger_lat = bottom_left_lat
+    
+    if first_lat >= smaller_lat and first_lat <= bigger_lat and last_lat >= smaller_lat and last_lat <= bigger_lat:
+        return True
+    return False
 
 def get_vehicle_can(args):
     directories = os.listdir(root_path)
