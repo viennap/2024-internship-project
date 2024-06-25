@@ -7,7 +7,7 @@ export default function VehicleTrajectory() {
     useEffect(() => {
         const createPlot = () => {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=2021-01-04-22-36-11_2T3Y1RFV8KC014025');
+            xhr.open('GET', 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=2021-04-03-21-51-37_2T3Y1RFV8KC014025');
             xhr.onload = function () {
             
             let GeoJSON = {};
@@ -15,8 +15,6 @@ export default function VehicleTrajectory() {
 
             if (xhr.status === 200) {
                 const parsed = JSON.parse(xhr.responseText);
-
-                mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
                 
                 map = new mapboxgl.Map({
                     container: 'map',
