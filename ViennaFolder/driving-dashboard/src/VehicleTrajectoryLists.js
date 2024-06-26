@@ -141,7 +141,38 @@ export default function VehicleTrajectory() {
     // Currently plotting one after another instead of all at the same time.
     const plotTrajectories = (idList) => {
         let allTrajectories = []
+        let promises = [];
         idList.forEach((id) => {
+            promises.push(fetch(`https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=${id}`));
+        });
+        Promise.all(promises).then(function() {
+            let GeoJSON = {};
+            GeoJSON["features"] = [];
+            GeoJSON["properties"] = {};
+            GeoJSON["type"] = "FeatureCollection";
+
+            let route = {};
+            route["type"] = "Feature";
+            route["properties"] = {};
+            route["geometry"] = {};
+            route["geometry"]["type"] = "MultiLineString";
+            route["geometry"]["coordinates"] = [];
+            arguments.forEach((response) => {
+                if (response.ok) {
+                    let json = response.json();
+                    let currentTrajectory = [];
+                    for (let i = 0; i < json['latitude'].length; i++) {
+                        let pair = [json['longitude'].at(i), json['latitude'].at(i)];
+                        currentTrajectory.push(pair);
+                    }
+                    route["geometry"]["coordinates"].push(currentTrajectory);
+                }
+            });
+            map.getSource('my-route').setData(GeoJSON);
+        }).catch(function () {
+            console.log("Doh!");
+        });
+        /*idList.forEach((id) => {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', `https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=${id}`);
             xhr.onload = function () {
@@ -173,9 +204,7 @@ export default function VehicleTrajectory() {
                 }
             };
             xhr.send();
-        });
-
-        map.getSource('my-route').setData(allTrajectories);
+        });*/
     };
 
     const handleSelectChange = (event) => {
