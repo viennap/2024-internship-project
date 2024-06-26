@@ -58,6 +58,7 @@ export default function VehicleTrajectory() {
 
         fetchTrajectoryList(); 
         
+        // For each trajectory in the list, create a plot... add to the same Ma
     }, []);
 
     const fetchTrajectoryList = () => {
@@ -73,7 +74,8 @@ export default function VehicleTrajectory() {
                 let idList = Object.keys(trajectories);
                 setTrajectoryList(idList);
                 if (idList.length !== 0) {
-                    setSelectedTrajectoryId(idList[0]);     
+                    setSelectedTrajectoryId(idList[0]); 
+                    plotTrajectories(idList);     
                 }
                 else {
                     setSelectedTrajectoryId('No valid trajectories.');
@@ -136,9 +138,50 @@ export default function VehicleTrajectory() {
         }
     };
 
+    // Currently plotting one after another instead of all at the same time.
+    const plotTrajectories = (idList) => {
+        let allTrajectories = []
+        idList.forEach((id) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=${id}`);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const parsed = JSON.parse(xhr.responseText);
+                    
+                    let GeoJSON = {};
+
+                    GeoJSON["features"] = [];
+                    GeoJSON["properties"] = {};
+                    GeoJSON["type"] = "FeatureCollection";
+
+                    let route = {};
+                    route["type"] = "Feature";
+                    route["properties"] = {};
+                    route["geometry"] = {};
+
+                    route["geometry"]["type"] = "MultiLineString";
+                    route["geometry"]["coordinates"] = [[]];
+
+                    for (let i = 0; i < parsed['latitude'].length; i++) {
+                        let pair = [parsed['longitude'].at(i), parsed['latitude'].at(i)];
+                        route["geometry"]["coordinates"][0].push(pair);
+                    }
+
+                    allTrajectories.push(GeoJSON);
+                } else {
+                    console.log('Error fetching trajectory data.');
+                }
+            };
+            xhr.send();
+        });
+
+        map.getSource('my-route').setData(allTrajectories);
+    };
+
     const handleSelectChange = (event) => {
         if (trajectoryList.includes(event.target.value)) {
             setSelectedTrajectoryId(event.target.value);
+            console.log("Selected trajectory: " + selectedTrajectoryId);
         }
     };
 
