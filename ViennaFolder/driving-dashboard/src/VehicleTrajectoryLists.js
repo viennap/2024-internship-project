@@ -7,45 +7,83 @@ export default function VehicleTrajectory() {
     const [trajectoryList, setTrajectoryList] = useState([]);
     const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');
     const [map, setMap] = useState(null); // initialize map once
+    const [startTime, setStartTime] = useState('1624912116');
+    const [endTime, setEndTime] = useState('1624915962');
+    const [bottomLeftLat, setBottomLeftLat] = useState('30');
+    const [bottomLeftLong, setBottomLeftLong] = useState('-90');
+    const [topRightLat, setTopRightLat] = useState('40');
+    const [topRightLong, setTopRightLong] = useState('-80');
 
     useEffect(() => {
-        const fetchTrajectoryList = () => {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_trajectory_lists?start_time=1577937156&end_time=1704167556&bottom_left_lat=25&bottom_left_long=-130&top_right_lat=50&top_right_long=-70');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    let trajectories = response['trajectories'];
-                    let idList = Object.keys(trajectories);
-                    if (idList.length === 0) {
-                        // Need to properly handle if no valid trajectories are generated.
-                        setTrajectoryList("No valid trajectories.");
-                    }
-                    else {
-                        setTrajectoryList(idList);
-                        setSelectedTrajectoryId(idList[0]); // default = first trajectory ID in drop-down
-                    }                     
-                } else {
-                    console.log('Error fetching trajectory list.');
-                }
-            };
-            xhr.send();
-        };
-        fetchTrajectoryList();
-
         const initializeMap = () => {
-            const newMap = new mapboxgl.Map({
+            const map = new mapboxgl.Map({
                 container: 'map', 
-                center: [86.767960, 36.174465], // defalt at Nashville
+                center: [-86.767960, 36.174465], // defalt at Nashville
                 zoom: 5
             });
+        
+            setMap(map);
 
-            setMap(newMap);
+            map.on('load', async () => {
+
+                let GeoJSON = {};
+
+                GeoJSON["features"] = [];
+                GeoJSON["properties"] = {};
+                GeoJSON["type"] = "FeatureCollection";
+
+                map.addSource("my-route", {
+                    "type": "geojson",
+                    "data": GeoJSON
+                });
+
+                map.addLayer({
+                    id: 'my-route-layer',
+                    source: 'my-route',
+                    type: 'line',
+                    layout: {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    paint: {
+                        'line-color': '#FF0000',
+                        'line-width': 5,
+                        'line-opacity': 0.8,
+                    }
+                });            
+            });
         };
 
         initializeMap();
 
+        fetchTrajectoryList(); 
+        
     }, []);
+
+    const fetchTrajectoryList = () => {
+        const xhr = new XMLHttpRequest();
+        let url = 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_trajectory_lists?start_time=' 
+                    + startTime + '&end_time=' + endTime + '1704167556&bottom_left_lat=' + bottomLeftLat + '&bottom_left_long=' + bottomLeftLong 
+                    + '&top_right_lat=' + topRightLat + '&top_right_long=' + topRightLong;
+        xhr.open('GET', url);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                let trajectories = response['trajectories'];
+                let idList = Object.keys(trajectories);
+                setTrajectoryList(idList);
+                if (idList.length !== 0) {
+                    setSelectedTrajectoryId(idList[0]);     
+                }
+                else {
+                    setSelectedTrajectoryId('No valid trajectories.');
+                }       
+            } else {
+                console.log('Error fetching trajectory list.');
+            }
+        };
+        xhr.send();
+    };
 
     useEffect(() => {
         if (selectedTrajectoryId && map) {
@@ -55,7 +93,8 @@ export default function VehicleTrajectory() {
 
     const createPlot = (id) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=${id}`);
+        if (id !== 'No valid trajectories.') {
+            xhr.open('GET', `https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=${id}`);
         xhr.onload = function () {
             let GeoJSON = {};
 
@@ -63,7 +102,7 @@ export default function VehicleTrajectory() {
                 const parsed = JSON.parse(xhr.responseText);
 
                 map.setCenter([parsed['longitude'].at(-1), parsed['latitude'].at(-1)]);
-                map.setZoom(20);
+                map.setZoom(15);
 
                 GeoJSON["features"] = [];
                 GeoJSON["properties"] = {};
@@ -84,39 +123,22 @@ export default function VehicleTrajectory() {
 
                 GeoJSON["features"].push(route);
 
-                map.on('load', async () => {
-                    map.addSource("my-route", {
-                        "type": "geojson",
-                        "data": GeoJSON
-                    });
+                map.getSource('my-route').setData(GeoJSON);
 
-                    map.addLayer({
-                        id: 'my-route-layer',
-                        source: 'my-route',
-                        type: 'line',
-                        layout: {
-                            'line-join': 'round',
-                            'line-cap': 'round'
-                        },
-                        paint: {
-                            'line-color': '#FF0000',
-                            'line-width': 5,
-                            'line-opacity': 0.8,
-                        }
-                    });
-                });
             } else {
                 console.log('Error fetching data.');
             }
         };
         xhr.send();
+        }
+        else {
+            console.log("No valid trajectories to plot.");
+        }
     };
 
     const handleSelectChange = (event) => {
-        // Making sure that the list actually includes what's in the dropdown. 
         if (trajectoryList.includes(event.target.value)) {
             setSelectedTrajectoryId(event.target.value);
-            console.log(event.target.value);
         }
     };
 
@@ -128,6 +150,36 @@ export default function VehicleTrajectory() {
                     <option key={id} value={id}>{id}</option>
                 ))}
             </select>
+            <div>
+                <label>
+                    Start Time:
+                    <input type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+                </label>
+                <label>
+                    End Time:
+                    <input type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+                </label>
+
+                <label>
+                    Bottom Left Longitude
+                    <input type="text" value={bottomLeftLong} onChange={(e) => setBottomLeftLong(e.target.value)} />
+                </label>
+                <label>
+                    Bottom Left Latitude
+                    <input type="text" value={bottomLeftLat} onChange={(e) => setBottomLeftLat(e.target.value)} />
+                </label>
+                <label>
+                    Top Right Longitude
+                    <input type="text" value={topRightLong} onChange={(e) => setTopRightLong(e.target.value)} />
+                </label>
+                <label>
+                    Top Right Latitude
+                    <input type="text" value={topRightLat} onChange={(e) => setTopRightLat(e.target.value)} />
+                </label>
+
+                <button onClick={fetchTrajectoryList}>Fetch Trajectories</button>
+            </div>
+            
             <div id='map' style={{ height: '500px' }}></div>
         </div>
     );

@@ -8,11 +8,17 @@ import VehicleTrajectoryLists from './VehicleTrajectoryLists';
 
 export default function App() {
     return (
-        <div> <VehicleTrajectoryLists/> </div>
+        // <div> <VehicleTrajectoryLists/> </div>
         
+        // Handling changing trajectory ids from the App dashboard so the signals 
+        // can be updated correspondingly
+
+        // Refactor VehicleTrajectory to initialize map first
+        // VehicleTrajectory.js, VehicleSpeed.js, and VehicleSteer.js should take in trajectory id as input
+        <VehicleTrajectoryLists />
         // <div className="container">
         //     <div className="left">
-        //         <VehicleTrajectory />
+                
         //     </div>
         //     <div className="right">
         //         <div className="item">
