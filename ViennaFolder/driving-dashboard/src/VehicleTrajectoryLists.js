@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
+import { v4 as uuidv4 } from 'uuid'; // universally unique identifier
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
 
@@ -43,7 +44,7 @@ export default function VehicleTrajectory() {
                 });
 
                 map.current.addLayer({
-                    id: 'my-route-layer',
+                    id: 'route-layer',
                     source: 'my-route',
                     type: 'line',
                     layout: {
@@ -120,13 +121,15 @@ export default function VehicleTrajectory() {
 
                 route["geometry"]["type"] = "MultiLineString";
                 route["geometry"]["coordinates"] = [[]];
-
+                
                 for (let i = 0; i < parsed['latitude'].length; i++) {
                     let pair = [parsed['longitude'].at(i), parsed['latitude'].at(i)];
                     route["geometry"]["coordinates"][0].push(pair);
                 }
 
                 GeoJSON["features"].push(route);
+
+                clearLayers(); 
 
                 map.current.getSource('my-route').setData(GeoJSON);
 
@@ -137,6 +140,7 @@ export default function VehicleTrajectory() {
         xhr.send();
         }
         else {
+            clearLayers(); 
             console.log("No valid trajectories to plot.");
         }
     };
@@ -144,13 +148,14 @@ export default function VehicleTrajectory() {
     
     // Currently plotting one after another instead of all at the same time.
     const plotTrajectories = (idList) => {
+        clearLayers(); 
         let promises = [];
-        console.log(idList);
+        // console.log(idList);
 
         idList.forEach((id) => {
             promises.push(fetch(`https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=${id}`));
         });
-        console.log(promises.length);
+        // console.log(promises.length);
         Promise.all(promises).then(function(...args) {
             let argsArray = args[0];
             let GeoJSON = {};
@@ -173,20 +178,21 @@ export default function VehicleTrajectory() {
                 }
             });
             Promise.all(jsonPromises).then(function (...jsonArgs) {
-                jsonArgs[0].forEach((obj, index) => {
+                jsonArgs[0].forEach((obj) => {
                     let currentTrajectory = [];
                     for (let i = 0; i < obj['latitude'].length; i++) {
                         let pair = [obj['longitude'].at(i), obj['latitude'].at(i)];
                         currentTrajectory.push(pair);
                     }
-                    console.log(currentTrajectory); 
-                    
+
                     route["geometry"]["coordinates"].push(currentTrajectory);
 
-                    let color = '#' + Math.floor(Math.random()*16777215).toString(16);
+                    let color = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
                     
+                    let uniqueId = uuidv4();
+
                     map.current.addLayer({
-                        id: 'route-' + index,
+                        id: 'route-' + uniqueId,
                         type: 'line',
                         source: {
                             type: 'geojson',
@@ -215,10 +221,20 @@ export default function VehicleTrajectory() {
         });
     };
 
+    const clearLayers = () => {
+        const layers = map.current.getStyle().layers;
+        layers.forEach((layer) => {
+            if (layer.id.startsWith('route-')) {
+                map.current.removeLayer(layer.id);
+            }
+        });
+    };
+
     const handleSelectChange = (event) => {
         if (trajectoryList.includes(event.target.value)) {
             setSelectedTrajectoryId(event.target.value);
             console.log("Selected trajectory: " + selectedTrajectoryId);
+            createPlot(selectedTrajectoryId);
         }
     };
 
