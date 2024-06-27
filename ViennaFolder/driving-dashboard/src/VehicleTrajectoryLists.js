@@ -8,8 +8,8 @@ export default function VehicleTrajectory() {
     const [trajectoryList, setTrajectoryList] = useState([]);
     const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');
     
-    const [startTime, setStartTime] = useState('1624912116');
-    const [endTime, setEndTime] = useState('1624915962');
+    const [startTime, setStartTime] = useState('1577936331'); // January 1, 2020
+    const [endTime, setEndTime] = useState('1704166731'); // January 1, 2024
     
     const [bottomLeftLat, setBottomLeftLat] = useState('30');
     const [bottomLeftLong, setBottomLeftLong] = useState('-90');
@@ -44,7 +44,7 @@ export default function VehicleTrajectory() {
                 });
 
                 map.current.addLayer({
-                    id: 'route-layer',
+                    id: 'my-route-layer',
                     source: 'my-route',
                     type: 'line',
                     layout: {
@@ -52,7 +52,7 @@ export default function VehicleTrajectory() {
                         'line-cap': 'round'
                     },
                     paint: {
-                        'line-color': '#FF0000',
+                        'line-color': ['to-string', ['get', 'myColorProperty']],
                         'line-width': 5,
                         'line-opacity': 0.8,
                     }
@@ -67,9 +67,9 @@ export default function VehicleTrajectory() {
 
     const fetchTrajectoryList = () => {
         const xhr = new XMLHttpRequest();
-        let url = 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_trajectory_lists?start_time=' 
-                    + startTime + '&end_time=' + endTime + '1704167556&bottom_left_lat=' + bottomLeftLat + '&bottom_left_long=' + bottomLeftLong 
-                    + '&top_right_lat=' + topRightLat + '&top_right_long=' + topRightLong;
+
+        let url = `https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_trajectory_lists?start_time=${startTime}&end_time=${endTime}&bottom_left_lat=${bottomLeftLat}&bottom_left_long=${bottomLeftLong}&top_right_lat=${topRightLat}&top_right_long=${topRightLong}`;
+       
         xhr.open('GET', url);
         xhr.onload = function () {
             if (xhr.status === 200) {
@@ -111,7 +111,7 @@ export default function VehicleTrajectory() {
                 map.current.setZoom(15);
 
                 GeoJSON["features"] = [];
-                GeoJSON["properties"] = {};
+                GeoJSON["properties"] = {"myColorProperty" : "red"};
                 GeoJSON["type"] = "FeatureCollection";
 
                 let route = {};
@@ -189,27 +189,7 @@ export default function VehicleTrajectory() {
 
                     let color = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
                     
-                    let uniqueId = uuidv4();
-
-                    map.current.addLayer({
-                        id: 'route-' + uniqueId,
-                        type: 'line',
-                        source: {
-                            type: 'geojson',
-                            data: {
-                                type: 'Feature',
-                                geometry: {
-                                    type: 'LineString',
-                                    coordinates: currentTrajectory
-                                }
-                            }
-                        },
-                        paint: {
-                            'line-color': color,
-                            'line-width': 5,
-                            'line-opacity': 0.8,
-                        }
-                    });
+                    route["properties"]["myColorProperty"] = color;
                 })
             }).then(function () {
                 GeoJSON["features"].push(route);
@@ -276,7 +256,7 @@ export default function VehicleTrajectory() {
                 <button onClick={fetchTrajectoryList}>Fetch Trajectories</button>
             </div>
             
-            <div ref={mapContainer} className="map-container" style={{ height: '500px' }}></div>
+            <div ref={mapContainer} className="map-container" style={{ height: '1000px' }}></div>
         </div>
     );
 }
