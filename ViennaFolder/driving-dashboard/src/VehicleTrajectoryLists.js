@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
 
+
 export default function VehicleTrajectory() {
     const [trajectoryList, setTrajectoryList] = useState([]);
     const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');
-    const [map, setMap] = useState(null); // initialize map once
     const [startTime, setStartTime] = useState('1624912116');
     const [endTime, setEndTime] = useState('1624915962');
     const [bottomLeftLat, setBottomLeftLat] = useState('30');
     const [bottomLeftLong, setBottomLeftLong] = useState('-90');
     const [topRightLat, setTopRightLat] = useState('40');
     const [topRightLong, setTopRightLong] = useState('-80');
+    const map = useRef(null);
 
     useEffect(() => {
         const initializeMap = () => {
-            const map = new mapboxgl.Map({
-                container: 'map', 
-                center: [-86.767960, 36.174465], // defalt at Nashville
-                zoom: 5
-            });
-        
-            setMap(map);
-
             map.on('load', async () => {
-
+                map.current = new mapboxgl.Map({
+                    container: 'map', 
+                    center: [-86.767960, 36.174465], // default at Nashville
+                    zoom: 5
+                });
                 let GeoJSON = {};
 
                 GeoJSON["features"] = [];
@@ -50,14 +47,12 @@ export default function VehicleTrajectory() {
                         'line-width': 5,
                         'line-opacity': 0.8,
                     }
-                });            
+                });
+                fetchTrajectoryList(); 
             });
         };
 
-        initializeMap();
-
-        fetchTrajectoryList(); 
-        
+        initializeMap();        
         // For each trajectory in the list, create a plot... add to the same Ma
     }, []);
 
@@ -142,10 +137,14 @@ export default function VehicleTrajectory() {
     const plotTrajectories = (idList) => {
         let allTrajectories = []
         let promises = [];
+        console.log(idList);
         idList.forEach((id) => {
+            console.log(id);
             promises.push(fetch(`https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=${id}`));
         });
-        Promise.all(promises).then(function() {
+        console.log(promises.length);
+        Promise.all(promises).then(function(...args) {
+            let argsArray = args[0];
             let GeoJSON = {};
             GeoJSON["features"] = [];
             GeoJSON["properties"] = {};
@@ -157,20 +156,32 @@ export default function VehicleTrajectory() {
             route["geometry"] = {};
             route["geometry"]["type"] = "MultiLineString";
             route["geometry"]["coordinates"] = [];
-            arguments.forEach((response) => {
+            console.log("Stepping through!");
+            console.log(argsArray.length);
+            let jsonPromises = [];
+            argsArray.forEach((response) => {
                 if (response.ok) {
-                    let json = response.json();
+                    console.log(response);
+                    let trajectoryResponse = response.json();
+                    jsonPromises.push(trajectoryResponse);
+                }
+            });
+            Promise.all(jsonPromises).then(function (...jsonArgs) {
+                jsonArgs[0].forEach((obj) => {
                     let currentTrajectory = [];
-                    for (let i = 0; i < json['latitude'].length; i++) {
-                        let pair = [json['longitude'].at(i), json['latitude'].at(i)];
+                    for (let i = 0; i < obj['latitude'].length; i++) {
+                        let pair = [obj['longitude'].at(i), obj['latitude'].at(i)];
                         currentTrajectory.push(pair);
                     }
                     route["geometry"]["coordinates"].push(currentTrajectory);
-                }
+                })
+            }).then(function () {
+                GeoJSON["features"].push(route);
+                map.getSource('my-route').setData(GeoJSON);
             });
-            map.getSource('my-route').setData(GeoJSON);
-        }).catch(function () {
+        }).catch(function (error) {
             console.log("Doh!");
+            console.log(error);
         });
         /*idList.forEach((id) => {
             const xhr = new XMLHttpRequest();
@@ -252,7 +263,7 @@ export default function VehicleTrajectory() {
                 <button onClick={fetchTrajectoryList}>Fetch Trajectories</button>
             </div>
             
-            <div id='map' style={{ height: '500px' }}></div>
+            <div ref={mapContainer} className="map-container" style={{ height: '500px' }}></div>
         </div>
     );
 }
