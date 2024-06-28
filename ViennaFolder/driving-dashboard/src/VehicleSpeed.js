@@ -3,7 +3,6 @@ import { Line } from "react-chartjs-2";
 import { CategoryScale } from 'chart.js';
 import Chart from "chart.js/auto";
 import "./styles.css";
-import Dashboard from './Dashboard';
 
 Chart.register(CategoryScale);
 
@@ -58,4 +57,3 @@ export default function VehicleSpeed({selectedTrajectoryId}) {
     </div>
   );
 }
-

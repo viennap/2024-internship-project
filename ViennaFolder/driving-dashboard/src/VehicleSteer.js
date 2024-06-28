@@ -6,7 +6,7 @@ import "./styles.css";
 
 Chart.register(CategoryScale);
 
-export default function VehicleSteer() {
+export default function VehicleSteer ({selectedTrajectoryId}) {
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {

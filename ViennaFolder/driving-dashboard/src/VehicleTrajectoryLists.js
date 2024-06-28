@@ -1,22 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
-
-import Dashboard from './Dashboard';
-import TrajectorySelector from './TrajectorySelector';
+import VehicleSpeed from './VehicleSpeed';
+import VehicleSteer from './VehicleSteer';
+import './styles.css';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
 
-export default function VehicleTrajectory() {
-    // const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');
-    // const [trajectoryList, setTrajectoryList] = useState([]);
-    
-    // const [startTime, setStartTime] = useState('1577936331'); // January 1, 2020
-    // const [endTime, setEndTime] = useState('1704166731'); // January 1, 2024
-    
-    // const [bottomLeftLat, setBottomLeftLat] = useState('30');
-    // const [bottomLeftLong, setBottomLeftLong] = useState('-90');
-    // const [topRightLat, setTopRightLat] = useState('40');
-    // const [topRightLong, setTopRightLong] = useState('-80');
+export default function VehicleTrajectory({
+        startTime,
+        endTime,
+        bottomLeftLat,
+        bottomLeftLong,
+        topRightLat,
+        topRightLong
+    }) {
+
+    const [trajectoryList, setTrajectoryList] = useState([]);
+    const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');
 
     const mapContainer = useRef(null);
     const map = useRef(null);
@@ -147,7 +147,6 @@ export default function VehicleTrajectory() {
         }
     };
 
-    
     // Currently plotting one after another instead of all at the same time.
     const plotTrajectories = (idList) => {
         clearLayers(); 
@@ -165,13 +164,6 @@ export default function VehicleTrajectory() {
             GeoJSON["properties"] = {};
             GeoJSON["type"] = "FeatureCollection";
 
-            let route = {};
-            route["type"] = "Feature";
-            route["properties"] = {};
-            route["geometry"] = {};
-            route["geometry"]["type"] = "MultiLineString";
-            route["geometry"]["coordinates"] = [];
-
             let jsonPromises = [];
             argsArray.forEach((response) => {
                 if (response.ok) {
@@ -181,6 +173,13 @@ export default function VehicleTrajectory() {
             });
             Promise.all(jsonPromises).then(function (...jsonArgs) {
                 jsonArgs[0].forEach((obj) => {
+                    let route = {};
+                    route["type"] = "Feature";
+                    route["properties"] = {};
+                    route["geometry"] = {};
+                    route["geometry"]["type"] = "MultiLineString";
+                    route["geometry"]["coordinates"] = [];
+
                     let currentTrajectory = [];
                     for (let i = 0; i < obj['latitude'].length; i++) {
                         let pair = [obj['longitude'].at(i), obj['latitude'].at(i)];
@@ -192,9 +191,10 @@ export default function VehicleTrajectory() {
                     let color = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
                     
                     route["properties"]["myColorProperty"] = color;
+
+                    GeoJSON["features"].push(route);
                 })
             }).then(function () {
-                GeoJSON["features"].push(route);
                 map.current.getSource('my-route').setData(GeoJSON);
             });
         }).catch(function (error) {
@@ -217,28 +217,27 @@ export default function VehicleTrajectory() {
             setSelectedTrajectoryId(event.target.value);
             console.log("Selected trajectory: " + selectedTrajectoryId);
             createPlot(selectedTrajectoryId);
+
+
         }
     };
 
     return (
         <div>
-            <Dashboard 
-                startTime={startTime} setStartTime={setStartTime}
-                endTime={endTime} setEndTime={setEndTime}
-                bottomLeftLat={bottomLeftLat} setBottomLeftLat={setBottomLeftLat}
-                bottomLeftLong={bottomLeftLong} setBottomLeftLong={setBottomLeftLong}
-                topRightLat={topRightLat} setTopRightLat={setTopRightLat}
-                topRightLong={topRightLong} setTopRightLong={setTopRightLong}
-                fetchTrajectoryList={fetchTrajectoryList}
-            />
-
-            <TrajectorySelector 
-                selectedTrajectoryId={selectedTrajectoryId}
-                trajectoryList={trajectoryList}
-                handleSelectChange={handleSelectChange}
-            />
-
-            <div ref={mapContainer} className="map-container" style={{ height: '1000px' }}></div>
+            <h2>Select a Trajectory ID:</h2>
+            <select value={selectedTrajectoryId} onChange={handleSelectChange}>
+                {trajectoryList.map((id) => (
+                    <option key={id} value={id}>{id}</option>
+                ))}
+            </select>
+            
+            <div>
+                <button onClick={fetchTrajectoryList}>Fetch Trajectories</button>
+            </div>
+            
+            <div ref={mapContainer} className="map-container" style= {{ height: '500px' }}></div>
+            {/* <VehicleSpeed selectedTrajectoryId = {selectedTrajectoryId} />
+            <VehicleSteer selectedTrajectoryId = {selectedTrajectoryId} /> */}
         </div>
     );
 }
