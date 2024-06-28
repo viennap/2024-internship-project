@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import VehicleTrajectoryLists from './VehicleTrajectoryLists.js';
+import Map from './Map.js';
 
 export default function Dashboard() {
     const [trajectoryList, setTrajectoryList] = useState({});
@@ -15,6 +16,10 @@ export default function Dashboard() {
                     />
             </div>
 
+            <div>
+                <Map trajectoryList = {trajectoryList} selectedTrajectoryId = {selectedTrajectoryId}/>
+            </div>
+            
             {/* Generating charts */}
 
             {/* <div>
