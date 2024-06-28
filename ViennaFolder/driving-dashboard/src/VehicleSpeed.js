@@ -3,15 +3,18 @@ import { Line } from "react-chartjs-2";
 import { CategoryScale } from 'chart.js';
 import Chart from "chart.js/auto";
 import "./styles.css";
+import Dashboard from './Dashboard';
 
 Chart.register(CategoryScale);
 
-export default function VehicleSpeed() {
+export default function VehicleSpeed({selectedTrajectoryId}) {
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {
+    if (!selectedTrajectoryId) return;
+
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_signal?signal_name=speed&trajectory_id=2021-01-04-22-36-11_2T3Y1RFV8KC014025');
+    xhr.open('GET', `https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_signal?signal_name=speed&trajectory_id=${selectedTrajectoryId}`);
     xhr.onload = function () {
       if (xhr.status === 200) {
         const parsed = JSON.parse(xhr.responseText);
@@ -33,7 +36,7 @@ export default function VehicleSpeed() {
       }
     };
     xhr.send();
-  }, []);
+  }, [selectedTrajectoryId]);
 
   return (
     <div className="chart-container">

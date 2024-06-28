@@ -5,6 +5,7 @@ import VehicleSteer from './VehicleSteer';
 import VehicleSpeed from './VehicleSpeed';
 import VehicleTrajectory from './VehicleTrajectory';
 import VehicleTrajectoryLists from './VehicleTrajectoryLists';
+import Dashboard from './Dashboard';
 
 export default function App() {
     return (
@@ -15,7 +16,7 @@ export default function App() {
 
         // Refactor VehicleTrajectory to initialize map first
         // VehicleTrajectory.js, VehicleSpeed.js, and VehicleSteer.js should take in trajectory id as input
-        <VehicleTrajectoryLists />
+        <Dashboard />
         // <div className="container">
         //     <div className="left">
                 

@@ -1,21 +1,23 @@
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
-import { v4 as uuidv4 } from 'uuid'; // universally unique identifier
+
+import Dashboard from './Dashboard';
+import TrajectorySelector from './TrajectorySelector';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
 
 export default function VehicleTrajectory() {
-    const [trajectoryList, setTrajectoryList] = useState([]);
-    const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');
+    // const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');
+    // const [trajectoryList, setTrajectoryList] = useState([]);
     
-    const [startTime, setStartTime] = useState('1577936331'); // January 1, 2020
-    const [endTime, setEndTime] = useState('1704166731'); // January 1, 2024
+    // const [startTime, setStartTime] = useState('1577936331'); // January 1, 2020
+    // const [endTime, setEndTime] = useState('1704166731'); // January 1, 2024
     
-    const [bottomLeftLat, setBottomLeftLat] = useState('30');
-    const [bottomLeftLong, setBottomLeftLong] = useState('-90');
-    const [topRightLat, setTopRightLat] = useState('40');
-    const [topRightLong, setTopRightLong] = useState('-80');
-    
+    // const [bottomLeftLat, setBottomLeftLat] = useState('30');
+    // const [bottomLeftLong, setBottomLeftLong] = useState('-90');
+    // const [topRightLat, setTopRightLat] = useState('40');
+    // const [topRightLong, setTopRightLong] = useState('-80');
+
     const mapContainer = useRef(null);
     const map = useRef(null);
 
@@ -220,42 +222,22 @@ export default function VehicleTrajectory() {
 
     return (
         <div>
-            <h2>Select a Trajectory ID:</h2>
-            <select value={selectedTrajectoryId} onChange={handleSelectChange}>
-                {trajectoryList.map((id) => (
-                    <option key={id} value={id}>{id}</option>
-                ))}
-            </select>
-            <div>
-                <label>
-                    Start Time:
-                    <input type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-                </label>
-                <label>
-                    End Time:
-                    <input type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-                </label>
+            <Dashboard 
+                startTime={startTime} setStartTime={setStartTime}
+                endTime={endTime} setEndTime={setEndTime}
+                bottomLeftLat={bottomLeftLat} setBottomLeftLat={setBottomLeftLat}
+                bottomLeftLong={bottomLeftLong} setBottomLeftLong={setBottomLeftLong}
+                topRightLat={topRightLat} setTopRightLat={setTopRightLat}
+                topRightLong={topRightLong} setTopRightLong={setTopRightLong}
+                fetchTrajectoryList={fetchTrajectoryList}
+            />
 
-                <label>
-                    Bottom Left Longitude
-                    <input type="text" value={bottomLeftLong} onChange={(e) => setBottomLeftLong(e.target.value)} />
-                </label>
-                <label>
-                    Bottom Left Latitude
-                    <input type="text" value={bottomLeftLat} onChange={(e) => setBottomLeftLat(e.target.value)} />
-                </label>
-                <label>
-                    Top Right Longitude
-                    <input type="text" value={topRightLong} onChange={(e) => setTopRightLong(e.target.value)} />
-                </label>
-                <label>
-                    Top Right Latitude
-                    <input type="text" value={topRightLat} onChange={(e) => setTopRightLat(e.target.value)} />
-                </label>
+            <TrajectorySelector 
+                selectedTrajectoryId={selectedTrajectoryId}
+                trajectoryList={trajectoryList}
+                handleSelectChange={handleSelectChange}
+            />
 
-                <button onClick={fetchTrajectoryList}>Fetch Trajectories</button>
-            </div>
-            
             <div ref={mapContainer} className="map-container" style={{ height: '1000px' }}></div>
         </div>
     );
