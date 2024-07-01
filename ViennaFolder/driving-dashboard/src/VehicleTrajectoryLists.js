@@ -79,23 +79,26 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
     };
     
     const handleSelectChange = (event) => {
-        if (trajectoryList.includes(event.target.value)) {
-            selectedTrajectoryIdSetter(event.target.value);
-            console.log("Selected trajectory: " + selectedTrajectoryId);
-        }
+        selectedTrajectoryIdSetter(event.target.value);
+        console.log("Selected trajectory: " + selectedTrajectoryId);
     };
+
+    const createSelectOption = () => {
+        var options = "";
+        for (const [id, trajectory] of Object.entries(trajectoryList)) {
+            options += "<option>" + id + "</option>";
+        }
+
+        if (options.length !== 0) {
+            document.getElementById("trajectory-options").innerHTML = options; 
+        }
+    } 
 
     return (
         <div>
             <h2>Select a Trajectory ID:</h2>
-            <select value={selectedTrajectoryId} onChange={handleSelectChange}>
-                {/* {for (const [id, trajectory] of Object.entries(trajectoryList)) {
-                    <option key={id} value={id}>{id}</option>
-                }} */}
-                {/* {trajectoryList.map((id) => (
-                    <option key={id} value={id}>{id}</option>
-                ))} Find equivalent for iterating through dictionary instead of array. */}
-            </select>
+            <select id = "trajectory-options" value={selectedTrajectoryId} onChange={handleSelectChange} />
+                {createSelectOption()}
             
             <div> 
                 <label>
