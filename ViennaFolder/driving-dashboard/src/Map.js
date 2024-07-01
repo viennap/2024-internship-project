@@ -56,6 +56,7 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
             GeoJSON["type"] = "FeatureCollection";
 
             console.log(GeoJSON);
+            console.log(trajectoryList);
 
             for (const [id, trajectory] of Object.entries(trajectoryList)) {
                 let route = {};
@@ -66,6 +67,8 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
                 route["geometry"]["coordinates"] = [];
 
                 let currentTrajectory = [];
+                console.log(id);
+                console.log(trajectory);
                 for (let i = 0; i < trajectory['latitude'].length; i++) {
                     let pair = [trajectory['longitude'].at(i), trajectory['latitude'].at(i)];
                     currentTrajectory.push(pair);

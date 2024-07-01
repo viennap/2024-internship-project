@@ -29,7 +29,6 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
                 const response = JSON.parse(xhr.responseText);
                 let trajectories = response['trajectories'];
                 let idList = Object.keys(trajectories);
-                trajectoryListSetter(idList);
                 if (idList.length !== 0) {
                     selectedTrajectoryIdSetter(idList[0]); 
                     plotTrajectories(trajectories, idList);     
@@ -70,6 +69,7 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
                    trajectories[obj["id"]]["longitude"] = obj["longitude"];
                 })
             }).then(function () {
+                console.log(trajectories);
                 trajectoryListSetter(trajectories);
             });
         }).catch(function (error) {
@@ -100,32 +100,32 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
             <div> 
                 <label>
                     Start Time:
-                    <input type="text" onChange={(e) => setStartTime(e.target.value)} />
+                    <input type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
                 </label>
 
                 <label>
                     End Time:
-                    <input type="text" onChange={(e) => setEndTime(e.target.value)} />
+                    <input type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
                 </label>
 
                 <label>
                     Bottom Left Longitude:
-                    <input type="text" onChange={(e) => setBottomLeftLong(e.target.value)} />
+                    <input type="text" value={bottomLeftLong} onChange={(e) => setBottomLeftLong(e.target.value)} />
                 </label>
                 
                 <label>
                     Bottom Left Latitude:
-                    <input type="text" onChange={(e) => setBottomLeftLat(e.target.value)} />
+                    <input type="text" value={bottomLeftLat} onChange={(e) => setBottomLeftLat(e.target.value)} />
                 </label>
 
                 <label>
                     Top Right Longitude:
-                    <input type="text" onChange={(e) => setTopRightLong(e.target.value)} />
+                    <input type="text" value={topRightLong} onChange={(e) => setTopRightLong(e.target.value)} />
                 </label>
 
                 <label>
                     Top Right Latitude:
-                    <input type="text" onChange={(e) => setTopRightLat(e.target.value)} />
+                    <input type="text" value={topRightLat} onChange={(e) => setTopRightLat(e.target.value)} />
                 </label>
                 
             </div>
