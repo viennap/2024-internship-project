@@ -55,20 +55,17 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
             GeoJSON["properties"] = {};
             GeoJSON["type"] = "FeatureCollection";
 
-            // console.log(GeoJSON);
-            // console.log(trajectoryList);
-
             for (const [id, trajectory] of Object.entries(trajectoryList)) {
                 let route = {};
                 route["type"] = "Feature";
+                route["animate"] = true;
                 route["properties"] = {};
                 route["geometry"] = {};
                 route["geometry"]["type"] = "MultiLineString";
                 route["geometry"]["coordinates"] = [];
 
                 let currentTrajectory = [];
-                // console.log(id);
-                // console.log(trajectory);
+
                 for (let i = 0; i < trajectory['latitude'].length; i++) {
                     let pair = [trajectory['longitude'].at(i), trajectory['latitude'].at(i)];
                     currentTrajectory.push(pair);
@@ -77,7 +74,19 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
                 route["geometry"]["coordinates"].push(currentTrajectory);
 
                 let color = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
-                
+
+                if (selectedTrajectoryId === "NONE") {
+                    // Do nothing. 
+                }
+                else if (id === selectedTrajectoryId) {
+                    color = '#FFFF00';
+                }
+                else {
+                    color = '#000000';
+                }
+
+                console.log(route); 
+
                 route["properties"]["myColorProperty"] = color;
 
                 GeoJSON["features"].push(route);

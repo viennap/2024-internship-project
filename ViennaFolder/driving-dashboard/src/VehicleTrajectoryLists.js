@@ -30,7 +30,8 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
                 let trajectories = response['trajectories'];
                 let idList = Object.keys(trajectories);
                 if (idList.length !== 0) {
-                    selectedTrajectoryIdSetter(idList[0]); 
+                    selectedTrajectoryIdSetter("NONE"); 
+                    // selectedTrajectoryIdSetter(idList[0]); 
                     plotTrajectories(trajectories, idList);     
                 }
                 else {
@@ -43,15 +44,12 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
         xhr.send();
     };
 
-    // Currently plotting one after another instead of all at the same time.
     const plotTrajectories = (trajectories, idList) => {
         let promises = [];
-        // console.log(idList);
 
         idList.forEach((id) => {
             promises.push(fetch(`https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_trajectory?trajectory_id=${id}`));
         });
-        // console.log(promises.length);
 
         Promise.all(promises).then(function(...args) {
             let argsArray = args[0];
