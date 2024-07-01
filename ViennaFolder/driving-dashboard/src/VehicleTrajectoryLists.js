@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
-import VehicleSpeed from './VehicleSpeed';
-import VehicleSteer from './VehicleSteer';
+import Dashboard from './Dashboard.js';
 import './styles.css';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
 
-export default function VehicleTrajectory({trajectoryListSetter, selectedTrajectoryIdSetter}) {
+export default function VehicleTrajectory({trajectoryListSetter, selectedTrajectoryIdSetter, trajectoryList, selectedTrajectoryId}) {
     
     const [startTime, setStartTime] = useState('1577936331'); // January 1, 2020
     const [endTime, setEndTime] = useState('1704166731'); // January 1, 2024
@@ -30,13 +29,13 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
                 const response = JSON.parse(xhr.responseText);
                 let trajectories = response['trajectories'];
                 let idList = Object.keys(trajectories);
-                setTrajectoryList(idList);
+                trajectoryListSetter(idList);
                 if (idList.length !== 0) {
-                    setSelectedTrajectoryId(idList[0]); 
+                    selectedTrajectoryIdSetter(idList[0]); 
                     plotTrajectories(trajectories, idList);     
                 }
                 else {
-                    setSelectedTrajectoryId('No valid trajectories.');
+                    selectedTrajectoryIdSetter('No valid trajectories.');
                 }       
             } else {
                 console.log('Error fetching trajectory list.');
@@ -90,9 +89,9 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
         <div>
             <h2>Select a Trajectory ID:</h2>
             <select value={selectedTrajectoryId} onChange={handleSelectChange}>
-                {trajectoryList.map((id) => (
+                {/* {trajectoryList.map((id) => (
                     <option key={id} value={id}>{id}</option>
-                ))}
+                ))} Find equivalent for iterating through dictionary instead of array. */}
             </select>
             
             <div> 
