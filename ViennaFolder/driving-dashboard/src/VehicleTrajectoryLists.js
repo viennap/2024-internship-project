@@ -89,6 +89,9 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
         <div>
             <h2>Select a Trajectory ID:</h2>
             <select value={selectedTrajectoryId} onChange={handleSelectChange}>
+                {/* {for (const [id, trajectory] of Object.entries(trajectoryList)) {
+                    <option key={id} value={id}>{id}</option>
+                }} */}
                 {/* {trajectoryList.map((id) => (
                     <option key={id} value={id}>{id}</option>
                 ))} Find equivalent for iterating through dictionary instead of array. */}

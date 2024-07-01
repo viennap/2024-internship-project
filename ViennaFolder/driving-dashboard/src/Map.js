@@ -23,7 +23,7 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
             GeoJSON["properties"] = {};
             GeoJSON["type"] = "FeatureCollection";
 
-            map.current.addSource("my-route", {
+            map.current.addSource('my-route', {
                 "type": "geojson",
                 "data": GeoJSON
             });
@@ -51,6 +51,8 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
         GeoJSON["properties"] = {};
         GeoJSON["type"] = "FeatureCollection";
 
+        console.log(GeoJSON);
+
         for (const [id, trajectory] of Object.entries(trajectoryList)) {
             let route = {};
             route["type"] = "Feature";
@@ -73,6 +75,7 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
 
             GeoJSON["features"].push(route);
         }
+
 
         map.current.getSource('my-route').setData(GeoJSON);
 
