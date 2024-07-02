@@ -14,28 +14,28 @@ export default function Dashboard() {
     const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');   
 
     return (
-        <Box sx={{p: 2}}>
-            <Grid container spacing={2}>
-                <Grid item xs={12} sm = {12}>
-                    <VehicleTrajectoryLists 
-                        trajectoryListSetter={setTrajectoryList} 
-                        selectedTrajectoryIdSetter={setSelectedTrajectoryId} 
-                        trajectoryList={trajectoryList}
-                        selectedTrajectoryId={selectedTrajectoryId} 
-                    />
-                </Grid>
+        <Grid padding = {2}>
+            <Grid item xs={12} sm = {12} mb = {2}>
+                <VehicleTrajectoryLists 
+                    trajectoryListSetter={setTrajectoryList} 
+                    selectedTrajectoryIdSetter={setSelectedTrajectoryId} 
+                    trajectoryList={trajectoryList}
+                    selectedTrajectoryId={selectedTrajectoryId} 
+                />
+            </Grid>
                 
+            <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}> 
                     <Map trajectoryList={trajectoryList} selectedTrajectoryId={selectedTrajectoryId}/>
-                </Grid>
-    
+                </Grid>    
+                
                 <Grid item xs={12} sm={6}>
-                    <Stack spacing={2}>
-                        <VehicleSpeed selectedTrajectoryId={selectedTrajectoryId}/>
+                     <Stack spacing={2}>
+                       <VehicleSpeed selectedTrajectoryId={selectedTrajectoryId}/>
                         <VehicleSteer selectedTrajectoryId={selectedTrajectoryId} />
                     </Stack>
                 </Grid>
             </Grid>
-        </Box>
+        </Grid>
     );
 }

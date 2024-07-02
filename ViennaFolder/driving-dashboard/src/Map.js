@@ -14,7 +14,7 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
           container: mapContainer.current,
           style: 'mapbox://styles/mapbox/streets-v12',
           center: [-86.767960, 36.174465],
-          zoom: 5
+          zoom: 6
         });
 
         newMap.on('load', async () => {
