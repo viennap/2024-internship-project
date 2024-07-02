@@ -82,7 +82,8 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
                     color = '#FFFF00';
                 }
                 else {
-                    color = '#000000';
+                    color = '#D3D3D3';
+                    
                 }
 
                 console.log(route); 

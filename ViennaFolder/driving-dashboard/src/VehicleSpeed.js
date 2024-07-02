@@ -6,12 +6,19 @@ import "./styles.css";
 
 Chart.register(CategoryScale);
 
+const defaultChartData = {
+  labels: [],
+  datasets: [{
+    label: 'Wheel Speed',
+    data: [],
+    tension: 0.1
+  }]
+};
+
 export default function VehicleSpeed({selectedTrajectoryId}) {
-  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
+  const [chartData, setChartData] = useState(defaultChartData);
 
   useEffect(() => {
-    if (!selectedTrajectoryId) return;
-
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_signal?signal_name=speed&trajectory_id=${selectedTrajectoryId}`);
     xhr.onload = function () {
@@ -39,7 +46,7 @@ export default function VehicleSpeed({selectedTrajectoryId}) {
 
   return (
     <div className="chart-container">
-      <h2 style={{ textAlign: "center" }}>Wheel Speed Over Time</h2>
+      <h3 style={{ textAlign: "center" }}>Wheel Speed Over Time</h3>
       <Line
         data={chartData}
         options={{

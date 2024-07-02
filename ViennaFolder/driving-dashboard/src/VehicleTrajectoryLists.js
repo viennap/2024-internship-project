@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
-import Dashboard from './Dashboard.js';
 import './styles.css';
+
+import { Container, Grid, Typography, FormControl, Select, TextField, Button, MenuItem, Box } from '@mui/material';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
 
@@ -80,63 +81,112 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
         selectedTrajectoryIdSetter(event.target.value);
         console.log("Selected trajectory: " + selectedTrajectoryId);
     };
-
-    const createSelectOption = () => {
-        var options = "";
-        for (const [id, trajectory] of Object.entries(trajectoryList)) {
-            options += "<option>" + id + "</option>";
-        }
-
-        if (options.length !== 0) {
-            document.getElementById("trajectory-options").innerHTML = options; 
-        }
-    } 
+    
+    const createSelectOptions = () => {
+        return Object.entries(trajectoryList).map(([id, trajectory]) => (
+            <MenuItem key={id} value={id}>
+                {id}
+            </MenuItem>
+        ));
+    };
 
     return (
-        <div>
-            <h2>Select a Trajectory ID:</h2>
-            <select id = "trajectory-options" value={selectedTrajectoryId} onChange={handleSelectChange} />
-                {createSelectOption()}
-            
-            <div> 
-                <label>
-                    Start Time:
-                    <input type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-                </label>
-
-                <label>
-                    End Time:
-                    <input type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-                </label>
-
-                <label>
-                    Bottom Left Longitude:
-                    <input type="text" value={bottomLeftLong} onChange={(e) => setBottomLeftLong(e.target.value)} />
-                </label>
-                
-                <label>
-                    Bottom Left Latitude:
-                    <input type="text" value={bottomLeftLat} onChange={(e) => setBottomLeftLat(e.target.value)} />
-                </label>
-
-                <label>
-                    Top Right Longitude:
-                    <input type="text" value={topRightLong} onChange={(e) => setTopRightLong(e.target.value)} />
-                </label>
-
-                <label>
-                    Top Right Latitude:
-                    <input type="text" value={topRightLat} onChange={(e) => setTopRightLat(e.target.value)} />
-                </label>
-                
-            </div>
-
-            <div>
-                <button onClick={fetchTrajectoryList}>Fetch Trajectories</button>
-            </div>
-            
-            {/* <VehicleSpeed selectedTrajectoryId = {selectedTrajectoryId} />
-            <VehicleSteer selectedTrajectoryId = {selectedTrajectoryId} /> */}
-        </div>
-    );
+        <Box sx={{ maxWidth: '100%', p: 2, backgroundColor: '#ECECEC'}}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12}>
+              <FormControl fullWidth size="small">
+                <Typography variant="caption" gutterBottom>
+                  Select Trajectory
+                </Typography>
+                <Select
+                  id="trajectory-select"
+                  value={selectedTrajectoryId}
+                  onChange={handleSelectChange}
+                  size="small"
+                >
+                  {createSelectOptions()}
+                </Select>
+              </FormControl>
+            </Grid>
+      
+            <Grid item xs={6} sm={2}>
+              <TextField
+                fullWidth
+                label="Start Time"
+                color="secondary"
+                variant="outlined"
+                size="small"
+                value={startTime}
+                onChange={(event) => setStartTime(event.target.value)}
+              />
+            </Grid>
+      
+            <Grid item xs={6} sm={2}>
+              <TextField
+                fullWidth
+                label="End Time"
+                color="secondary"
+                variant="outlined"
+                size="small"
+                value={endTime}
+                onChange={(event) => setEndTime(event.target.value)}
+              />
+            </Grid>
+      
+            <Grid item xs={6} sm={2}>
+              <TextField
+                fullWidth
+                label="Bottom Left Long"
+                color="secondary"
+                variant="outlined"
+                size="small"
+                value={bottomLeftLong}
+                onChange={(event) => setBottomLeftLong(event.target.value)}
+              />
+            </Grid>
+      
+            <Grid item xs={6} sm={2}>
+              <TextField
+                fullWidth
+                label="Bottom Left Lat"
+                color="secondary"
+                variant="outlined"
+                size="small"
+                value={bottomLeftLat}
+                onChange={(event) => setBottomLeftLat(event.target.value)}
+              />
+            </Grid>
+      
+            <Grid item xs={6} sm={2}>
+              <TextField
+                fullWidth
+                label="Top Right Long"
+                color="secondary"
+                variant="outlined"
+                size="small"
+                value={topRightLong}
+                onChange={(event) => setTopRightLong(event.target.value)}
+              />
+            </Grid>
+      
+            <Grid item xs={6} sm={2}>
+              <TextField
+                fullWidth
+                label="Top Right Lat"
+                color="secondary"
+                variant="outlined"
+                size="small"
+                value={topRightLat}
+                onChange={(event) => setTopRightLat(event.target.value)}
+              />
+            </Grid>
+      
+            <Grid item xs={12} sm={3}>
+              <Button variant="contained" color="primary" onClick={fetchTrajectoryList} fullWidth size="small">
+                Fetch Trajectories
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      );
 }

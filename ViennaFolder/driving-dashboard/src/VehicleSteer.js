@@ -6,15 +6,25 @@ import "./styles.css";
 
 Chart.register(CategoryScale);
 
+const defaultChartData = {
+  labels: [],
+  datasets: [{
+    label: 'Steering Angle',
+    data: [],
+    tension: 0.1
+  }]
+};
+
 export default function VehicleSteer ({selectedTrajectoryId}) {
-  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
+  const [chartData, setChartData] = useState(defaultChartData);
 
   useEffect(() => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_signal?signal_name=steer&trajectory_id=2021-01-04-22-36-11_2T3Y1RFV8KC014025');
+    xhr.open('GET', `https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_signal?signal_name=steer&trajectory_id=${selectedTrajectoryId}`);
     xhr.onload = function () {
       if (xhr.status === 200) {
         const parsed = JSON.parse(xhr.responseText);
+
         console.log(parsed);
         console.log(parsed['time']);
 
@@ -33,11 +43,11 @@ export default function VehicleSteer ({selectedTrajectoryId}) {
       }
     };
     xhr.send();
-  }, []);
+  }, [selectedTrajectoryId]);
 
   return (
     <div className="chart-container">
-      <h2 style={{ textAlign: "center" }}>Steering Angle Over Time</h2>
+      <h3 style={{ textAlign: "center" }}>Steering Angle Over Time</h3>
       <Line
         data={chartData}
         options={{
