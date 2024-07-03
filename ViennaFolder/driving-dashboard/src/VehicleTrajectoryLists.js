@@ -31,7 +31,7 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
                 let trajectories = response['trajectories'];
                 let idList = Object.keys(trajectories);
                 if (idList.length !== 0) {
-                    selectedTrajectoryIdSetter("NONE"); 
+                    selectedTrajectoryIdSetter("All Trajectories");   
                     // selectedTrajectoryIdSetter(idList[0]); 
                     plotTrajectories(trajectories, idList);     
                 }
@@ -63,6 +63,7 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
                 }
             });
             Promise.all(jsonPromises).then(function (...jsonArgs) {
+                let set = false; 
                 jsonArgs[0].forEach((obj) => {
                    trajectories[obj["id"]]["latitude"] = obj["latitude"];
                    trajectories[obj["id"]]["longitude"] = obj["longitude"];
@@ -80,15 +81,31 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
     const handleSelectChange = (event) => {
         selectedTrajectoryIdSetter(event.target.value);
         console.log("Selected trajectory: " + selectedTrajectoryId);
+        if (event.target.value === "All Trajectories") {
+            fetchTrajectoryList(); 
+        }
     };
     
     const createSelectOptions = () => {
-        return Object.entries(trajectoryList).map(([id, trajectory]) => (
-            <MenuItem key={id} value={id}>
-                {id}
+      // if trajectory list is NOT of length 0, then also add "display all trajectories" option at top
+        let options = [];
+        if (Object.entries(trajectoryList).length !== 0) {
+          options.push(
+            <MenuItem key={"All Trajectories"} value={"All Trajectories"}>
+               All Trajectories
             </MenuItem>
-        ));
+          );
+        }
+        for (const [id, trajectory] of Object.entries(trajectoryList)) {
+          options.push(
+              <MenuItem key={id} value={id}>
+                  {id}
+              </MenuItem>
+          );
+        }
+        return options;
     };
+
 
     return (
         <Box sx={{ maxWidth: '100%', p: 2, backgroundColor: '#ECECEC'}}>
