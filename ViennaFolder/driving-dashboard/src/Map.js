@@ -38,9 +38,20 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
                     'line-cap': 'round'
                 },
                 paint: {
-                    'line-color': ['get', 'myColorProperty'],
-                    'line-width': ['get', 'myWidthProperty'],
-                    'line-opacity': ['get', 'myOpacityProperty']
+                    'line-color': ['case',
+                        ['all', ['to-boolean', ['get', 'isSelected']], ['to-boolean', ['get', 'oneIsSelected']]], '#FF0000',
+                        ['get', 'oneIsSelected'], '#000000',
+                        ['get', 'myColorProperty']
+                    ],
+                    'line-width': ['case',
+                        ['get', 'isSelected'], 12.0,
+                        5.0
+                    ],
+                    'line-opacity': ['case',
+                        ['all', ['to-boolean', ['get', 'isSelected']], ['to-boolean', ['get', 'oneIsSelected']]], 0.8,
+                        ['get', 'oneIsSelected'], 0,
+                        0.8
+                    ],
                 }
             });
             setMapReady(true);
@@ -73,34 +84,28 @@ export default function Map({trajectoryList, selectedTrajectoryId}){
                 route["geometry"]["coordinates"].push(currentTrajectory);
 
                 let color = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
-                let width = 5; 
-                let opacity = 0.8; 
 
                 if (selectedTrajectoryId === "All Trajectories") {
                     // Do nothing. 
                 }
-                else if (id === selectedTrajectoryId) {
-                    color = '#FF0000';
-                    width = 12; 
+                else if (id === selectedTrajectoryId) { 
                     let midPoint = currentTrajectory.length/2; 
                     map.current.setCenter(currentTrajectory[midPoint]);
                     map.current.setZoom(8);
                     // Extra: Make sure the most out-lying trajectory are within the map
                 }
-                else {
-                    opacity = 0.1; 
-                }
                 
+                route["properties"]["trajectoryId"] = id;
+                route["properties"]["isSelected"] = (id === selectedTrajectoryId);
+                route["properties"]["oneIsSelected"] = (selectedTrajectoryId !==  "All Trajectories");
                 route["properties"]["myColorProperty"] = color;
-                route["properties"]["myWidthProperty"] = width; 
-                route["properties"]["myOpacityProperty"] = opacity; 
                 
                 GeoJSON["features"].push(route);
             }
+            console.log(GeoJSON);
             map.current.getSource('my-route').setData(GeoJSON);
         }
         // add a new layer for the selected trajectory id on top ??
-
     }, [mapReady, trajectoryList, selectedTrajectoryId]);
 
     // map.current.on('click', (event) => {
