@@ -12,6 +12,15 @@ import { Stack, Container, Grid, Typography, FormControl, Select, TextField, But
 export default function Dashboard() {
     const [trajectoryList, setTrajectoryList] = useState({});
     const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');   
+    const [markedTimestamp, setMarkedTimestamp] = useState(0); 
+
+    const handleTrajectoryClick = (trajectoryId) => {
+        setSelectedTrajectoryId(trajectoryId);
+    };
+
+    const handleMarkerDrop = (markedTimestamp) => {
+        setMarkedTimestamp(markedTimestamp);
+    };
 
     return (
         <Grid padding = {2}>
@@ -26,13 +35,24 @@ export default function Dashboard() {
                 
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}> 
-                    <Map trajectoryList={trajectoryList} selectedTrajectoryId={selectedTrajectoryId}/>
+                    <Map 
+                        trajectoryList={trajectoryList} 
+                        selectedTrajectoryId={selectedTrajectoryId}
+                        onTrajectoryClick={handleTrajectoryClick}
+                        onMarkerDrop={handleMarkerDrop}
+                        />
                 </Grid>    
                 
                 <Grid item xs={12} sm={6}>
                      <Stack spacing={2}>
-                       <VehicleSpeed selectedTrajectoryId={selectedTrajectoryId}/>
-                        <VehicleSteer selectedTrajectoryId={selectedTrajectoryId} />
+                       <VehicleSpeed 
+                            selectedTrajectoryId={selectedTrajectoryId}
+                            markedTimestamp={markedTimestamp}
+                        />
+                        <VehicleSteer 
+                            selectedTrajectoryId={selectedTrajectoryId} 
+                            markedTimestamp={markedTimestamp}
+                        />
                     </Stack>
                 </Grid>
             </Grid>

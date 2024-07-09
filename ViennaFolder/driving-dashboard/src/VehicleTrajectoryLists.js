@@ -67,6 +67,7 @@ export default function VehicleTrajectory({trajectoryListSetter, selectedTraject
                 jsonArgs[0].forEach((obj) => {
                    trajectories[obj["id"]]["latitude"] = obj["latitude"];
                    trajectories[obj["id"]]["longitude"] = obj["longitude"];
+                   trajectories[obj["id"]]["time"] = obj["time"];
                 })
             }).then(function () {
                 console.log(trajectories);

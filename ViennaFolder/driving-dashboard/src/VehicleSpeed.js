@@ -15,8 +15,9 @@ const defaultChartData = {
   }]
 };
 
-export default function VehicleSpeed({selectedTrajectoryId}) {
+export default function VehicleSpeed({selectedTrajectoryId, markedTimestamp}) {
   const [chartData, setChartData] = useState(defaultChartData);
+  // console.log(markedTimestamp); 
 
   useEffect(() => {
     const xhr = new XMLHttpRequest();
@@ -24,8 +25,6 @@ export default function VehicleSpeed({selectedTrajectoryId}) {
     xhr.onload = function () {
       if (xhr.status === 200) {
         const parsed = JSON.parse(xhr.responseText);
-        console.log(parsed);
-        console.log(parsed['time']);
 
         const data = {
           labels: parsed['time'],
@@ -42,7 +41,7 @@ export default function VehicleSpeed({selectedTrajectoryId}) {
       }
     };
     xhr.send();
-  }, [selectedTrajectoryId]);
+  }, [selectedTrajectoryId, markedTimestamp]);
 
   return (
     <div className="chart-container">

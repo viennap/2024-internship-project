@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Line } from "react-chartjs-2";
+import { Line} from "react-chartjs-2";
 import { CategoryScale } from 'chart.js';
 import Chart from "chart.js/auto";
 import "./styles.css";
@@ -15,8 +15,9 @@ const defaultChartData = {
   }]
 };
 
-export default function VehicleSteer ({selectedTrajectoryId}) {
+export default function VehicleSteer ({selectedTrajectoryId, markedTimestamp}) {
   const [chartData, setChartData] = useState(defaultChartData);
+  // console.log(markedTimestamp); 
 
   useEffect(() => {
     const xhr = new XMLHttpRequest();
@@ -24,9 +25,6 @@ export default function VehicleSteer ({selectedTrajectoryId}) {
     xhr.onload = function () {
       if (xhr.status === 200) {
         const parsed = JSON.parse(xhr.responseText);
-
-        console.log(parsed);
-        console.log(parsed['time']);
 
         const data = {
           labels: parsed['time'],
@@ -43,7 +41,7 @@ export default function VehicleSteer ({selectedTrajectoryId}) {
       }
     };
     xhr.send();
-  }, [selectedTrajectoryId]);
+  }, [selectedTrajectoryId, markedTimestamp]);
 
   return (
     <div className="chart-container">
@@ -53,7 +51,7 @@ export default function VehicleSteer ({selectedTrajectoryId}) {
         options={{
           plugins: {
             title: {
-              display: true,
+              display: true
             },
             legend: {
               display: true,
@@ -62,6 +60,7 @@ export default function VehicleSteer ({selectedTrajectoryId}) {
           }
         }}
       />
+
     </div>
   );
 }
