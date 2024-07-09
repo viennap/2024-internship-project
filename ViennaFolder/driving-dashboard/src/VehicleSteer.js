@@ -17,7 +17,6 @@ const defaultChartData = {
 
 export default function VehicleSteer ({selectedTrajectoryId, markedTimestamp}) {
   const [chartData, setChartData] = useState(defaultChartData);
-  // console.log(markedTimestamp); 
 
   useEffect(() => {
     const xhr = new XMLHttpRequest();
@@ -35,7 +34,11 @@ export default function VehicleSteer ({selectedTrajectoryId, markedTimestamp}) {
           }]
         };
 
+        if (markedTimestamp !== 0) console.log(markedTimestamp); 
+        console.log(selectedTrajectoryId);
+
         setChartData(data);
+        
       } else {
         console.log('Error fetching data.');
       }

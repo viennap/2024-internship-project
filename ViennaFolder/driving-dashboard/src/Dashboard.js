@@ -8,19 +8,12 @@ import VehicleSteer from './VehicleSteer';
 import './dashboard.css';
 
 import { Stack, Container, Grid, Typography, FormControl, Select, TextField, Button, MenuItem, Box } from '@mui/material';
+import { SetMealSharp } from '@mui/icons-material';
 
 export default function Dashboard() {
     const [trajectoryList, setTrajectoryList] = useState({});
     const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');   
     const [markedTimestamp, setMarkedTimestamp] = useState(0); 
-
-    const handleTrajectoryClick = (trajectoryId) => {
-        setSelectedTrajectoryId(trajectoryId);
-    };
-
-    const handleMarkerDrop = (markedTimestamp) => {
-        setMarkedTimestamp(markedTimestamp);
-    };
 
     return (
         <Grid padding = {2}>
@@ -38,9 +31,9 @@ export default function Dashboard() {
                     <Map 
                         trajectoryList={trajectoryList} 
                         selectedTrajectoryId={selectedTrajectoryId}
-                        onTrajectoryClick={handleTrajectoryClick}
-                        onMarkerDrop={handleMarkerDrop}
-                        />
+                        selectedTrajectoryIdSetter={setSelectedTrajectoryId}
+                        markedTimestampSetter={setMarkedTimestamp}
+                    />
                 </Grid>    
                 
                 <Grid item xs={12} sm={6}>

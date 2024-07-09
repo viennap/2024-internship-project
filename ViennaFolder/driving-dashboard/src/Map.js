@@ -5,7 +5,7 @@ import { geometry, lineStringç } from "@turf/helpers";
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
 
-export default function Map({trajectoryList, selectedTrajectoryId, onTrajectoryClick, onMarkerDrop}){
+export default function Map({trajectoryList, selectedTrajectoryId, markedTimestampSetter, selectedTrajectoryIdSetter}){
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [mapReady, setMapReady] = useState(false);
@@ -115,77 +115,93 @@ export default function Map({trajectoryList, selectedTrajectoryId, onTrajectoryC
         // add a new layer for the selected trajectory id on top ??
     }, [mapReady, trajectoryList, selectedTrajectoryId]);
 
-    useEffect(() => {
-        if (mapReady && selectedTrajectoryId === "All Trajectories") {
-            map.current.on('click', event => {
-                const trajectoryFeatures = map.current.queryRenderedFeatures(event.point, {
-                    layers: ['my-route-layer']
-                });
-
-                if (!trajectoryFeatures.length) {
-                    return;
-                }
-
-                const trajectoryFeature = trajectoryFeatures[0];
-                // console.log(trajectoryFeature.properties.myColorProperty);
-
-                onTrajectoryClick(trajectoryFeature['properties']['trajectoryId']);
-            });
+    const handleTrajectoryClick = (event) => {
+        if (!mapReady || selectedTrajectoryId !== 'All Trajectories') return;
+    
+        const trajectoryFeatures = map.current.queryRenderedFeatures(event.point, {
+            layers: ['my-route-layer']
+        });
+    
+        if (!trajectoryFeatures.length) {
+            return;
         }
-    }, [mapReady, selectedTrajectoryId, onTrajectoryClick]);
-
-    useEffect(() => {
+    
+        const trajectoryFeature = trajectoryFeatures[0];
+        selectedTrajectoryIdSetter(trajectoryFeature.properties.trajectoryId);
+    };
+    
+    const handleDblClick = (event) => {
         if (!mapReady || selectedTrajectoryId === 'All Trajectories') return;
-
-        const handleDblClick = event => {
-            const trajectoryFeatures = map.current.queryRenderedFeatures(event.point, {
-                layers: ['my-route-layer'],
-            });
-
-            if (trajectoryFeatures.length) {
-                const trajectoryFeature = trajectoryFeatures[0];
-                const point = turf.point([event.lngLat.lng, event.lngLat.lat])['geometry']['coordinates'];
-
-                if (trajectoryFeature['geometry'] && trajectoryFeature['geometry']['coordinates'].length) {
-                    // const l = turf.lineString(trajectoryFeature['geometry']['coordinates']);
-                    const id = trajectoryFeature['properties']['trajectoryId'];
-                  
-                    // Pair up the corresponding [longitude, latitude]
-                    const coords = [];
-                    for (let i = 0; i < trajectoryList[id]['longitude'].length; i++) {
-                        let pair = [trajectoryList[id]['longitude'].at(i), trajectoryList[id]['latitude'].at(i)];
-                        coords.push(pair); 
-                    }
-                    const line = turf.lineString(coords);
-
-                    const snapped = turf.nearestPointOnLine(line, point);
-                    const trajectoryPoint = snapped['geometry']['coordinates'];
-
-                    if (markerRef.current) {
-                        markerRef.current.remove();
-                    }
-
-                    markerRef.current = new mapboxgl.Marker({
-                        color: '#FFFFFF',
-                    }).setLngLat(trajectoryPoint).addTo(map.current);
-
-                    const index = snapped['properties']['index'];
-                    const markedTimestamp = trajectoryList[id]['time'].at(index);
-
-                    onMarkerDrop(markedTimestamp); // Update timestamp to the dropped marker timestamp
-                    console.log(markedTimestamp);
+    
+        const trajectoryFeatures = map.current.queryRenderedFeatures(event.point, {
+            layers: ['my-route-layer'],
+        });
+    
+        if (trajectoryFeatures.length) {
+            const trajectoryFeature = trajectoryFeatures[0];
+            const point = turf.point([event.lngLat.lng, event.lngLat.lat]).geometry.coordinates;
+    
+            if (trajectoryFeature.geometry && trajectoryFeature.geometry.coordinates.length) {
+                const id = trajectoryFeature.properties.trajectoryId;
+                const coords = [];
+    
+                for (let i = 0; i < trajectoryList[id].longitude.length; i++) {
+                    let pair = [
+                        trajectoryList[id].longitude[i],
+                        trajectoryList[id].latitude[i]
+                    ];
+                    coords.push(pair);
                 }
+    
+                const line = turf.lineString(coords);
+                const snapped = turf.nearestPointOnLine(line, point);
+                const trajectoryPoint = snapped.geometry.coordinates;
+    
+                if (markerRef.current) {
+                    markerRef.current.remove();
+                }
+    
+                markerRef.current = new mapboxgl.Marker({
+                    color: '#FFFFFF',
+                }).setLngLat(trajectoryPoint).addTo(map.current);
+    
+                const index = snapped.properties.index;
+                const markedTimestamp = trajectoryList[id].time[index];
+    
+                markedTimestampSetter(markedTimestamp); // Update timestamp to the dropped marker timestamp
+                console.log(markedTimestamp);
             }
-        };
-
-        map.current.on('dblclick', handleDblClick);
-
-        return () => {
-            map.current.off('dblclick', handleDblClick);
-        };
-    }, [mapReady, selectedTrajectoryId, onMarkerDrop, trajectoryList]);
-
+        }
+    };
+    
+    useEffect(() => {
+        if (mapReady) {
+            return () => {
+                map.current.off('click', handleTrajectoryClick);
+                map.current.off('dblclick', handleDblClick);
+            };
+        }
+    }, [mapReady]);
+    
     return (
-        <div ref={mapContainer} className="map-container" style= {{ height: '500px' }}></div>
+        <div 
+            ref={mapContainer} 
+            className="map-container" 
+            style={{ height: '500px' }}
+            onClick={() => {
+                if (mapReady && selectedTrajectoryId === 'All Trajectories') {
+                    map.current.on('click', handleTrajectoryClick);
+                }
+                
+            }}
+            onDoubleClick={() => {
+                if (mapReady && selectedTrajectoryId !== 'All Trajectories') {
+                    map.current.on('dblclick', handleDblClick);
+                }
+                
+            }}
+        >
+            
+        </div>
     );
 }
