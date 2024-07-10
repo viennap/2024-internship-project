@@ -41,7 +41,11 @@ export default function VehicleSpeed({selectedTrajectoryId, markedTimestamp}) {
       }
     };
     xhr.send();
-  }, [selectedTrajectoryId, markedTimestamp]);
+  }, [selectedTrajectoryId]);
+
+  useEffect(() => {
+    if (markedTimestamp !== 0) console.log(markedTimestamp);
+  }, [markedTimestamp]);
 
   return (
     <div className="chart-container">

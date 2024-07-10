@@ -34,7 +34,6 @@ export default function VehicleSteer ({selectedTrajectoryId, markedTimestamp}) {
           }]
         };
 
-        if (markedTimestamp !== 0) console.log(markedTimestamp); 
         console.log(selectedTrajectoryId);
 
         setChartData(data);
@@ -44,7 +43,11 @@ export default function VehicleSteer ({selectedTrajectoryId, markedTimestamp}) {
       }
     };
     xhr.send();
-  }, [selectedTrajectoryId, markedTimestamp]);
+  }, [selectedTrajectoryId]);
+
+  useEffect(() => {
+    if (markedTimestamp !== 0) console.log(markedTimestamp);
+  }, [markedTimestamp]);
 
   return (
     <div className="chart-container">
