@@ -167,8 +167,9 @@ export default function Map({trajectoryList, selectedTrajectoryId, markedTimesta
     
                 const index = snapped.properties.index;
                 const markedTimestamp = trajectoryList[id].time[index];
-    
-                markedTimestampSetter(markedTimestamp); // Update timestamp to the dropped marker timestamp
+                
+                // Update timestamp to the dropped marker timestamp
+                markedTimestampSetter(markedTimestamp); 
                 console.log(markedTimestamp);
             }
         }
