@@ -16,6 +16,7 @@
     "@turf/nearest-point": "^7.0.0",
     "@turf/turf": "^7.0.0",
     "chart.js": "^4.4.3",
+    "chartjs-plugin-annotation": "^3.0.1",
     "mapbox-gl": "^3.4.0",
     "markerjs2": "^2.32.1",
     "react": "^18.3.1",
