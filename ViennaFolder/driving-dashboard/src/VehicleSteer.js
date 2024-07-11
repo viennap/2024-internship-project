@@ -3,7 +3,8 @@ import { Line} from "react-chartjs-2";
 import { CategoryScale } from 'chart.js';
 import "./styles.css";
 import { Chart } from 'chart.js';
-import { annotationPlugin } from 'chartjs-plugin-annotation';
+
+import annotationPlugin from 'chartjs-plugin-annotation';
 Chart.register(annotationPlugin);
 
 Chart.register(CategoryScale);
@@ -63,7 +64,7 @@ export default function VehicleSteer({selectedTrajectoryId, markedTimestamp}) {
 
   return (
     <div className="chart-container">
-      <h3 style={{ textAlign: "center", marginBottom: "-20px" }}>Steering Angle Over Time</h3>
+      <h3 style={{ textAlign: "center", marginBottom: "20px" }}>Steering Angle Over Time</h3>
       <Line
         data={chartData}
         options={{
@@ -87,7 +88,17 @@ export default function VehicleSteer({selectedTrajectoryId, markedTimestamp}) {
                     }
                   }
                 }
-              : undefined
+              : {
+                annotations: {
+                  point1: {
+                    type: 'point',
+                    xValue: 1623544770,
+                    yValue: 60,
+                    backgroundColor: 'green',
+                    radius: 50
+                  }
+                }
+              }
           }
         }}
       />

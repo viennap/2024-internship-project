@@ -49,7 +49,7 @@ export default function VehicleSpeed({selectedTrajectoryId, markedTimestamp}) {
 
   return (
     <div className="chart-container">
-      <h3 style={{ textAlign: "center", marginBottom: "-20px" }}>Wheel Speed Over Time</h3>
+      <h3 style={{ textAlign: "center", marginBottom: "20px" }}>Wheel Speed Over Time</h3>
       <Line
         data={chartData}
         options={{
