@@ -4,6 +4,9 @@ import { CategoryScale } from 'chart.js';
 import Chart from "chart.js/auto";
 import "./styles.css";
 
+import { Annotation } from 'chartjs-plugin-annotation';
+// Chart.register(Annotation);
+
 Chart.register(CategoryScale);
 
 const defaultChartData = {
@@ -15,39 +18,49 @@ const defaultChartData = {
   }]
 };
 
-export default function VehicleSteer ({selectedTrajectoryId, markedTimestamp}) {
+export default function VehicleSteer({selectedTrajectoryId, markedTimestamp}) {
   const [chartData, setChartData] = useState(defaultChartData);
-
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [yValue, setYValue] = useState(0); 
+  
   useEffect(() => {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `https://ransom.isis.vanderbilt.edu/ViennaFolder/endpoints_python/get_vehicle_signal?signal_name=steer&trajectory_id=${selectedTrajectoryId}`);
     xhr.onload = function () {
       if (xhr.status === 200) {
         const parsed = JSON.parse(xhr.responseText);
+        if (parsed && parsed['time'] && parsed['signal']) {
+          const data = {
+            labels: parsed['time'],
+            datasets: [{
+              label: 'Steering Angle',
+              data: parsed['signal'],
+              borderWidth: 1
+            }]
+          };
+          setChartData(data);
+          setIsDataLoaded(true);
+          
+          console.log(markedTimestamp); 
+          
+          // Find the nearest recorded timestamp to markedTimestamp
+          const nearestIndex = parsed['time'].reduce((prev, curr, index) => {
+            return (Math.abs(curr - markedTimestamp) < Math.abs(parsed['time'][prev] - markedTimestamp) ? index : prev);
+          }, 0);
 
-        const data = {
-          labels: parsed['time'],
-          datasets: [{
-            label: 'Steering Angle',
-            data: parsed['signal'],
-            borderWidth: 1
-          }]
-        };
-
-        console.log(selectedTrajectoryId);
-
-        setChartData(data);
-        
+          if (nearestIndex !== -1) {
+            console.log(parsed['signal'][nearestIndex]);
+            setYValue(parsed['signal'][nearestIndex]);
+          } else {
+            console.log('Timestamp not found in the data');
+          }
+        }
       } else {
         console.log('Error fetching data.');
       }
     };
     xhr.send();
-  }, [selectedTrajectoryId]);
-
-  useEffect(() => {
-    if (markedTimestamp !== 0) console.log(markedTimestamp);
-  }, [markedTimestamp]);
+  }, [selectedTrajectoryId, markedTimestamp]);
 
   return (
     <div className="chart-container">
@@ -62,11 +75,27 @@ export default function VehicleSteer ({selectedTrajectoryId, markedTimestamp}) {
             legend: {
               display: true,
               position: 'top'
-            }
+            },
+            annotation: isDataLoaded
+              ? {
+                  annotations: {
+                    point1: {
+                      type: 'point',
+                      xValue: markedTimestamp,
+                      yValue: yValue,
+                      backgroundColor: 'red',
+                      radius: 50
+                    }
+                  }
+                }
+              : undefined
           }
         }}
       />
-
     </div>
   );
 }
+
+
+
+
