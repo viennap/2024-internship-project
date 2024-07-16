@@ -74,6 +74,8 @@ def get_vehicle_trajectory(args):
 
         if len(variable_glob_results) > 0:
             df = pd.read_csv(variable_glob_results[0])
+            df = df[df['Status'] == 'A']
+
             result = {
                 "id": trajectory_id,
                 "time": df['Systime'].to_list(),
