@@ -2,6 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
 
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs';
+
+import { Container, Grid, Typography, FormControl, Select, TextField, Button, MenuItem, Box } from '@mui/material';
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
 
 export default function Map({ trajectoryList, selectedTrajectoryId, markedTimestamp, markedTimestampSetter, selectedTrajectoryIdSetter }) {
@@ -214,6 +221,21 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
             }
         }
     };
+    
+    // Why is markedTimestamp Nan here?
+    
+    const handleTimestampManipulation = (label) => {
+        if (label === "earlier") {
+            const newTimestamp = markedTimestamp - 60;
+            markedTimestampSetter(newTimestamp);
+            console.log("Earlier clicked");
+        }
+        else if (label == "later") {
+            const newTimestamp = markedTimestamp + 60;
+            markedTimestampSetter(newTimestamp);
+            console.log("Later clicked");
+        }
+    };
 
     return (
         <div>
@@ -222,16 +244,27 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
                 className="map-container"
                 style={{ height: '500px' }}
             />
-            {selectedTrajectoryId !== "All Trajectories" && trajectoryList[selectedTrajectoryId] && (
-                <input
-                    type="range"
-                    min={Math.min(...trajectoryList[selectedTrajectoryId].time)}
-                    max={Math.max(...trajectoryList[selectedTrajectoryId].time)}
-                    value={sliderValue}
-                    onChange={handleSliderChange}
-                    className="slider"
-                />
-            )}
+    
+            <div>
+                {selectedTrajectoryId !== "All Trajectories" && trajectoryList[selectedTrajectoryId] && (
+                    <Button onClick={() => handleTimestampManipulation("earlier")} label="earlier"> ⬅️ </Button>
+                )}
+
+                {selectedTrajectoryId !== "All Trajectories" && trajectoryList[selectedTrajectoryId] && (
+                    <input
+                        type="range"
+                        min={Math.min(...trajectoryList[selectedTrajectoryId].time)}
+                        max={Math.max(...trajectoryList[selectedTrajectoryId].time)}
+                        value={sliderValue}
+                        onChange={handleSliderChange}
+                        className="slider"
+                    />
+                )}
+
+                {selectedTrajectoryId !== "All Trajectories" && trajectoryList[selectedTrajectoryId] && (
+                    <Button onClick={() => handleTimestampManipulation("later")} label="later"> ➡️ </Button>
+                )}
+            </div>
         </div>
     );
 }
