@@ -17,8 +17,8 @@ const defaultChartData = {
 
 export default function VehicleSpeed({selectedTrajectoryId, markedTimestamp}) {
   const [chartData, setChartData] = useState(defaultChartData);
-  const [xValue, setXValue] = useState(-1); 
-  const [yValue, setYValue] = useState(-1); 
+  const [xValue, setXValue] = useState(0); 
+  const [yValue, setYValue] = useState(0); 
   const [parsed, setParsed] = useState([]);
 
   useEffect(() => {
@@ -46,20 +46,27 @@ export default function VehicleSpeed({selectedTrajectoryId, markedTimestamp}) {
   }, [selectedTrajectoryId]);
 
   useEffect(() => {
-    if (parsed && parsed['time'] && parsed['signal']) {
+    if (parsed && parsed['time'] && parsed['signal'] && selectedTrajectoryId != 'All Trajectories' && selectedTrajectoryId != '') {
+      console.log("Marked Timestamp: " + markedTimestamp);
       
+      // if (markedTimestamp >= parsed['time'].at(0) && markedTimestamp <= parsed['time'].at(-1)) {
+      //   console.log("In bounds");
+      // }
+      // else {
+      //   console.log("Out bounds");
+      // }
+
       // Find the nearest recorded timestamp to markedTimestamp
-      const nearestIndex = parsed['time'].reduce((prev, curr, index) => {
+      var nearestIndex = parsed['time'].reduce((prev, curr, index) => {
         return (Math.abs(curr - markedTimestamp) < Math.abs(parsed['time'][prev] - markedTimestamp) ? index : prev);
       }, 0);
+      console.log(nearestIndex);
   
-      if (nearestIndex !== -1 && xValue != -1 && yValue != -1) {
+      if (nearestIndex !== -1) {
         // console.log("xValue: ", parsed['time'][nearestIndex]);
-        console.log("xValue: ", nearestIndex);
         setXValue(nearestIndex); // xValue is set to index in parsed['time']
         // setXValue(parsed['time'][nearestIndex]);
         setYValue(parsed['signal'][nearestIndex]);
-        console.log("yIndex :", parsed['signal'][nearestIndex]);
       } else {
         setXValue(0);
         setYValue(0);
@@ -68,8 +75,8 @@ export default function VehicleSpeed({selectedTrajectoryId, markedTimestamp}) {
   }, [markedTimestamp, parsed]);
 
   const createOptions = () => {
-    console.log('xValue:', xValue);
-    console.log('yValue:', yValue);
+
+    const showAnnotation = selectedTrajectoryId !== 'All Trajectories' && selectedTrajectoryId !== '';
 
     return {
       plugins: {
@@ -81,7 +88,7 @@ export default function VehicleSpeed({selectedTrajectoryId, markedTimestamp}) {
           position: 'top'
         },
         annotation: {
-          annotations: {
+          annotations: showAnnotation ? {
             point1: {
               type: 'point',
               xValue: xValue, // index in parsed['time']
@@ -91,7 +98,7 @@ export default function VehicleSpeed({selectedTrajectoryId, markedTimestamp}) {
               borderColor: 'green',
               borderWidth: 2
             }
-          }
+          } : {}
         },
         scales: {
           x: {
@@ -102,7 +109,6 @@ export default function VehicleSpeed({selectedTrajectoryId, markedTimestamp}) {
       }
     };
   };
-
   return (
     <div className="chart-container">
       <h3 style={{ textAlign: "center", marginBottom: "20px" }}>Wheel Speed Over Time</h3>

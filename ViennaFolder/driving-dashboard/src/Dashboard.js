@@ -13,7 +13,7 @@ import { SetMealSharp } from '@mui/icons-material';
 export default function Dashboard() {
     const [trajectoryList, setTrajectoryList] = useState({});
     const [selectedTrajectoryId, setSelectedTrajectoryId] = useState('');   
-    const [markedTimestamp, setMarkedTimestamp] = useState(0); 
+    const [markedTimestamp, setMarkedTimestamp] = useState(-1); 
 
     return (
         <Grid padding = {2}>

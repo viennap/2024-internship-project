@@ -20,6 +20,7 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
             center: [-86.767960, 36.174465],
             zoom: 6
         });
+        newMap.doubleClickZoom.disable();
 
         newMap.on('load', async () => {
             let GeoJSON = {};
@@ -98,7 +99,6 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
                 } else if (id === selectedTrajectoryId) {
                     let midPoint = Math.floor(currentTrajectory.length / 2);
                     map.current.setCenter(currentTrajectory[midPoint]);
-                    map.current.setZoom(8);
                     // Extra: Make sure the most out-lying trajectory are within the map
                 }
 
@@ -143,6 +143,9 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
 
                     if (trajectoryFeature.geometry && trajectoryFeature.geometry.coordinates.length) {
                         const id = trajectoryFeature.properties.trajectoryId;
+                        console.log("Current ID: " + id);
+                        console.log("Selected ID: " + selectedTrajectoryId);
+
                         const coords = [];
 
                         for (let i = 0; i < trajectoryList[id].longitude.length; i++) {
@@ -190,7 +193,7 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
         const newTimestamp = Number(event.target.value);
         setSliderValue(newTimestamp);
         markedTimestampSetter(newTimestamp);
-
+        
         if (selectedTrajectoryId && trajectoryList[selectedTrajectoryId]) {
             const index = trajectoryList[selectedTrajectoryId].time.reduce((prev, curr, index) => {
                 return (Math.abs(curr - newTimestamp) < Math.abs(trajectoryList[selectedTrajectoryId].time[prev] - newTimestamp) ? index : prev);

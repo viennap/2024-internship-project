@@ -19,8 +19,8 @@ const defaultChartData = {
 
 export default function VehicleSteer({ selectedTrajectoryId, markedTimestamp }) {
   const [chartData, setChartData] = useState(defaultChartData);
-  const [xValue, setXValue] = useState(-1); 
-  const [yValue, setYValue] = useState(-1); 
+  const [xValue, setXValue] = useState(0); 
+  const [yValue, setYValue] = useState(0); 
   const [parsed, setParsed] = useState([]);
 
   useEffect(() => {
@@ -49,20 +49,16 @@ export default function VehicleSteer({ selectedTrajectoryId, markedTimestamp }) 
   }, [selectedTrajectoryId]);
 
   useEffect(() => {
-    if (parsed && parsed['time'] && parsed['signal']) {
-      
+    if (parsed && parsed['time'] && parsed['signal'] && selectedTrajectoryId != 'All Trajectories' && selectedTrajectoryId != '') {
       // Find the nearest recorded timestamp to markedTimestamp
       const nearestIndex = parsed['time'].reduce((prev, curr, index) => {
         return (Math.abs(curr - markedTimestamp) < Math.abs(parsed['time'][prev] - markedTimestamp) ? index : prev);
       }, 0);
   
       if (nearestIndex !== -1 && xValue != -1 && yValue != -1) {
-        console.log("xValue: ", parsed['time'][nearestIndex]);
-        console.log("xIndex: ", nearestIndex);
         setXValue(nearestIndex); // xValue is set to index in parsed['time']
         // setXValue(parsed['time'][nearestIndex]);
         setYValue(parsed['signal'][nearestIndex]);
-        console.log("yIndex :", parsed['signal'][nearestIndex]);
       } else {
         setXValue(0);
         setYValue(0);
@@ -71,8 +67,8 @@ export default function VehicleSteer({ selectedTrajectoryId, markedTimestamp }) 
   }, [markedTimestamp, parsed]);
 
   const createOptions = () => {
-    console.log('xValue:', xValue);
-    console.log('yValue:', yValue);
+
+    const showAnnotation = selectedTrajectoryId !== 'All Trajectories' && selectedTrajectoryId !== '';
 
     return {
       plugins: {
@@ -84,7 +80,7 @@ export default function VehicleSteer({ selectedTrajectoryId, markedTimestamp }) 
           position: 'top'
         },
         annotation: {
-          annotations: {
+          annotations: showAnnotation ? {
             point1: {
               type: 'point',
               xValue: xValue, // index in parsed['time']
@@ -94,7 +90,7 @@ export default function VehicleSteer({ selectedTrajectoryId, markedTimestamp }) 
               borderColor: 'red',
               borderWidth: 2
             }
-          }
+          } : {}
         },
         scales: {
           x: {
