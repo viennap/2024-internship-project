@@ -4,7 +4,7 @@ import * as turf from '@turf/turf';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { TimeField } from '@mui/x-date-pickers/TimeField';
 import dayjs from 'dayjs';
 
 import { Container, Grid, Typography, FormControl, Select, TextField, Button, MenuItem, Box } from '@mui/material';
@@ -252,7 +252,39 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
             }
         }
     };
-    
+
+    const handleTimeInputChange = (newTime) => {
+        const newTimestamp = dayjs(newTime).unix();
+        setSliderValue(newTimestamp);
+        markedTimestampSetter(newTimestamp);
+
+        if (selectedTrajectoryId && trajectoryList[selectedTrajectoryId]) {         
+            if (newTimestamp < trajectoryList[selectedTrajectoryId].time.at(0) 
+                    || newTimestamp > trajectoryList[selectedTrajectoryId].time.at(-1)) {
+                console.log("Please entire a time that is within the range.");    
+            }
+            else {
+                console.log("Valid time entered.");
+            }
+
+            const index = trajectoryList[selectedTrajectoryId].time.reduce((prev, curr, index) => {
+                return (Math.abs(curr - newTimestamp) < Math.abs(trajectoryList[selectedTrajectoryId].time[prev] - newTimestamp) ? index : prev);
+            }, 0);
+            
+            if (index !== -1) {
+                const lng = trajectoryList[selectedTrajectoryId].longitude[index];
+                const lat = trajectoryList[selectedTrajectoryId].latitude[index];
+
+                if (markerRef.current) {
+                    markerRef.current.setLngLat([lng, lat]);
+                } else {
+                    markerRef.current = new mapboxgl.Marker({
+                        color: '#FFFFFF',
+                    }).setLngLat([lng, lat]).addTo(map.current);
+                }
+            }
+        }
+    };
 
     return (
         <div>
@@ -264,22 +296,35 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
     
             <div>
                 {selectedTrajectoryId !== "All Trajectories" && trajectoryList[selectedTrajectoryId] && (
-                    <Button onClick={() => handleTimestampManipulation("earlier")} label="earlier"> ⬅️ </Button>
+                    <Box display="flex" alignItems="center">
+                        <Typography>{dayjs.unix(Math.min(...trajectoryList[selectedTrajectoryId].time)).format('hh:mm:ss A')}</Typography>
+
+                        <Button onClick={() => handleTimestampManipulation("earlier")} label="earlier"> ⬅️ </Button>
+                        <input
+                            type="range"
+                            min={Math.min(...trajectoryList[selectedTrajectoryId].time)}
+                            max={Math.max(...trajectoryList[selectedTrajectoryId].time)}
+                            value={sliderValue}
+                            onChange={handleSliderChange}
+                            className="slider"
+                        />
+                        <Button onClick={() => handleTimestampManipulation("later")} label="later"> ➡️ </Button>
+                        
+                        <Typography>{dayjs.unix(Math.max(...trajectoryList[selectedTrajectoryId].time)).format('hh:mm:ss A')}</Typography>
+                    </Box>
                 )}
 
+                <div> </div>
                 {selectedTrajectoryId !== "All Trajectories" && trajectoryList[selectedTrajectoryId] && (
-                    <input
-                        type="range"
-                        min={Math.min(...trajectoryList[selectedTrajectoryId].time)}
-                        max={Math.max(...trajectoryList[selectedTrajectoryId].time)}
-                        value={sliderValue}
-                        onChange={handleSliderChange}
-                        className="slider"
-                    />
-                )}
-
-                {selectedTrajectoryId !== "All Trajectories" && trajectoryList[selectedTrajectoryId] && (
-                    <Button onClick={() => handleTimestampManipulation("later")} label="later"> ➡️ </Button>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <TimeField
+                            label="Current Timestamp"
+                            value={dayjs.unix(sliderValue)}
+                            format="hh:mm:ss A"
+                            onChange={handleTimeInputChange}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
                 )}
             </div>
         </div>
