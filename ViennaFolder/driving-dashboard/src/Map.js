@@ -222,20 +222,37 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
         }
     };
     
-    // Why is markedTimestamp Nan here?
-    
     const handleTimestampManipulation = (label) => {
-        if (label === "earlier") {
-            const newTimestamp = markedTimestamp - 60;
+        if (selectedTrajectoryId && trajectoryList[selectedTrajectoryId]) {
+            const timeArray = trajectoryList[selectedTrajectoryId].time;
+            let currentIndex = timeArray.findIndex(time => time === sliderValue);
+            let newIndex;
+    
+            if (label === "earlier") {
+                newIndex = currentIndex > 0 ? currentIndex - 1 : 0;
+                console.log("Earlier clicked");
+            } else if (label === "later") {
+                newIndex = currentIndex < timeArray.length - 1 ? currentIndex + 1 : timeArray.length - 1;
+                console.log("Later clicked");
+            }
+    
+            const newTimestamp = timeArray[newIndex];
+            setSliderValue(newTimestamp);
             markedTimestampSetter(newTimestamp);
-            console.log("Earlier clicked");
-        }
-        else if (label == "later") {
-            const newTimestamp = markedTimestamp + 60;
-            markedTimestampSetter(newTimestamp);
-            console.log("Later clicked");
+    
+            const lng = trajectoryList[selectedTrajectoryId].longitude[newIndex];
+            const lat = trajectoryList[selectedTrajectoryId].latitude[newIndex];
+    
+            if (markerRef.current) {
+                markerRef.current.setLngLat([lng, lat]);
+            } else {
+                markerRef.current = new mapboxgl.Marker({
+                    color: '#FFFFFF',
+                }).setLngLat([lng, lat]).addTo(map.current);
+            }
         }
     };
+    
 
     return (
         <div>
