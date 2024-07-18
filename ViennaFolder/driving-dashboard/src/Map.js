@@ -18,7 +18,6 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
     const markerRef = useRef(null);
 
     const [sliderValue, setSliderValue] = useState(0);
-
     useEffect(() => {
         if (map.current) return; // initialize map only once
         let newMap = new mapboxgl.Map({
@@ -104,6 +103,10 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
                     }
 
                 } else if (id === selectedTrajectoryId) {
+                    if (markerRef.current != null) {
+                        markerRef.current.remove();
+                    }
+
                     let midPoint = Math.floor(currentTrajectory.length / 2);
                     map.current.setCenter(currentTrajectory[midPoint]);
                     // Extra: Make sure the most out-lying trajectory are within the map
