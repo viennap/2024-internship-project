@@ -7,8 +7,7 @@ import VehicleSteer from './VehicleSteer';
 
 import './dashboard.css';
 
-import { Stack, Container, Grid, Typography, FormControl, Select, TextField, Button, MenuItem, Box } from '@mui/material';
-import { SetMealSharp } from '@mui/icons-material';
+import { Stack, Grid } from '@mui/material';
 
 export default function Dashboard() {
     const [trajectoryList, setTrajectoryList] = useState({});

@@ -7,7 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
 import dayjs from 'dayjs';
 
-import { Container, Grid, Typography, FormControl, Select, TextField, Button, MenuItem, Box } from '@mui/material';
+import { Typography, Select, TextField, Button, Box } from '@mui/material';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoidmllbm5hcCIsImEiOiJjbHg5NjR4cWgwbjB4MmtwajRlZ2RucXU3In0.eJuij93s8bNLip5GyM85dA';
 
@@ -225,20 +225,27 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
     const handleTimestampManipulation = (label) => {
         if (selectedTrajectoryId && trajectoryList[selectedTrajectoryId]) {
             const timeArray = trajectoryList[selectedTrajectoryId].time;
-            let currentIndex = timeArray.findIndex(time => time === sliderValue);
-            let newIndex;
+    
+            let currentTimestamp = new Date(sliderValue);
+            let newTimestamp;
     
             if (label === "earlier") {
-                newIndex = currentIndex > 0 ? currentIndex - 1 : 0;
+                newTimestamp = new Date(currentTimestamp.getTime() - 60); 
                 console.log("Earlier clicked");
             } else if (label === "later") {
-                newIndex = currentIndex < timeArray.length - 1 ? currentIndex + 1 : timeArray.length - 1;
+                newTimestamp = new Date(currentTimestamp.getTime() + 60); 
                 console.log("Later clicked");
             }
     
-            const newTimestamp = timeArray[newIndex];
-            setSliderValue(newTimestamp);
-            markedTimestampSetter(newTimestamp);
+            // Find the closest timestamp in timeArray to newTimestamp
+            let nearestTimestamp = timeArray.reduce((prev, curr) => {
+                return (Math.abs(new Date(curr) - newTimestamp) < Math.abs(new Date(prev) - newTimestamp) ? curr : prev);
+            });
+            
+            setSliderValue(nearestTimestamp);
+            markedTimestampSetter(nearestTimestamp);
+    
+            let newIndex = timeArray.findIndex(time => time === nearestTimestamp);
     
             const lng = trajectoryList[selectedTrajectoryId].longitude[newIndex];
             const lat = trajectoryList[selectedTrajectoryId].latitude[newIndex];
@@ -324,6 +331,7 @@ export default function Map({ trajectoryList, selectedTrajectoryId, markedTimest
                             onChange={handleTimeInputChange}
                             renderInput={(params) => <TextField {...params} />}
                         />
+                            
                     </LocalizationProvider>
                 )}
             </div>
